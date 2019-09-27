@@ -1,101 +1,91 @@
+import 'dart:ui';
+import 'dart:ui' as prefix0;
+
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+import 'package:flutter_realistic_forms/screens/user_first.dart';
 
 class HomeMaterial extends StatefulWidget {
   @override
   _HomeMaterialState createState() => _HomeMaterialState();
 }
 
+              
 class _HomeMaterialState extends State<HomeMaterial> {
-  final _formKey = GlobalKey<FormState>();
-  final _user = User();
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context){
     return Scaffold(
-        appBar: AppBar(title: Text('Profile')),
-        body: Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-            child: Builder(
-                builder: (context) => Form(
-                    key: _formKey,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextFormField(
-                            decoration:
-                                InputDecoration(labelText: 'First name'),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter your first name';
-                              }
-                            },
-                            onSaved: (val) =>
-                                setState(() => _user.firstName = val),
-                          ),
-                          TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: 'Last name'),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your last name.';
-                                }
-                              },
-                              onSaved: (val) =>
-                                  setState(() => _user.lastName = val)),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
-                            child: Text('Subscribe'),
-                          ),
-                          SwitchListTile(
-                              title: const Text('Monthly Newsletter'),
-                              value: _user.newsletter,
-                              onChanged: (bool val) =>
-                                  setState(() => _user.newsletter = val)),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
-                            child: Text('Interests'),
-                          ),
-                          CheckboxListTile(
-                              title: const Text('Cooking'),
-                              value: _user.passions[User.PassionCooking],
-                              onChanged: (val) {
-                                setState(() =>
-                                    _user.passions[User.PassionCooking] = val);
-                              }),
-                          CheckboxListTile(
-                              title: const Text('Traveling'),
-                              value: _user.passions[User.PassionTraveling],
-                              onChanged: (val) {
-                                setState(() => _user
-                                    .passions[User.PassionTraveling] = val);
-                              }),
-                          CheckboxListTile(
-                              title: const Text('Hiking'),
-                              value: _user.passions[User.PassionHiking],
-                              onChanged: (val) {
-                                setState(() =>
-                                    _user.passions[User.PassionHiking] = val);
-                              }),
-                          Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16.0, horizontal: 16.0),
-                              child: RaisedButton(
-                                  onPressed: () {
-                                    final form = _formKey.currentState;
-                                    if (form.validate()) {
-                                      form.save();
-                                      _user.save();
-                                      _showDialog(context);
-                                    }
-                                  },
-                                  child: Text('Save'))),
-                        ])))));
-  }
+           body: Container(
+            //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
+            //margin: ,
+            child:  Container(
+              
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                                image: AssetImage("./assets/images/screen1.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                      child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 70.0),
+                                        child: 
+                                    Text(
+                                        'No vendemos pólizas, te damos razones para tenerla.', 
+                                        style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 18),
+                                        textAlign: TextAlign.center,
+                              
+                                        ),
+                                      ),
 
-  _showDialog(BuildContext context) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('Submitting form')));
+                                      Container(
+                                      padding:new EdgeInsets.only(top: 300.0),
+                                      child: 
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                          child: 
+                                          RaisedButton(
+                                            onPressed: () {
+                                            Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => UserFirst()
+                                                    ),
+                                                );
+                                            },
+                                            child: Text('Cotizar')
+                                            )
+                                      ),
+                                      ),
+                                    ],
+                                    ),
+                                
+                        ),
+                      ),
+                    
+                    ),
+
+                    ),
+    );
+      // body: Container(
+      //   decoration: BoxDecoration(
+      //     image: DecorationImage(
+      //       image: AssetImage("./assets/images/screen1.png"),
+      //       fit: BoxFit.cover,
+      //     ),
+      //   ),
+      //   child: new BackdropFilter(
+      //     filter: new ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+      //     child: new Container(
+      //       decoration: new BoxDecoration(color: Colors.black.withOpacity(0.3)),
+      //     ),
+      //   ),
+      // ),
+      
   }
 }
