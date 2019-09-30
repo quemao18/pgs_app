@@ -1,8 +1,9 @@
 import 'dart:ui';
-import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_realistic_forms/screens/user_first.dart';
+import '../app_config.dart';
+import 'drawer.dart';
 
 class HomeMaterial extends StatefulWidget {
   @override
@@ -14,8 +15,13 @@ class _HomeMaterialState extends State<HomeMaterial> {
 
   @override
     Widget build(BuildContext context){
+    var config = AppConfig.of(context);
     return Scaffold(
-           body: Container(
+            appBar: new AppBar(
+              title: new Text(config.appName),
+            ),
+            drawer: DrawerOnly(), 
+            body: Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
             child:  Container(
@@ -51,12 +57,14 @@ class _HomeMaterialState extends State<HomeMaterial> {
                                           child: 
                                           RaisedButton(
                                             onPressed: () {
-                                            Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => UserFirst()
-                                                    ),
-                                                );
+                                             Navigator.push(context,
+                                              new MaterialPageRoute(builder: (ctxt) => new UserFirst()));
+                                            // Navigator.push(
+                                            //       context,
+                                            //       MaterialPageRoute(
+                                            //         builder: (context) => UserFirst()
+                                            //         ),
+                                            //     );
                                             },
                                             child: Text('Cotizar')
                                             )

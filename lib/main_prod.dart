@@ -7,8 +7,9 @@ void main() {
   var configuredApp = new AppConfig(
     appName: 'PGS Consulting',
     flavorName: 'production',
-    email: 'info@pgs-consulting.com',
-    phone: '+584245881728',
+    email: 'servicioalcliente@pgs-consulting.com',
+    phone1: '+584245881728',
+    phone2: '+582512547777',
     apiBaseUrl: 'https://pgs.nov9m.com/api/',
     child: new App(),
   );

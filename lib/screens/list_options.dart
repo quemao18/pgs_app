@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_realistic_forms/models/lesson.dart';
 
+import '../app_config.dart';
+import 'drawer.dart';
+
 class ListPage extends StatefulWidget {
   ListPage({Key key, this.title}) : super(key: key);
 
@@ -121,11 +124,17 @@ class _ListPageState extends State<ListPage> {
     //   // ],
     // );
 
+    var config = AppConfig.of(context);
     return Scaffold(
-      //backgroundColor:  Color(0xFF9e946b),
-      //appBar: topAppBar,
+        appBar: new AppBar(
+          title: new Text(config.appName),
+        ),
+      drawer: DrawerOnly(), 
       body: 
-          Container(
+      SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Container(
             padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 50.0),
             child: Column(
               children: <Widget>[
@@ -149,38 +158,12 @@ class _ListPageState extends State<ListPage> {
             ),
             
           ),
-        drawer: Drawer(child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('PGS'),
-              decoration: BoxDecoration(
-                color: Color(0xFF9e946b),
-              ),
-            ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-        ),
-      );
+          ]
+      ),
+        
+    
+    ),
+    );
 
       //bottomNavigationBar: makeBottom,
   }

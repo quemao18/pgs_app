@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_realistic_forms/screens/home.dart';
 
-import 'app_config.dart';
-
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Call AppConfig.of(context) anywhere to obtain the 
     // environment specific configuration 
-    var config = AppConfig.of(context);
 
     return new MaterialApp(
-      title: config.appName,
+      //title: config.appName,
       theme: ThemeData(
           // Define the default brightness and colors.
           //brightness: Brightness.dark, //#9e946b

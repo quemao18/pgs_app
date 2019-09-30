@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 //import '../app_config.dart';
 import '../app_config.dart';
 import '../models/user.dart';
+import 'drawer.dart';
 import 'user_second.dart';
 import 'dart:convert';
 
@@ -40,10 +41,12 @@ class _UserFirst extends State<UserFirst> {
   Widget build(BuildContext context) {
    
     //getCountries(context);
-
+     var config = AppConfig.of(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-        //appBar: AppBar(title: Text('Completa el formulario')),
+        appBar: new AppBar(
+          title: new Text(config.appName),
+        ),
+        drawer: DrawerOnly(), 
         body: Container(
           child: new SingleChildScrollView(  
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -51,7 +54,6 @@ class _UserFirst extends State<UserFirst> {
               
                 builder: (context) => Form(
                     key: _formKey,
-                    
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -90,7 +92,6 @@ class _UserFirst extends State<UserFirst> {
                             ),
                             TextFormField(
                               keyboardType: TextInputType.number,
-                              
                               decoration:
                                   InputDecoration(labelText: 'Edad'),
                               validator: validateAge,
