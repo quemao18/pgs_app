@@ -1,11 +1,16 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_realistic_forms/screens/home_material.dart';
-import 'package:flutter_realistic_forms/screens/list_options.dart';
-import 'package:flutter_realistic_forms/screens/user_first.dart';
+import 'package:pgs_contulting/screens/user_login.dart';
+import '../screens/home_material.dart';
+import '../screens/list_options.dart';
+import '../screens/user_first.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
 
 import '../app_config.dart';
+
 
 class DrawerItem {
   String title;
@@ -20,10 +25,10 @@ class DrawerOnly extends StatelessWidget  {
 
   //int _selectedDrawerIndex = 0;
 
-    final drawerItems = [
-    new DrawerItem("Inicio", Icons.home, HomeMaterial()),
-    new DrawerItem("Cotizar", Icons.account_box, UserFirst()),
-    new DrawerItem("Aseguradoras", Icons.list, ListPage()),
+  final drawerItems = [
+    new DrawerItem("Inicio", Icons.home, LoginPage()),
+    new DrawerItem("Cotizar", Icons.account_box, UserFirst(userData: null)),
+    //new DrawerItem("Aseguradoras", Icons.list, ListPage()),
     new DrawerItem("¿Quienes somos?", Icons.info, HomeMaterial())
   ];
 
@@ -36,11 +41,17 @@ class DrawerOnly extends StatelessWidget  {
   }
 }
 
-
+String uid;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+void userId() async {
+    final FirebaseUser user = await _auth.currentUser();
+    uid = user.uid;
+    // here you write the codes to input the data into firestore
+  }
 
   Widget build (BuildContext context) {
     var config = AppConfig.of(context);
-      
+        print(uid);
           var drawerOptions = <Widget>[];
           for (var i = 0; i < this.drawerItems.length; i++) {
             var d = this.drawerItems[i];
@@ -70,11 +81,11 @@ class DrawerOnly extends StatelessWidget  {
           }
       
           return 
-      
+        
           Drawer(
               
               child: new Column(
-        
+      
                       children: <Widget>[
         
                         new UserAccountsDrawerHeader(
@@ -107,7 +118,7 @@ class DrawerOnly extends StatelessWidget  {
         
                         Container(
         
-                          padding:new EdgeInsets.only(top: 190.0),
+                          //padding:new EdgeInsets.only(top: 190.0),
         
                           child: new Align(
         
@@ -144,5 +155,4 @@ class DrawerOnly extends StatelessWidget  {
           );
         }
       
-        void setState(int Function() param0) {}
 }

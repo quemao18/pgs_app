@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "855167360160",
+    "firebase_url": "https://pgs-consulting.firebaseio.com",
+    "project_id": "pgs-consulting",
+    "storage_bucket": "pgs-consulting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855167360160:android:e81fc3832f4be2d49f7dc5",
+        "android_client_info": {
+          "package_name": "com.example.pgsconsulting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855167360160-g3pk95429p5t2u7v60rohg026fm26a1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC4OzQh5lfc0oFd2rTwUy-OaPbeg5lrH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855167360160-g3pk95429p5t2u7v60rohg026fm26a1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

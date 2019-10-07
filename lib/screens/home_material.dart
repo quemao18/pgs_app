@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_realistic_forms/screens/user_first.dart';
+import '../screens/user_first.dart';
 import '../app_config.dart';
 import 'drawer.dart';
 
@@ -21,7 +21,9 @@ class _HomeMaterialState extends State<HomeMaterial> {
               title: new Text(config.appName),
             ),
             drawer: DrawerOnly(), 
-            body: Container(
+            body: 
+            //SingleChildScrollView(child: 
+            Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
             child:  Container(
@@ -77,8 +79,8 @@ class _HomeMaterialState extends State<HomeMaterial> {
                       ),
                     
                     ),
-
-                    ),
+            //),
+          ),
     );
       // body: Container(
       //   decoration: BoxDecoration(

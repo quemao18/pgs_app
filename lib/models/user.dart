@@ -15,9 +15,12 @@ class User {
   String gender = '';
   String countryId = '';
   String age = '0';
+  String phone = '0';
   String spouseAge = '0';
   String spouseGender = 'none';
   String dependents = '0';
+  String photo = '';
+  List dependentsAges = [];
   bool maternity = false;
   bool smoker = false;
   bool transplant = false;
@@ -40,6 +43,7 @@ class User {
       "last_name": user.lastName,
       "username": user.email,
       "email": user.email,
+      "photo": user.photo,
       "password":"",
       "user_type":4,
       "gender": user.gender, 
@@ -47,7 +51,8 @@ class User {
       "age": int.parse(user.age),
       "spouse_gender": this.spouseGender,
       "spouse_age": int.parse(this.spouseAge),
-      "dependents": int.parse(this.dependents),
+      "dependents": this.dependentsAges.length,
+      "dependents_ages": this.dependentsAges,
       "maternity": this.maternity ,
       "smoker": this.smoker ,
       "transplant": this.transplant 

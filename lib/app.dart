@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_realistic_forms/screens/home.dart';
+import 'package:pgs_contulting/screens/home_material.dart';
+import 'package:pgs_contulting/screens/user_first.dart';
+import './screens/home.dart';
+import 'screens/user_login.dart';
 
 class App extends StatelessWidget {
   @override
@@ -8,6 +11,13 @@ class App extends StatelessWidget {
     // environment specific configuration 
 
     return new MaterialApp(
+
+      routes: <String, WidgetBuilder>{
+        // Set routes for using the Navigator.
+        '/home': (BuildContext context) => new HomeMaterial(),
+        '/login': (BuildContext context) => new LoginPage(),
+
+      },
       //title: config.appName,
       theme: ThemeData(
           // Define the default brightness and colors.
@@ -17,7 +27,7 @@ class App extends StatelessWidget {
           //accentColor: Colors.cyan[600],
           
           // Define the default font family.
-          fontFamily: 'Montserrat',
+          fontFamily: 'Vaud',
 
           buttonTheme: ButtonThemeData(
            buttonColor: Color(0xFF9e946b),
@@ -25,7 +35,9 @@ class App extends StatelessWidget {
            textTheme: ButtonTextTheme.primary,
           ),
           
-          
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Color(0xFF9e946b),
+          ),
           // Define the default TextTheme. Use this to specify the default
           // text styling for headlines, titles, bodies of text, and more.
           textTheme: TextTheme(

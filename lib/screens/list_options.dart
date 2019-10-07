@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_realistic_forms/models/lesson.dart';
+import '../models/lesson.dart';
 
 import '../app_config.dart';
 import 'drawer.dart';
