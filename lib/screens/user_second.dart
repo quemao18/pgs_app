@@ -44,7 +44,8 @@ class _UserSecond extends State<UserSecond>{
 
   int value = 0;
 
- 
+  int _keyboardVisibilitySubscriberId;
+
   bool _keyboardState;
   KeyboardVisibilityNotification _keyboardVisibility = new KeyboardVisibilityNotification();
 
@@ -54,13 +55,19 @@ class _UserSecond extends State<UserSecond>{
 
     _keyboardState = _keyboardVisibility.isKeyboardVisible;
 
-   _keyboardVisibility.addNewListener(
+   _keyboardVisibilitySubscriberId =_keyboardVisibility.addNewListener(
       onChange: (bool visible) {
         setState(() {
+          print(visible);
           _keyboardState = visible;
         });
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
   }
 
   void _onChanged1(bool value) => setState(()
@@ -462,8 +469,8 @@ class _UserSecond extends State<UserSecond>{
                                 
                                 child: Icon(Icons.navigate_next)//Text('Siguiente')
                         ),
-                        visible:  !_keyboardState   
-                        ),
+                        visible:  !_keyboardState
+                    ),
               );
   }
 
@@ -539,9 +546,7 @@ class _UserSecond extends State<UserSecond>{
       ),
     );
 
-  _showDialog(context, text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
+
 _showDialog2(text, tempo){
   _scaffoldstate.currentState.showSnackBar(
                   new SnackBar(

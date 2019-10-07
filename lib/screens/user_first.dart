@@ -34,6 +34,7 @@ class _UserFirst extends State<UserFirst> {
   // bool _isButtonDisabled = false;
   bool _keyboardState;
   KeyboardVisibilityNotification _keyboardVisibility = new KeyboardVisibilityNotification();
+  int _keyboardVisibilitySubscriberId;
 
   @protected
   void initState() {
@@ -41,15 +42,20 @@ class _UserFirst extends State<UserFirst> {
 
     _keyboardState = _keyboardVisibility.isKeyboardVisible;
 
-   _keyboardVisibility.addNewListener(
+    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
         setState(() {
+          print(visible);
           _keyboardState = visible;
         });
       },
     );
   }
 
+  @override
+  void dispose() {
+    _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
+  }
 
   void afterFirstLayout() {
     // Calling the same function "after layout" to resolve the issue.
