@@ -4,10 +4,11 @@ import 'package:pgs_contulting/components/TextFields/inputField.dart';
 import '../app_config.dart';
 import '../models/user.dart';
 import 'package:http/http.dart' as http;
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 
 import 'drawer.dart';
+import 'user_third.dart';
 
 class UserSecond extends StatefulWidget{
   
@@ -15,7 +16,7 @@ class UserSecond extends StatefulWidget{
 
   UserSecond({Key key, this.user}) : super(key: key);
 
-  
+
   @override
   _UserSecond createState()=> _UserSecond();
   
@@ -44,30 +45,23 @@ class _UserSecond extends State<UserSecond>{
 
   int value = 0;
 
-  int _keyboardVisibilitySubscriberId;
-
-  bool _keyboardState;
-  KeyboardVisibilityNotification _keyboardVisibility = new KeyboardVisibilityNotification();
+  bool _keyboardState= false;
 
   @protected
   void initState() {
     super.initState();
-
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
-
-   _keyboardVisibilitySubscriberId =_keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          print(visible);
+    KeyboardVisibilityNotification().addNewListener(
+        onChange: (bool visible) {
+          //print(visible);
           _keyboardState = visible;
-        });
-      },
-    );
+        },
+      );
+
   }
 
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
+    super.dispose();
   }
 
   void _onChanged1(bool value) => setState(()
@@ -89,6 +83,7 @@ class _UserSecond extends State<UserSecond>{
   @override
   Widget build(BuildContext context) {
     //print(widget.user.email);
+    
     var config = AppConfig.of(context);
     return Scaffold(
       key: _scaffoldstate,
@@ -444,7 +439,23 @@ class _UserSecond extends State<UserSecond>{
                         Visibility(child:                             
                         FloatingActionButton(
                           elevation: 10,
-                                onPressed: (){   
+                           onPressed: (){   
+                                    final form = _formKey.currentState;
+                                    if (form.validate()) {
+                                    form.save();
+                                    //print(widget.user.email);
+                                    //_user.save();
+                                    //_showDialog(context);
+                                    _user.dependentsAges = ages;
+                                    Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                    builder: (context) => UserThird(user: widget.user, user2: _user)
+                                    ),
+                                    );
+                                    }
+                                },
+                                /*onPressed: (){   
                                     final form = _formKey.currentState;
                                     if (form.validate()) {
                                       form.save();
@@ -465,7 +476,7 @@ class _UserSecond extends State<UserSecond>{
                                       //saveUser(context, widget.user, _user)
                                       //print(widget.user.name);
                                     }
-                                },
+                                },*/
                                 
                                 child: Icon(Icons.navigate_next)//Text('Siguiente')
                         ),

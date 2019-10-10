@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 
 import 'app_config.dart';
+//192.168.11.47 
 
 void main() {
   var configuredApp = new AppConfig(

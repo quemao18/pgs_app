@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
@@ -15,8 +16,15 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:loading_animations/loading_animations.dart';
+
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+final _random = new Random();
+
+int next(int min, int max) => min + _random.nextInt(max - min);
 
 void main() {
   runApp(LoginPage());
@@ -27,6 +35,8 @@ class UserLogged{
   String email = '';
   String photo = '';
 }
+
+
 
 class LoginPage extends StatefulWidget {
   
@@ -45,7 +55,20 @@ class _LoginPageState extends State<LoginPage> {
   var _userID;
   String _message;
   final TextEditingController _tokenController = TextEditingController();
-
+  List listImg = [
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen1.png?alt=media&token=7e207097-6292-434a-bdd4-336c5ac5e88f',
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.png?alt=media&token=507976f1-f48f-40ce-ab9d-bb0c933ab908',
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen3.png?alt=media&token=7bb9ab03-cee0-4126-a4da-03990b6c8819',
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen4.png?alt=media&token=edf4579e-50f6-4a01-bebd-69128740be0c'
+  ];
+  List textIni = [
+    'No te vendemos una poliza... Te damos razones para tenerla.',
+    'Cotiza el mejor plan que se adapte a tus necesidades.',
+    'Que tu ausencia no afecte el futuro de tu familia.',
+    'Imprescindible en tu camino es contar con nuestro respaldo.'
+  ];
+  int rand = next(0, 3);
+  int randText = next(0, 3);
   var facebookLogin = FacebookLogin();
 
    onLoginStatusChanged(bool isLoggedIn, {profileData, userLogged}) {
@@ -62,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var config = AppConfig.of(context);
+    //var config = AppConfig.of(context);
 
     return Scaffold(
         // appBar: AppBar(
@@ -107,20 +130,38 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
-            child:  Container(
+            child: 
+            CachedNetworkImage(
+                    imageUrl: listImg[rand],
+                    imageBuilder: (context, imageProvider) => Container(
               
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                                image: AssetImage("./assets/images/screen1.png"),
+                                // image: AssetImage("./assets/images/screen"+rand.toString()+".png"),
+                                image: (imageProvider),
                                 fit: BoxFit.cover,
                               ),
                             ),
-                      child: BackdropFilter(
+                      child:  
+                      BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                               child: Container(
                                 color: Colors.black.withOpacity(0.5),
-                                child: Column(
+                                child: isLoading ? 
+                                  Center(
+                                  child: LoadingBouncingGrid.square(
+                                    borderColor: Color(0xFF9e946b),
+                                    borderSize: 1.0,
+                                    size: 70.0,
+                                    backgroundColor: Colors.transparent,
+                                    )
+                                    // CircularProgressIndicator( 
+                                    // valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF9e946b)),
+                                    // ),
+                                    )
+                                    : Column(
                                     children: <Widget>[
+
                                       new Center(
                                         child: new Image(
                                         image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
@@ -136,11 +177,11 @@ class _LoginPageState extends State<LoginPage> {
                                        // margin: EdgeInsets.only(top: 0),
                                         child: 
                                         ListTile(
-                                        title: Text('Bienvenido', 
-                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+                                        title: Text( isLoggedIn ? 'Hola '+this.userLogged.name.split(' ')[0] : 'Bienvenido', 
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
                                         textAlign: TextAlign.center,
                                         ),
-                                        subtitle: Text('\nCotiza el mejor plan que se adapte a tus necesidades', style: prefix0.TextStyle(color: Colors.white70, fontSize: 15),
+                                        subtitle: Text('\n'+textIni[randText].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                         textAlign: TextAlign.center,
                                         ),
                                         ),
@@ -187,15 +228,45 @@ class _LoginPageState extends State<LoginPage> {
                                               ProgressHUD(
                                                   child: _displayLoginButton(), inAsyncCall: isLoading),
                                         ),
+                                        
                                       ),
                                       ),
+
                                     ],
                                     ),
                                 
                         ),
+
                       ),
                     
                     ),
+            placeholder: (context, url) =>       
+                          new Center(
+                          
+                          child:
+                          Column(children: <Widget>[
+                          new Image(
+                          image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
+                          width: (screenSize.width < 500)
+                              ? 250.0
+                              : (screenSize.width / 4) + 12.0,
+                          height: screenSize.height / 4 + 100,
+                          ),
+                          LoadingBouncingGrid.square(
+                          borderColor: Color(0xFF9e946b),
+                          borderSize: 1.0,
+                          size: 70.0,
+                          backgroundColor: Colors.transparent,
+                          )
+                          ],
+
+                        ),
+                        ),
+
+            errorWidget: (context, url, error) => Icon(Icons.error),
+)
+             
+                    
             //),
           );
   }
@@ -246,6 +317,9 @@ class _LoginPageState extends State<LoginPage> {
 
     // Example code of how to sign in with google.
    void _signInWithGoogle() async {
+         setState(() {
+      isLoading = true;
+    });
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -284,9 +358,8 @@ class _LoginPageState extends State<LoginPage> {
       accessToken: _tokenController.text,
     );
     
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
-    assert(user.email != null);
+    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    assert(user.email !=null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);

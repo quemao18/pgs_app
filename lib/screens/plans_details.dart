@@ -57,7 +57,7 @@ class _ListPageState extends State<ListPage> {
               padding: EdgeInsets.only(top: 4, bottom: 4),
               child: 
               CachedNetworkImage(
-                  height: 60, width: 60,
+                  height: 50, width: 50,
                   imageUrl: data['company_logo'],
                   placeholder: (context, url) => new CircularProgressIndicator(),
                   errorWidget: (context, url, error) => new Icon(Icons.image),
@@ -106,7 +106,7 @@ class _ListPageState extends State<ListPage> {
 
     final makeBody = Container(
       //width: 400,
-      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
+      margin: new EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
       child: isLoading?  
         Center(

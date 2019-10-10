@@ -98,7 +98,8 @@ void userId() async {
         
                                 colorFilter: new ColorFilter.mode(Colors.black87.withOpacity(0.8), BlendMode.dstATop),
         
-                                image: AssetImage("./assets/images/screen2.jpg"),
+                                //image: AssetImage("./assets/images/screen2.jpg"),
+                                image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.jpg?alt=media&token=7539a2ee-e05a-4044-9afe-d113de6956ee'),
         
                                 fit: BoxFit.cover,
         

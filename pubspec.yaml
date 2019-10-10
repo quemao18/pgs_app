@@ -17,13 +17,16 @@ dependencies:
     sdk: flutter
   http: ^0.12.0
   #global_configuration: ^1.4.0
-  #loading: ^1.0.1
+  loading_animations: "^2.0.0"
   url_launcher: 4.1.0+1
   flutter_facebook_login: ^3.0.0
   firebase_auth: ^0.14.0+5
   google_sign_in: ^4.0.7
   material_design_icons_flutter: 3.2.4495
-  keyboard_visibility: any
+  # keyboard_visibility: ^[CURRENT VERSION NUMBER]
+  cached_network_image: ^1.1.1
+
+  flutter_keyboard_visibility: ^0.7.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,6 +50,9 @@ flutter:
 
   assets:
     - ./assets/images/screen1.png
+    - ./assets/images/screen2.png
+    - ./assets/images/screen2.jpg
+    - ./assets/images/screen3.png
     - ./assets/images/screen2.jpg
     - ./assets/images/logo.png
     - ./assets/images/logos/Sin-fondo-(4).png

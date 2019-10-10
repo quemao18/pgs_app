@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:pgs_contulting/components/TextFields/inputField.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -10,6 +9,7 @@ import '../models/user.dart';
 import 'drawer.dart';
 import 'user_second.dart';
 import 'dart:convert';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class UserFirst extends StatefulWidget {
   @override
@@ -32,36 +32,23 @@ class _UserFirst extends State<UserFirst> {
 
   List data = List(); //edited line
   // bool _isButtonDisabled = false;
-  bool _keyboardState;
-  KeyboardVisibilityNotification _keyboardVisibility = new KeyboardVisibilityNotification();
-  int _keyboardVisibilitySubscriberId;
+  bool _keyboardState= false;
+
 
   @protected
   void initState() {
     super.initState();
-
-    _keyboardState = _keyboardVisibility.isKeyboardVisible;
-
-    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          print(visible);
+    KeyboardVisibilityNotification().addNewListener(
+        onChange: (bool visible) {
+          //print(visible);
           _keyboardState = visible;
-        });
-      },
-    );
+        },
+      );
   }
 
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
-  }
-
-  void afterFirstLayout() {
-    // Calling the same function "after layout" to resolve the issue.
-       //getCountries(context);
-       //print('hola');
-
+    super.dispose();
   }
 
 
@@ -74,8 +61,7 @@ class _UserFirst extends State<UserFirst> {
     }else{
       //Navigator.pop(context);
     }
-    //_redirectLogin();
-    //getCountries(context);
+
     var config = AppConfig.of(context);
     return Scaffold(
         appBar: new AppBar(
@@ -131,18 +117,7 @@ class _UserFirst extends State<UserFirst> {
                             onSaved: (val) =>
                                 setState(() => _user.name = val),
                           ),
-                          // TextFormField(
-                          //     decoration:
-                          //         InputDecoration(labelText: 'Apellido'),
-                          //     validator: (value) {
-                          //       if (value.isEmpty) {
-                          //         return 'Introduce tu apellido';
-                          //       }
-                          //       return null;
-                          //     },
-                          //     onSaved: (val) =>
-                          //         setState(() => _user.lastName = val)
-                          // ),
+
                           InputField(
                             autovalidate: false,
                               controller: _emailTextController,
