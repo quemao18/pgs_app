@@ -1,5 +1,5 @@
 name: pgs_contulting
-description: A new Flutter project.
+description: Cotizador de Seguros.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -10,7 +10,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -27,6 +27,10 @@ dependencies:
   cached_network_image: ^1.1.1
 
   flutter_keyboard_visibility: ^0.7.0
+  intl: ">=0.14.0"
+  grouped_buttons: ^1.0.4
+  flutter_launcher_icons: "^0.7.3"
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -49,14 +53,15 @@ flutter:
   uses-material-design: true
 
   assets:
-    - ./assets/images/screen1.png
-    - ./assets/images/screen2.png
-    - ./assets/images/screen2.jpg
-    - ./assets/images/screen3.png
-    - ./assets/images/screen2.jpg
+    # - ./assets/images/screen1.png
+    # - ./assets/images/screen2.png
+    # - ./assets/images/screen3.png
+    # - ./assets/images/screen2.jpg
+    - ./assets/images/drawer1.jpg
     - ./assets/images/logo.png
     - ./assets/images/logos/Sin-fondo-(4).png
     - ./assets/images/logos/Sin-fondo-(1).png
+    - ./assets/images/logos/logo-ini.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -101,3 +106,9 @@ flutter:
         - asset: ./fonts/vaud/Vaud.ttf
         - asset: ./fonts/vaud/Vaud-Italic.ttf
         - asset: ./fonts/vaud/Vaud-Bold.ttf
+
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  # android: true
+  image_path: "./assets/icon/icon.png"

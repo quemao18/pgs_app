@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-  IconData icon;
-  IconData iconSuf;
-  String hintText;
-  TextInputType keyboardType;
-  Color textFieldColor, iconColor, iconColorSuf;
-  bool obscureText;
-  double bottomMargin;
-  TextStyle textStyle, hintStyle;
-  var validator;
-  var onSaved;
-  var controller;
-  var onChanged;
-  var onPressedSuf;
-  bool autovalidate = false;
-  Key key;
-  bool enabled;
+  final IconData icon;
+  final IconData iconSuf;
+  final String hintText;
+  final TextInputType keyboardType;
+  final Color textFieldColor, iconColor, iconColorSuf;
+  final bool obscureText;
+  final double bottomMargin;
+  final TextStyle textStyle, hintStyle;
+  final validator;
+  final onSaved;
+  final controller;
+  final onChanged;
+  final onPressedSuf;
+  final bool autovalidate;
+  final Key key;
+  final bool enabled;
 
   //passing props in the Constructor.
   InputField(
@@ -42,6 +42,8 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final ThemeData theme = Theme.of(context);
+
     return (new Container(
         margin: new EdgeInsets.only(bottom: bottomMargin),
           child: new TextFormField(
@@ -81,11 +83,11 @@ class InputField extends StatelessWidget {
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF9e946b),),
+              borderSide: BorderSide(color: theme.primaryColor,),
               borderRadius: BorderRadius.circular(30),
              ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color:Color(0xFF9e946b),),
+              borderSide: BorderSide(color: theme.primaryColor,),
               borderRadius: BorderRadius.circular(30),
             ),
             border: OutlineInputBorder(

@@ -8,9 +8,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pgs_contulting/screens/drawer.dart';
+// import 'package:pgs_contulting/screens/drawer.dart';
 import 'package:pgs_contulting/screens/user_first.dart';
-import '../app_config.dart';
 import './progress_hud.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
@@ -51,23 +50,25 @@ class _LoginPageState extends State<LoginPage> {
   var userLogged;
   final userFb = UserLogged();
   final userGoogle = UserLogged();
-  bool _success;
-  var _userID;
+  // bool _success;
+  // var _userID;
   String _message;
   final TextEditingController _tokenController = TextEditingController();
-  List listImg = [
+  static List listImg = [
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen1.png?alt=media&token=7e207097-6292-434a-bdd4-336c5ac5e88f',
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.png?alt=media&token=507976f1-f48f-40ce-ab9d-bb0c933ab908',
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen3.png?alt=media&token=7bb9ab03-cee0-4126-a4da-03990b6c8819',
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen4.png?alt=media&token=edf4579e-50f6-4a01-bebd-69128740be0c'
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen4.png?alt=media&token=edf4579e-50f6-4a01-bebd-69128740be0c',
+  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen5.png?alt=media&token=c31b40aa-9edf-4296-8fed-0663127bbf2c'
   ];
-  List textIni = [
+  List listTxt = [
     'No te vendemos una poliza... Te damos razones para tenerla.',
     'Cotiza el mejor plan que se adapte a tus necesidades.',
     'Que tu ausencia no afecte el futuro de tu familia.',
     'Imprescindible en tu camino es contar con nuestro respaldo.'
   ];
-  int rand = next(0, 3);
+  // int maxImg = listImg.length;
+  int rand = next(0, 4);
   int randText = next(0, 3);
   var facebookLogin = FacebookLogin();
 
@@ -118,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         //   ]:null,
         // )
         // ,
-        drawer: DrawerOnly(),
+        // drawer: DrawerOnly(),
         body:
         _home()
       );
@@ -127,6 +128,8 @@ class _LoginPageState extends State<LoginPage> {
 
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
+    final ThemeData theme = Theme.of(context);
+
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
@@ -134,7 +137,6 @@ class _LoginPageState extends State<LoginPage> {
             CachedNetworkImage(
                     imageUrl: listImg[rand],
                     imageBuilder: (context, imageProvider) => Container(
-              
                     decoration: BoxDecoration(
                       image: DecorationImage(
                                 // image: AssetImage("./assets/images/screen"+rand.toString()+".png"),
@@ -150,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: isLoading ? 
                                   Center(
                                   child: LoadingBouncingGrid.square(
-                                    borderColor: Color(0xFF9e946b),
+                                    borderColor: theme.primaryColor,
                                     borderSize: 1.0,
                                     size: 70.0,
                                     backgroundColor: Colors.transparent,
@@ -162,14 +164,16 @@ class _LoginPageState extends State<LoginPage> {
                                     : Column(
                                     children: <Widget>[
 
-                                      new Center(
-                                        child: new Image(
-                                        image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
-                                        width: (screenSize.width < 500)
-                                            ? 250.0
-                                            : (screenSize.width / 4) + 12.0,
-                                        height: screenSize.height / 4 + 100,
-                                        )
+                                      new Center( 
+                                        child: 
+                                        Image( 
+                                              color: theme.accentColor.withOpacity(0.7),
+                                              image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
+                                              width: (screenSize.width < 500)
+                                                  ? 300.0
+                                                  : (screenSize.width / 4) + 12.0,
+                                              height: screenSize.height / 4 + 100,
+                                            )
                                       ),
                                       Container(
                                         width: 280,
@@ -181,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
                                         textAlign: TextAlign.center,
                                         ),
-                                        subtitle: Text('\n'+textIni[randText].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
+                                        subtitle: Text('\n'+listTxt[randText].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                         textAlign: TextAlign.center,
                                         ),
                                         ),
@@ -253,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: screenSize.height / 4 + 100,
                           ),
                           LoadingBouncingGrid.square(
-                          borderColor: Color(0xFF9e946b),
+                          borderColor: theme.primaryColor,
                           borderSize: 1.0,
                           size: 70.0,
                           backgroundColor: Colors.transparent,
@@ -263,8 +267,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         ),
 
-            errorWidget: (context, url, error) => Icon(Icons.error),
-)
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+              )
              
                     
             //),
@@ -338,14 +342,14 @@ class _LoginPageState extends State<LoginPage> {
     assert(user.uid == currentUser.uid);
     setState(() {
       if (user != null) {
-        _success = true;
-        _userID = user.uid;
+        // _success = true;
+        // _userID = user.uid;
         this.userGoogle.name = user.displayName;
         this.userGoogle.email = user.email;
         this.userGoogle.photo = user.photoUrl;
         onLoginStatusChanged(true, profileData: user, userLogged: userGoogle);
       } else {
-        _success = false;
+        // _success = false;
       }
     });
   }
@@ -480,12 +484,12 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  _logout() async {
-    await facebookLogin.logOut();
-    onLoginStatusChanged(false);
-    print("Logged out");
-    _auth.signOut();
-    _googleSignIn.signOut();
-    Navigator.of(context).pushReplacementNamed('/login');
-  }
+  // _logout() async {
+  //   await facebookLogin.logOut();
+  //   onLoginStatusChanged(false);
+  //   print("Logged out");
+  //   _auth.signOut();
+  //   _googleSignIn.signOut();
+  //   Navigator.of(context).pushReplacementNamed('/login');
+  // }
 }

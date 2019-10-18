@@ -1,12 +1,11 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../screens/home_material.dart';
-import '../screens/list_options.dart';
+
 import '../screens/user_first.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 
 import '../app_config.dart';
@@ -27,9 +26,9 @@ class DrawerOnly extends StatelessWidget  {
 
   final drawerItems = [
     new DrawerItem("Inicio", Icons.home, LoginPage()),
-    new DrawerItem("Cotizar", Icons.account_box, UserFirst(userData: null)),
+    new DrawerItem("Nueva cotización", Icons.perm_contact_calendar, UserFirst(userData: null)),
     //new DrawerItem("Aseguradoras", Icons.list, ListPage()),
-    new DrawerItem("¿Quienes somos?", Icons.info, HomeMaterial())
+    new DrawerItem("¿Quienes somos?", Icons.person_pin, HomeMaterial())
   ];
 
   _launchURL(url) async {
@@ -41,17 +40,18 @@ class DrawerOnly extends StatelessWidget  {
   }
 }
 
-String uid;
-final FirebaseAuth _auth = FirebaseAuth.instance;
-void userId() async {
-    final FirebaseUser user = await _auth.currentUser();
-    uid = user.uid;
-    // here you write the codes to input the data into firestore
-  }
+// String uid;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+//   void userId() async {
+//       final FirebaseUser user = await _auth.currentUser();
+//       uid = user.uid;
+//       // here you write the codes to input the data into firestore
+//     }
 
   Widget build (BuildContext context) {
     var config = AppConfig.of(context);
-        print(uid);
+    final ThemeData theme = Theme.of(context);
+
           var drawerOptions = <Widget>[];
           for (var i = 0; i < this.drawerItems.length; i++) {
             var d = this.drawerItems[i];
@@ -92,14 +92,14 @@ void userId() async {
         
                           decoration: BoxDecoration(
 
-                            color: Color(0xFF9e946b).withOpacity(0.2),
+                            color: theme.primaryColor.withOpacity(0.2),
         
                               image: DecorationImage(
         
                                 colorFilter: new ColorFilter.mode(Colors.black87.withOpacity(0.8), BlendMode.dstATop),
         
-                                //image: AssetImage("./assets/images/screen2.jpg"),
-                                image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.jpg?alt=media&token=7539a2ee-e05a-4044-9afe-d113de6956ee'),
+                                image: AssetImage("./assets/images/drawer1.jpg"),
+                                // image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fdrawer1.jpg?alt=media&token=65290dff-4e1a-45a0-9884-803635dd46ef'),
         
                                 fit: BoxFit.cover,
         
@@ -133,9 +133,9 @@ void userId() async {
         
                                     ListTile(
         
-                                      title: Text('¿Tienes una emergencia?'),
+                                      title: Text('Llámanos'),
         
-                                      leading: Icon(Icons.healing),
+                                      leading: Icon(Icons.local_phone),
         
                                       onTap: () => launch('tel://'+config.phone1),
         

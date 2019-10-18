@@ -23,6 +23,7 @@ class UserFirst extends StatefulWidget {
 class _UserFirst extends State<UserFirst> {
   final _formKey = GlobalKey<FormState>();
   final _user = User();
+  bool isLoading = false;
 
   TextEditingController _nameTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
@@ -34,6 +35,7 @@ class _UserFirst extends State<UserFirst> {
   // bool _isButtonDisabled = false;
   bool _keyboardState= false;
 
+  var countries;
 
   @protected
   void initState() {
@@ -44,6 +46,12 @@ class _UserFirst extends State<UserFirst> {
           _keyboardState = visible;
         },
       );
+  
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        countries = getCountries(context);
+      });
+    });
   }
 
   @override
@@ -62,7 +70,9 @@ class _UserFirst extends State<UserFirst> {
       //Navigator.pop(context);
     }
 
+    final ThemeData theme = Theme.of(context);
     var config = AppConfig.of(context);
+    
     return Scaffold(
         appBar: new AppBar(
           title: new Text(config.appName),
@@ -177,7 +187,7 @@ class _UserFirst extends State<UserFirst> {
                               padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
                                 decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
-                                    side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  Color(0xFF9e946b) ),
+                                    side: BorderSide(width: 1.0, style: BorderStyle.solid, color: theme.primaryColor ),
                                     borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                   ),
                                 ),
@@ -219,13 +229,13 @@ class _UserFirst extends State<UserFirst> {
                               padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0.0),
                               decoration: ShapeDecoration(
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  Color(0xFF9e946b)),
+                                  side: BorderSide(width: 1.0, style: BorderStyle.solid, color: theme.primaryColor),
                                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                 ),
                               ),
 
                               child: FutureBuilder(
-                                  future: getCountries(context) ,
+                                  future: countries ,
                                   builder: (context, snapshot){
                                     if (snapshot.hasData) {
                                       //print(snapshot.data);
@@ -288,6 +298,7 @@ class _UserFirst extends State<UserFirst> {
                                 onPressed: (){   
                                     final form = _formKey.currentState;
                                     if (form.validate()) {
+
                                     form.save();
                                     //_user.save();
                                     //_showDialog(context);
@@ -302,7 +313,7 @@ class _UserFirst extends State<UserFirst> {
                                 
                                 child: Icon(Icons.navigate_next)//Text('Siguiente')
                         ),
-                        visible: !_keyboardState,
+                        visible: !_keyboardState && !isLoading,
                         )
                         );
   }
@@ -333,12 +344,16 @@ class _UserFirst extends State<UserFirst> {
   }
 
     getCountries(BuildContext context) async{
+      isLoading = true;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/country/countries/'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
         //print(resBody);
         if (res.statusCode == 200) {
+          setState(() {
+           isLoading = false; 
+          });
             return resBody;
         }else{
           throw Exception('Failed to load post');

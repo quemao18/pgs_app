@@ -83,7 +83,7 @@ class _UserSecond extends State<UserSecond>{
   @override
   Widget build(BuildContext context) {
     //print(widget.user.email);
-    
+    final ThemeData theme = Theme.of(context);  
     var config = AppConfig.of(context);
     return Scaffold(
       key: _scaffoldstate,
@@ -122,7 +122,7 @@ class _UserSecond extends State<UserSecond>{
                                         value: _value2,
                                         onChanged: _onChanged2,
                                         title: new Text('¿Conyugue o Casado/a?', style: TextStyle(fontWeight: FontWeight.bold),),
-                                        activeColor: Color(0xFF9e946b),
+                                        activeColor: theme.primaryColor,
                                     )
                                   ),
                                 Container(
@@ -132,6 +132,7 @@ class _UserSecond extends State<UserSecond>{
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
+                            
                                     Flexible(
                                         child:
                                         Container(
@@ -167,7 +168,7 @@ class _UserSecond extends State<UserSecond>{
                                         padding: EdgeInsets.only(top:0),
                                         decoration: ShapeDecoration(
                                             shape: RoundedRectangleBorder(
-                                              side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  Color(0xFF9e946b) ),
+                                              side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  theme.primaryColor ),
                                               borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                             ),
                                           ),
@@ -202,8 +203,9 @@ class _UserSecond extends State<UserSecond>{
                                       ),
                                       
                                       ),
-                                      ), 
-                                      //SizedBox(width: 100.0,),
+                                      ),
+                                   
+                                      // SizedBox(height: 100.0,),
                                       //SizedBox(width: 0.0,),
                                     ],
                                   ),
@@ -215,7 +217,7 @@ class _UserSecond extends State<UserSecond>{
                                         value: _value1,
                                         onChanged: _onChanged1,
                                         title: new Text('¿Tiene niños?', style: TextStyle(fontWeight: FontWeight.bold),),
-                                        activeColor: Color(0xFF9e946b),
+                                        activeColor: theme.primaryColor,
                                     )
                                   ),
                                   Container(
@@ -341,7 +343,7 @@ class _UserSecond extends State<UserSecond>{
                                                      //decoration: BoxDecoration(color: Color(0xFF9e946b),),
                                                   child: Padding(
                                                   padding: const EdgeInsets.all(0.0),
-                                                   child: _buildRow(index, ages ),
+                                                   child: _buildRow(index, ages, theme ),
                                                   ),
                                                  ),
                                                 );
@@ -497,54 +499,18 @@ class _UserSecond extends State<UserSecond>{
     });
   }
 
-  _buildRow(int index, ages){
+  _buildRow(int index, ages, theme){
     if(index<5)
     {
       _btnEnabled = true;
-      return _tile(" Niño "+ (index+1).toString(), ages[index].toString() + ' años', Icons.delete_sweep);
+      return _tile(" Niño "+ (index+1).toString(), ages[index].toString() + ' años', Icons.delete_sweep, theme);
     }else{
       _btnEnabled = false;
       _textFieldControllerAge.text = '';
     }
   }
 
-  //_buildRow(int index, ages) {
-    //print(index);
-    //return Text("Edad " + (index).toString()+': '+ages[index].toString(), style: TextStyle(fontSize: 15),);
-
-    // return Row(  // Replace with a Row for horizontal icon + text
-    //     children: <Widget>[
-    //       Text(" Edad del niño/a " + (index+1).toString()+': '+ages[index].toString() + ' años', style: TextStyle(fontSize: 16),),
-    //        Padding(
-    //             padding: EdgeInsets.only(left: 130),
-    //             child: Icon(Icons.delete_sweep)
-    //         ),
-    //     ],
-    //   );
-    //   _btnEnabled = false;
-  //   return 
-
-
-  //   FlatButton(
-
-  //     color: Color(0xFF9e946b),
-  //     onPressed: () {
-  //        setState(() {
-  //         ages.removeAt(index);
-  //         });
-  //     },
-  //     //child: Text("Edad " + (index+1).toString()+': '+ages[index].toString(),)
-  //     child: Row( // Replace with a Row for horizontal icon + text
-  //       children: <Widget>[
-  //         Icon(Icons.delete_forever),
-  //         Text(" Edad " + (index+1).toString()+': '+ages[index].toString(),)
-  //       ],
-  //     ),
-    
-  //   );
-  //}
-
-  ListTile _tile(String title, String subtitle, IconData icon) => ListTile(
+  ListTile _tile(String title, String subtitle, IconData icon, ThemeData theme) => ListTile(
       title: Text(title,
           style: TextStyle(
             fontWeight: FontWeight.w500,
@@ -553,19 +519,10 @@ class _UserSecond extends State<UserSecond>{
       subtitle: Text(subtitle),
       leading: Icon(
         icon,
-        color: Color(0xFF9e946b),
+        color:theme.primaryColor,
       ),
     );
 
-
-_showDialog2(text, tempo){
-  _scaffoldstate.currentState.showSnackBar(
-                  new SnackBar(
-                      duration: new Duration(seconds: tempo),
-                      content: new Text(text),
-                   )
-                   );
-  }
 
   String validateAge(String value) {
     if(_value2 == false) return null;
@@ -598,7 +555,7 @@ _showDialog2(text, tempo){
   String validateGender(String value){
       if(_value2 == false) return null;
       if (value == null || value == '' ) {
-        return 'Selecciona el género del conyugue';
+        return 'Selecciona el género';
       }
       return null;
     }

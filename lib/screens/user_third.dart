@@ -57,6 +57,8 @@ class _UserThird extends State<UserThird>{
   Widget build(BuildContext context) {
     //print(widget.user2.spouseAge);
     var config = AppConfig.of(context);
+    final ThemeData theme = Theme.of(context);
+    
     return Scaffold(
       key: _scaffoldstate,
         appBar: new AppBar(
@@ -85,9 +87,9 @@ class _UserThird extends State<UserThird>{
                               Container(
                                   padding: EdgeInsets.only(top: 10),
                                   child: ListTile(
-                                    title: Text('COTIZAR', textAlign: TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                                    title: Text('COTIZAR', textAlign: TextAlign.center, style: TextStyle(color:theme.accentColor,  fontSize: 25, fontWeight: FontWeight.bold)),
                                     subtitle: Text('\nCompleta si deseas alguna cobertura adicional',
-                                    style: TextStyle(fontSize: 15,height: 1.3),
+                                    style: TextStyle(fontSize: 15,height: 1.3, color: theme.accentColor),
                                     ),
                                     ),
                                   ),
@@ -111,7 +113,7 @@ class _UserThird extends State<UserThird>{
                           child:CheckboxListTile(
                               title: const Text('Maternidad'),
                               value: _user.maternity,
-                              activeColor: Color(0xFF9e946b),
+                              activeColor: theme.primaryColor,
                               onChanged: (val) {
                                 setState(() => _user.maternity = val );
                               }),
@@ -122,7 +124,7 @@ class _UserThird extends State<UserThird>{
                           child: CheckboxListTile(
                               title: const Text('Fumador'),
                               value: _user.smoker,
-                              activeColor: Color(0xFF9e946b),
+                              activeColor: theme.primaryColor,
                               onChanged: (val) {
                                 setState(() => _user.smoker = val );
                               }),
@@ -133,7 +135,7 @@ class _UserThird extends State<UserThird>{
                           child: CheckboxListTile(
                               title: const Text('Transplante de organos'),
                               value: _user.transplant,
-                              activeColor: Color(0xFF9e946b),
+                              activeColor: theme.primaryColor,
                               onChanged: (val) {
                                 setState(() => _user.transplant = val);
                               }),
@@ -149,7 +151,7 @@ class _UserThird extends State<UserThird>{
                         Visibility(child:                             
                         FloatingActionButton(
                           elevation: 10,
-                         
+                        
                                 onPressed: (){   
                                     final form = _formKey.currentState;
                                     if (form.validate()) {
@@ -160,7 +162,7 @@ class _UserThird extends State<UserThird>{
                                            if(id==null)
                                           _showDialog2('Error', 5);
                                           else{
-                                          _showDialog2('Registro correcto...', 5);
+                                          // _showDialog2('Registro correcto...', 5);
                                            Navigator.push(
                                             context,
                                             MaterialPageRoute(
