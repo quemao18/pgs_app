@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                       new Center( 
                                         child: 
                                         Image( 
-                                              color: theme.accentColor.withOpacity(0.7),
+                                              color: theme.primaryColor.withOpacity(1 ),
                                               image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
                                               width: (screenSize.width < 500)
                                                   ? 300.0
