@@ -23,7 +23,6 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 final _random = new Random();
 
-
 int next(int min, int max) => min + _random.nextInt(max - min);
 
 void main() {
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   // bool _success;
   // var _userID;
   String _message;
-  final TextEditingController _tokenController = TextEditingController();
+  // final TextEditingController _tokenController = TextEditingController();
   static List listImg = [
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen1.png?alt=media&token=7e207097-6292-434a-bdd4-336c5ac5e88f',
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.png?alt=media&token=507976f1-f48f-40ce-ab9d-bb0c933ab908',
@@ -87,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
       //return UserFirst(userData: userLogged);
       // print(this.profileData);
     });
-   UserFirst(userData: profileData);
+  //  UserFirst(userData: profileData);
   }
 
   @override
@@ -286,8 +285,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var facebookLoginResult =
-        await facebookLogin.logIn(['email']);
+    var facebookLoginResult = await facebookLogin.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
@@ -297,18 +295,20 @@ class _LoginPageState extends State<LoginPage> {
         onLoginStatusChanged(false);
         break;
       case FacebookLoginStatus.loggedIn:
+        String token = facebookLoginResult.accessToken.token;
         var graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
 
         var profile = json.decode(graphResponse.body);
         //print(graphResponse.body);
-        _tokenController.text = facebookLoginResult.accessToken.token;
+        
         this.userFb.name =  profile['name'];
         this.userFb.email = profile['email'];
         this.userFb.photo = profile['picture']['data']['url'];
 
+        _signInWithFacebook(token);
         onLoginStatusChanged(true, profileData: profile, userLogged: userFb);
-        _signInWithFacebook();
+
         break;
 
     }
@@ -320,14 +320,12 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
     assert(user.email != null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
@@ -352,15 +350,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Example code of how to sign in with Facebook.
-  void _signInWithFacebook() async {
+  void _signInWithFacebook(token) async {
     //_googleSignIn.signOut();
     //_auth.signOut();
     final AuthCredential credential = FacebookAuthProvider.getCredential(
-      accessToken: _tokenController.text,
+      accessToken: token
     );
     
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-    assert(user.email !=null);
+    // print(user.email);
+    assert(user.providerData[1].email !=null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
@@ -411,19 +410,20 @@ class _LoginPageState extends State<LoginPage> {
   }*/
 
   void _getCurrentUser() async{
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    // print(user); 
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final FirebaseUser user = await _auth.currentUser();
+    // print(user.providerData[1]); 
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.email;
+        this.userGoogle.email = user.providerData[1].email;
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
       else
       isLoggedIn = false;
     });
-
+    // print(this.userGoogle.email);
     this.userLogged = this.userGoogle;
     
   }

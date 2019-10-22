@@ -2,6 +2,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../screens/home_material.dart';
 
@@ -29,10 +30,11 @@ class DrawerOnly extends StatelessWidget  {
   //int _selectedDrawerIndex = 0;
 
   final drawerItems = [
-    new DrawerItem("Inicio", Icons.home, LoginPage()),
-    new DrawerItem("Nueva cotización", Icons.perm_contact_calendar, UserFirst(userData: null)),
-    //new DrawerItem("Aseguradoras", Icons.list, ListPage()),
-    new DrawerItem("¿Quienes somos?", Icons.person_pin, HomeMaterial())
+    new DrawerItem("Inicio", MdiIcons.homeOutline, LoginPage()),
+    new DrawerItem("¿Quienes somos?", MdiIcons.accountMultipleOutline, HomeMaterial()),
+    new DrawerItem("Nueva cotización", MdiIcons.calendarAccountOutline, UserFirst(userData: null)),
+    new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, LoginPage())
+
   ];
 
   _launchURL(url) async {
@@ -65,7 +67,7 @@ class DrawerOnly extends StatelessWidget  {
                 title: new Text(d.title),
                 // selected: i == _selectedDrawerIndex,
                 onTap: () {
-                  if(i==2) {
+                  if(i==1) {
                     _launchURL('https://pgs-consulting.com/somos-pgs/');
                     }
                   else{
@@ -120,7 +122,7 @@ class DrawerOnly extends StatelessWidget  {
                         new Column(children: drawerOptions),
 
                         //padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 10.0),
-        
+
                         Container(
         
                           //padding:new EdgeInsets.only(top: 190.0),
@@ -139,7 +141,7 @@ class DrawerOnly extends StatelessWidget  {
         
                                       title: Text('Llámanos'),
         
-                                      leading: Icon(Icons.local_phone),
+                                      leading: Icon(MdiIcons.phoneOutline),
         
                                       onTap: () => launch('tel://'+config.phone1),
         
@@ -150,9 +152,37 @@ class DrawerOnly extends StatelessWidget  {
                                 ),
         
                               ),
+
+                          Container(
+                          margin: EdgeInsets.only(right: 10,),
+                          padding:new EdgeInsets.only(top: 80.0),
+        
+                          child: new Align(
+        
+                              alignment: Alignment.bottomCenter,
+        
+                              child:
+        
+                                  Container(
+        
+                                    child:
+        
+                                    ListTile(
+        
+                                      title: Text('Términos y condiciones de privacidad', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45),),
+                                      onTap: () => _launchURL('https://pgs-consulting.com/somos-pgs/'),
+                     
+        
+                                    ), 
+        
+                                  ),
+        
+                                ),
+        
+                              ),
                           
                           Container(
-                          padding:new EdgeInsets.only(top: 190.0),  
+                          // padding:new EdgeInsets.only(top: 0),  
                           child: 
                           Divider(color: theme.primaryColor,),
                           ),

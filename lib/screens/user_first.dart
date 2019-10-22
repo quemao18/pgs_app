@@ -61,8 +61,9 @@ class _UserFirst extends State<UserFirst> {
 
 
   Widget build(BuildContext context) {
-    // print(widget.userData);
+    // print(widget.userData.email);
     if(widget.userData!=null){
+      
     if(widget.userData.name != '') _nameTextController.text = widget.userData.name;
     if(widget.userData.email != '') _emailTextController.text = widget.userData.email;
     _user.photo = widget.userData.photo;
@@ -133,7 +134,7 @@ class _UserFirst extends State<UserFirst> {
                               controller: _emailTextController,
                               obscureText: false,
                               keyboardType: TextInputType.emailAddress,
-                              icon: Icons.mail_outline,
+                              icon: Icons.mail,
                               bottomMargin: 20.0,
                               hintText: "Email",
                               // decoration:InputDecoration(labelText: 'Email'),
