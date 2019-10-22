@@ -11,9 +11,6 @@ import 'drawer.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'plans_details2.dart';
-
-
 class ListPage extends StatefulWidget {
   final String userId;
   final String title;
@@ -297,5 +294,22 @@ getCompanies(BuildContext context) async {
         }
       
   }
+
+}
+
+// One entry in the multilevel list displayed by this app.
+class Entry {
+  Entry(
+    this.companyId,
+    this.planId,
+    this.title, 
+    this.subTitle, [this.children = const <Entry>[]]);
+
+  final String title;
+  final String subTitle;
+  final String planId;
+  final String companyId;
+  final List<Entry> children;
+  // final String planId;
 
 }
