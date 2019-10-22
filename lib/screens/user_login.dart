@@ -23,6 +23,7 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 final _random = new Random();
 
+
 int next(int min, int max) => min + _random.nextInt(max - min);
 
 void main() {
@@ -38,7 +39,6 @@ class UserLogged{
 
 
 class LoginPage extends StatefulWidget {
-  
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoggedIn = false;
   bool isLoading = false;
   var profileData;
-  var userLogged;
+  var userLogged ;
   final userFb = UserLogged();
   final userGoogle = UserLogged();
   // bool _success;
@@ -72,6 +72,12 @@ class _LoginPageState extends State<LoginPage> {
   int randText = next(0, 3);
   var facebookLogin = FacebookLogin();
 
+  @protected
+  initState(){
+    super.initState();
+    _getCurrentUser();
+  }
+
    onLoginStatusChanged(bool isLoggedIn, {profileData, userLogged}) {
     setState(() {
       isLoading = false;
@@ -79,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       this.profileData = profileData;
       this.userLogged = userLogged;
       //return UserFirst(userData: userLogged);
-      print(this.profileData);
+      // print(this.profileData);
     });
    UserFirst(userData: profileData);
   }
@@ -87,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     //var config = AppConfig.of(context);
-
+// print(isLoggedIn);
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(
@@ -197,17 +203,6 @@ class _LoginPageState extends State<LoginPage> {
                                       Align(
                                         alignment: Alignment.bottomCenter,
                                           child: this.isLoggedIn==true ?
-                                          // RaisedButton(
-                                          //   onPressed: () {
-                                          //   Navigator.push(
-                                          //         context,
-                                          //         MaterialPageRoute(
-                                          //           builder: (context) => UserFirst(userData: userLogged)
-                                          //           ),
-                                          //       );
-                                          //   },
-                                          //   child: Text('Cotizar')
-                                          //   )
                                             RoundedButton(
                                               buttonName: "Cotizar",
                                               onTap:  () {
@@ -342,6 +337,7 @@ class _LoginPageState extends State<LoginPage> {
     assert(user.uid == currentUser.uid);
     setState(() {
       if (user != null) {
+        isLoggedIn = true;
         // _success = true;
         // _userID = user.uid;
         this.userGoogle.name = user.displayName;
@@ -349,6 +345,7 @@ class _LoginPageState extends State<LoginPage> {
         this.userGoogle.photo = user.photoUrl;
         onLoginStatusChanged(true, profileData: user, userLogged: userGoogle);
       } else {
+        isLoggedIn = false;
         // _success = false;
       }
     });
@@ -413,6 +410,23 @@ class _LoginPageState extends State<LoginPage> {
       );
   }*/
 
+  void _getCurrentUser() async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    // print(user); 
+    setState(() {
+      if(user!=null){
+        this.userGoogle.name = user.displayName;
+        this.userGoogle.email = user.email;
+        this.userGoogle.photo = user.photoUrl;
+        isLoggedIn = true;
+      }
+      else
+      isLoggedIn = false;
+    });
+
+    this.userLogged = this.userGoogle;
+    
+  }
   _displayLoginButton() {
     // final Size screenSize = MediaQuery.of(context).size;
         return Column(children: <Widget>[
@@ -484,12 +498,5 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  // _logout() async {
-  //   await facebookLogin.logOut();
-  //   onLoginStatusChanged(false);
-  //   print("Logged out");
-  //   _auth.signOut();
-  //   _googleSignIn.signOut();
-  //   Navigator.of(context).pushReplacementNamed('/login');
-  // }
+
 }

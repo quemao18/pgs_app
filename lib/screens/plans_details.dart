@@ -89,12 +89,15 @@ class _PlansPageState extends State<PlansPage> {
       child: isLoading?  
         Container(
         margin: EdgeInsets.only(top: screenSize.height/5),
-        child: LoadingBouncingGrid.square(
+        child: Column(children: <Widget>[
+          LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
         borderSize: 1.0,
         size: 70.0,
         backgroundColor: Colors.transparent,
-        )
+        ),
+        Text('\nBuscando los mejores precios...')
+        ],)
         )
       :
       FutureBuilder(
@@ -280,7 +283,7 @@ getCompanies(BuildContext context) async {
     var price2 = [];
     var price3 = [];
     var dedu1, dedu2, dedu3 = 0;
-// print(dependent);
+print(plan);
     for(var p in plan['price']){ //print(p['age_range']);
 
       if(p['age_range'] == '1 dependiente'){

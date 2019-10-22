@@ -1,5 +1,6 @@
 
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../screens/home_material.dart';
@@ -9,6 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 import '../app_config.dart';
+
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
 class DrawerItem {
@@ -59,9 +63,9 @@ class DrawerOnly extends StatelessWidget  {
               new ListTile(
                 leading: new Icon(d.icon),
                 title: new Text(d.title),
-                //selected: i == _selectedDrawerIndex,
+                // selected: i == _selectedDrawerIndex,
                 onTap: () {
-                  if(i==3) {
+                  if(i==2) {
                     _launchURL('https://pgs-consulting.com/somos-pgs/');
                     }
                   else{
@@ -146,7 +150,40 @@ class DrawerOnly extends StatelessWidget  {
                                 ),
         
                               ),
+                          
+                          Container(
+                          padding:new EdgeInsets.only(top: 190.0),  
+                          child: 
+                          Divider(color: theme.primaryColor,),
+                          ),
+                          Container(
+                          // padding:new EdgeInsets.only(top: 180.0),
+                          // color: theme.accentColor,
+                          child: new Align(
         
+                              alignment: Alignment.bottomCenter,
+        
+                              child:
+        
+                                  Container(
+        
+                                    child:
+        
+                                    ListTile(
+        
+                                      title: Text('Salir'),
+        
+                                      leading: Icon(Icons.exit_to_app),
+        
+                                      onTap: () => _logout(context),
+        
+                                    ), 
+        
+                                  ),
+        
+                                ),
+        
+                              ),
                
         
                         ],
@@ -155,5 +192,11 @@ class DrawerOnly extends StatelessWidget  {
       
           );
         }
+
+  _logout(BuildContext context) async {
+    print("Logged out");
+    _auth.signOut();
+    Navigator.of(context).pushReplacementNamed('/login');
+  }
       
 }

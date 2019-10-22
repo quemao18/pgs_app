@@ -35,9 +35,6 @@ class ExpansionTileSample extends StatelessWidget {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
-
-
-
            return 
            Column(
              children: <Widget>[

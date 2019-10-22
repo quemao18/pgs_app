@@ -75,11 +75,10 @@ class _ListPageState extends State<ListPage> {
                 children: (data['plans'][0]['price'].length > 0) ?
                   data['plans'].map<Widget>((document) {
                     // print(data['plans'][1]);
-                  // print(document['price'].length);
+                  //  print(document['name']);
                   isCheck =  !document['status'];
                   // var valueAdd;
-
-                  if(document['price'].length>1)
+                  // if(document['price'].length>1)
                   return new CheckboxListTile(
                   activeColor: theme.primaryColor,
                   title: new 
@@ -106,19 +105,11 @@ class _ListPageState extends State<ListPage> {
                           builData(data, document, false);
                           }
 
-                            
-                        
-
-                        // var over21s = dataResult2.where((user) => user.title == document['name'] );
-                          // print(over21s.toList());
-                                
-
-                          // builData(data);
                         });
 
                       },
                     );
-                  return Container();
+                  // return Container();
                 }).toList()
                 :
                 <Widget>[
@@ -139,12 +130,15 @@ class _ListPageState extends State<ListPage> {
       child:  isLoading?  
         Container(
         margin: EdgeInsets.only(top: screenSize.height/5),
-        child: LoadingBouncingGrid.square(
+        child: Column(children: <Widget>[
+          LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
         borderSize: 1.0,
         size: 70.0,
         backgroundColor: Colors.transparent,
-        )
+        ),
+        Text('\nBuscando los mejores planes...')
+        ],)
         )
       :FutureBuilder(
         future: companies,
@@ -156,7 +150,7 @@ class _ListPageState extends State<ListPage> {
                   return new Text('Error: ${snapshot.error}');
                else{
               //return new Text('Result: ${snapshot.data}');
-              //print(snapshot.data);
+              // print(snapshot.data);
               return ListView.builder(
                         //   separatorBuilder: (context, index) => Divider(
                         //   color: Colors.black45,
@@ -165,7 +159,8 @@ class _ListPageState extends State<ListPage> {
                         shrinkWrap: true,
                         itemCount: snapshot.data == null? 0: snapshot.data.length,
                         itemBuilder: (BuildContext context, int index) {
-                        if(snapshot.data[index]['plans'][0]['price'].length>1)
+                        // print(snapshot.data[index]);
+                        // if(snapshot.data[index]['plans'][0]['price'].length>1)
                         return 
                           // Container(
                             // child: Card(
@@ -173,17 +168,17 @@ class _ListPageState extends State<ListPage> {
                             // //decoration: BoxDecoration(color: Color(0xFF9e946b),),
                             // child: 
                             Container(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: theme.primaryColor)
-                        ),     
+                                  margin: const EdgeInsets.only(bottom: 10.0),
+                                  decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: theme.primaryColor)
+                                ),     
                               child:
                             makeExpansion(snapshot.data[index]),
                             // ),
                             // )
                           );
-                          return Container();
+                          // return Container();
                         },
                       );
                }
@@ -280,35 +275,6 @@ dataResult2.add(valueAdd);
 
 }
 
-//   final List<Entry> dataResult = <Entry>[
-//   Entry(
-//     'Company A',
-//     <Entry>[
-//       Entry('option 1'),
-//       Entry('option 2'),
-//       Entry('option 3'),
-//     ],
-//   ),
-//   Entry(
-//     'comp B',
-//     <Entry>[
-//       Entry('B0'),
-//       Entry('B1'),
-//       Entry('B2'),
-//     ],
-//   ),
-
-// ];
-
-checkPlans(plans){
-  bool show = false;
-  for(var plan in plans)
-  // print(plan['price'].length);
-    if(plan['price'].length > 1) show = true;
-    // else
-    return show;
-}
-
 getCompanies(BuildContext context) async {
   //print(widget.userId);
   setState(() {
@@ -319,7 +285,7 @@ getCompanies(BuildContext context) async {
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/company/companies/'+widget.userId+'/options'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
-        //print(resBody);
+        // print(resBody);
         if (res.statusCode == 200) {
               setState(() {
                 isLoading = false;
