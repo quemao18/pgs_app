@@ -14,8 +14,9 @@ import 'package:http/http.dart' as http;
 class ListPage extends StatefulWidget {
   final String userId;
   final String title;
+  final userData;
   
-  ListPage({Key key, this.title, this.userId}) : super(key: key);
+  ListPage({Key key, this.title, this.userId, this.userData}) : super(key: key);
 
 
   @override
@@ -95,11 +96,11 @@ class _ListPageState extends State<ListPage> {
                           if(!companiesIds.contains(data['company_id']))
                           companiesIds.add(data['company_id']);
                           planIds.add(document['plan_id']);
-                          builData(data, document, true);
+                          // builData(data, document, true);
                           }else{
                           companiesIds.remove(data['company_id']);
                           planIds.remove(document['plan_id']);
-                          builData(data, document, false);
+                          // builData(data, document, false);
                           }
 
                         });
@@ -230,7 +231,7 @@ class _ListPageState extends State<ListPage> {
                   MaterialPageRoute(
                   builder: (context) => 
                   //ExpansionTileSample(dataResult2, companiesIds),
-                  PlansPage(plansIds: planIds, userId: widget.userId,)
+                  PlansPage(plansIds: planIds, userId: widget.userId, userData: widget.userData)
                   ),
                   );
                 },
@@ -249,12 +250,16 @@ builData(data, plan, check){
 
 Entry valueAdd=
     Entry(
+      data['company_name'],
+      data['company_logo'],
       data['company_id'],
       plan['plan_id'],
       plan['name'], 
       plan['description'],
       <Entry>[
-        Entry(
+        Entry(     
+            data['company_name'],
+            data['company_logo'],
             data['company_id'], 
             plan['plan_id'],
             'Pago USD '+(plan['price'][0]['price1'].toString()), 
@@ -300,6 +305,8 @@ getCompanies(BuildContext context) async {
 // One entry in the multilevel list displayed by this app.
 class Entry {
   Entry(
+    this.companyName,
+    this.companyLogo,
     this.companyId,
     this.planId,
     this.title, 
@@ -309,6 +316,8 @@ class Entry {
   final String subTitle;
   final String planId;
   final String companyId;
+  final String companyName;
+  final String companyLogo;
   final List<Entry> children;
   // final String planId;
 

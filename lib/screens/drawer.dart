@@ -2,6 +2,8 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../screens/home_material.dart';
@@ -14,6 +16,8 @@ import '../app_config.dart';
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FacebookLogin _facebookLogin = FacebookLogin();
 
 
 class DrawerItem {
@@ -30,10 +34,10 @@ class DrawerOnly extends StatelessWidget  {
   //int _selectedDrawerIndex = 0;
 
   final drawerItems = [
-    new DrawerItem("Inicio", MdiIcons.homeOutline, LoginPage()),
+    new DrawerItem("Inicio", MdiIcons.homeOutline, LoginPage(message: null,)),
     new DrawerItem("¿Quienes somos?", MdiIcons.accountMultipleOutline, HomeMaterial()),
     new DrawerItem("Nueva cotización", MdiIcons.calendarAccountOutline, UserFirst(userData: null)),
-    new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, LoginPage())
+    new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, LoginPage(message: null,))
 
   ];
 
@@ -225,6 +229,8 @@ class DrawerOnly extends StatelessWidget  {
 
   _logout(BuildContext context) async {
     print("Logged out");
+    _googleSignIn.signOut();
+    _facebookLogin.logOut();
     _auth.signOut();
     Navigator.of(context).pushReplacementNamed('/login');
   }

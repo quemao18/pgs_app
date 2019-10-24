@@ -43,7 +43,7 @@ class _UserSecond extends State<UserSecond>{
   List<DropdownMenuItem> list = [];
   List<String> ages = [];
 
-  int value = 0;
+  int count = 0;
 
   bool _keyboardState= false;
 
@@ -275,42 +275,7 @@ class _UserSecond extends State<UserSecond>{
                                         ),
                                       ),
                                       SizedBox(width: 0),
-                                        // Flexible(
-                                        //   flex: 1,
-                                        //   // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0.0),
-                                        //   // child: FlatButton(
-                                            
-                                        //   //     // onPressed: () {
-                                        //   //     //   if(_btnEnabled==true)
-                                        //   //     //   _addItem();
-                                        //   //     // },
-                                        //   //     onPressed: _btnEnabled==false || ages.length>4  ? null: _addItem,
-                                        //   //     child: Row( // Replace with a Row for horizontal icon + text
-                                        //   //       children: <Widget>[
-                                        //   //         Text(" Agregar " ),
-                                        //   //         Icon(Icons.add_circle_outline),
-                                        //   //       ],
-                                        //   //     ),
-
-                                        //   //   )
-                                        //  child: Container(
-                                        //         width: 160,
-                                        //         margin: EdgeInsets.only(left: 0, top: 0),
-                                        //         padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                                        //         decoration: ShapeDecoration(
-                                        //           shape: RoundedRectangleBorder(
-                                        //             side: BorderSide(width: 1.0, style: BorderStyle.solid, color: Color(0xFF9e946b) ),
-                                        //             borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                        //           ),
-                                        //         ),
-                                        //         child: FlatButton.icon(
-                                        //           onPressed: _btnEnabled==false || ages.length>4  ? null: _addItem,
-                                        //           icon: Icon(MdiIcons.plus, color:  Color(0xFF9e946b)), 
-                                        //           label: Text('Agregar', 
-                                        //           style: TextStyle(color: Colors.black),)),
-                                        //     ),
-                                        //   ),
-                                        //   SizedBox(width: 0,),
+                
                                             ],
                                           ),
                                   ),
@@ -457,32 +422,10 @@ class _UserSecond extends State<UserSecond>{
                                     );
                                     }
                                 },
-                                /*onPressed: (){   
-                                    final form = _formKey.currentState;
-                                    if (form.validate()) {
-                                      form.save();
-                                      _user.dependentsAges = ages;
-                                      print(_user);
-                                      _user.save(context,widget.user).then((id) {
-                                           print("Result: $id");
-                                           if(id==null)
-                                          _showDialog2('Error', 5);
-                                          
-                                          else
-                                          _showDialog2('Registro correcto...', 5);
-                                      } 
-                                     
-                                      
-                                      );
-                                      
-                                      //saveUser(context, widget.user, _user)
-                                      //print(widget.user.name);
-                                    }
-                                },*/
                                 
                                 child: Icon(Icons.navigate_next)//Text('Siguiente')
                         ),
-                        visible:  !_keyboardState
+                        visible:  !_keyboardState && (!_value1 || ages.length>0)
                     ),
               );
   }
@@ -490,13 +433,18 @@ class _UserSecond extends State<UserSecond>{
 
 
   _addItem() {
+    if(_textFieldControllerAge.text!='')
     setState(() {
-      value = value + 1;
+      count = count + 1;
       //_ageDependent = _textFieldControllerAge.text;
       ages.add(
         _textFieldControllerAge.text
       );
+      FocusScope.of(context).requestFocus(FocusNode());
     });
+  else{
+  _textFieldControllerAge.text = '';
+  }
   }
 
   _buildRow(int index, ages, theme){
@@ -539,10 +487,10 @@ class _UserSecond extends State<UserSecond>{
     if(_value1 == false) {_btnEnabled = false; return null;}
     Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
     RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
+    if (!regex.hasMatch(value) && value!='')
     { 
       _btnEnabled = false;
-      return 'Coloca una edad válida';
+      return 'Coloca una edad válida y presiona + para agregar al niño';
     }
       
     else{

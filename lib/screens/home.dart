@@ -16,7 +16,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: LoginPage()
+      body: LoginPage(message: null,)
     );
   }
 }

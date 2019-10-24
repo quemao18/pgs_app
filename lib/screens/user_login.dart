@@ -20,13 +20,14 @@ import 'package:loading_animations/loading_animations.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FacebookLogin _facebookLogin = FacebookLogin();
 
 final _random = new Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
 
 void main() {
-  runApp(LoginPage());
+  runApp(LoginPage(message: null,));
 }
 
 class UserLogged{
@@ -38,6 +39,10 @@ class UserLogged{
 
 
 class LoginPage extends StatefulWidget {
+  final String message;
+  
+  LoginPage({Key key, this.message}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -69,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   // int maxImg = listImg.length;
   int rand = next(0, 4);
   int randText = next(0, 3);
-  var facebookLogin = FacebookLogin();
+  // var facebookLogin = FacebookLogin();
 
   @protected
   initState(){
@@ -134,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
     final ThemeData theme = Theme.of(context);
-
+    // print(widget.message);
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
@@ -185,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                                         padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                        // margin: EdgeInsets.only(top: 0),
                                         child: 
-                                        ListTile(
+                                        widget.message == null ? ListTile(
                                         title: Text( isLoggedIn ? 'Hola '+this.userLogged.name.split(' ')[0] : 'Bienvenido', 
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
                                         textAlign: TextAlign.center,
@@ -193,7 +198,17 @@ class _LoginPageState extends State<LoginPage> {
                                         subtitle: Text('\n'+listTxt[randText].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                         textAlign: TextAlign.center,
                                         ),
+                                        ): 
+                                        ListTile(
+                                        title: Text( 'Gracias por preferirnos', 
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
+                                        textAlign: TextAlign.center,
                                         ),
+                                        subtitle: Text('\n'+ widget.message, style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
+                                        textAlign: TextAlign.center,
+                                        ),
+                                        ),
+
                                       ),
 
                                       Container(
@@ -203,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                                         alignment: Alignment.bottomCenter,
                                           child: this.isLoggedIn==true ?
                                             RoundedButton(
-                                              buttonName: "Cotizar",
+                                              buttonName: widget.message == null ? "Cotizar": "Cotizar nuevamente",
                                               onTap:  () {
                                                   Navigator.push(
                                                         context,
@@ -285,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    var facebookLoginResult = await facebookLogin.logIn(['email']);
+    var facebookLoginResult = await _facebookLogin.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
@@ -351,8 +366,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // Example code of how to sign in with Facebook.
   void _signInWithFacebook(token) async {
-    //_googleSignIn.signOut();
-    //_auth.signOut();
+
     final AuthCredential credential = FacebookAuthProvider.getCredential(
       accessToken: token
     );

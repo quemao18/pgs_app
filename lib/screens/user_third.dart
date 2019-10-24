@@ -79,72 +79,74 @@ class _UserThird extends State<UserThird>{
                     key: _formKey,
                     
                           child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                   
-
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                          
+                          Container(
+                              padding: EdgeInsets.only(top: 10, bottom: 20),
+                              child: ListTile(
+                                title: Text('COTIZAR', textAlign: TextAlign.center, style: TextStyle(color:theme.accentColor,  fontSize: 25, fontWeight: FontWeight.bold)),
+                                subtitle: Text('\nCompleta si deseas alguna cobertura adicional',
+                                style: TextStyle(fontSize: 15,height: 1.3, color: theme.accentColor),
+                                ),
+                                ),
+                              ),
+                          Container(
+                            child: 
+                            Column(children: <Widget>[
                               Container(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: ListTile(
-                                    title: Text('COTIZAR', textAlign: TextAlign.center, style: TextStyle(color:theme.accentColor,  fontSize: 25, fontWeight: FontWeight.bold)),
-                                    subtitle: Text('\nCompleta si deseas alguna cobertura adicional',
-                                    style: TextStyle(fontSize: 15,height: 1.3, color: theme.accentColor),
-                                    ),
-                                    ),
-                                  ),
-                          // Container(
-                          //   //padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          //   //padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                          //   //child: Text('Otra información'),
-                          //   //child: Text("OR"),
-                          //     margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-                          //     child: Divider(
-                          //       color: Color(0xFF9e946b),
-                          //       //height: 6,
-                          //     )
-                          //   ),
-                            //),
-                          //),
-                          
-                          Container(
-                            height: 40,
-                          //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child:CheckboxListTile(
-                              title: const Text('Maternidad'),
-                              value: _user.maternity,
-                              activeColor: theme.primaryColor,
-                              onChanged: (val) {
-                                setState(() => _user.maternity = val );
-                              }),
-                          ),
-                          Container(
-                             height: 40,
-                          //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: CheckboxListTile(
-                              title: const Text('Fumador'),
-                              value: _user.smoker,
-                              activeColor: theme.primaryColor,
-                              onChanged: (val) {
-                                setState(() => _user.smoker = val );
-                              }),
-                          ),
-                          Container(
-                             height: 40,
-                          //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: CheckboxListTile(
-                              title: const Text('Transplante de organos'),
-                              value: _user.transplant,
-                              activeColor: theme.primaryColor,
-                              onChanged: (val) {
-                                setState(() => _user.transplant = val);
-                              }),
+                              // height: 40,
+                              padding: EdgeInsets.all(10),
+                              //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child:CheckboxListTile(
+                                  title: const Text('Complicaciones de maternidad'),
+                                  value: _user.maternity,
+                                  activeColor: theme.primaryColor,
+                                  onChanged: (val) {
+                                    setState(() => _user.maternity = val );
+                                  }),
+        
+                              ),
+                              // Container(
+                                //    height: 40,
+                                // //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                // child: CheckboxListTile(
+                                //     title: const Text('Fumador'),
+                                //     value: _user.smoker,
+                                //     activeColor: theme.primaryColor,
+                                //     onChanged: (val) {
+                                //       setState(() => _user.smoker = val );
+                                //     }),
+                                // ),
+                                Container(
+                                  //  height: 40,
+                                //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                margin: EdgeInsets.only(top: 0),
+                                padding: EdgeInsets.all(10),
+                                child: CheckboxListTile(
+                                    title: const Text('Transplante de organos'),
+                                    value: _user.transplant,
+                                    activeColor: theme.primaryColor,
+                                    onChanged: (val) {
+                                      setState(() => _user.transplant = val);
+                                    }),
+                            
+                                ),
+                            
+                          ],) ,
+                                decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: theme.primaryColor)
+                              ),  
                           ),
 
+
                           
-                        ])
+                        ]),
                         )
-                        )
+                        ),
+                      
                         )
                         ),
                         floatingActionButton:  
@@ -166,7 +168,7 @@ class _UserThird extends State<UserThird>{
                                            Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                            builder: (context) => ListPage(userId: id)
+                                            builder: (context) => ListPage(userId: id, userData: _user)
                                             ),
                                             );
                                           }

@@ -14,7 +14,7 @@ class App extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         // Set routes for using the Navigator.
         '/home': (BuildContext context) => new HomeMaterial(),
-        '/login': (BuildContext context) => new LoginPage(),
+        '/login': (BuildContext context) => new LoginPage(message: null,),
 
       },
       //title: config.appName,

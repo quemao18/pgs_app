@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:pgs_contulting/screens/user_login.dart';
 
 import '../app_config.dart';
 import 'drawer.dart';
@@ -17,9 +20,9 @@ class PlansPage extends StatefulWidget {
   final plans;
   final List plansIds;
   final String userId;
+  final userData;
 
-
-  PlansPage({Key key, this.plans, this.plansIds, this.userId}) : super(key: key);
+  PlansPage({Key key, this.plans, this.plansIds, this.userId, this.userData}) : super(key: key);
 
   @override
   _PlansPageState createState() => _PlansPageState();
@@ -66,7 +69,7 @@ class _PlansPageState extends State<PlansPage> {
               title: new ListTile(title:Text(planName,  style: TextStyle(height: 1.3, fontWeight: FontWeight.bold)), 
               subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),),
                 children:<Widget>[
-                    _getChildren(plan, theme),
+                    _getChildren(plan, theme, widget.userId, data, widget.userData),
                     // if(spouse <= 1 && plan['price'].length<1)
                     // Container(margin: EdgeInsets.only(bottom: 5),
                     // child:
@@ -239,7 +242,16 @@ class _PlansPageState extends State<PlansPage> {
         Visibility(child:                              
         FloatingActionButton(
                 onPressed: (){   
-                  print(selectedOptions);
+                  // print(selectedOptions);
+                  _saveData();
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                  builder: (context) => 
+                  //ExpansionTileSample(dataResult2, companiesIds),
+                  LoginPage(message: 'Cotización realizada con éxito, muy pronto nos pondremos en contacto contigo.')
+                  ),
+                  );
                 },
                 
                 child: Icon(Icons.navigate_next)//Text('Siguiente')
@@ -278,12 +290,19 @@ getCompanies(BuildContext context) async {
 
     final formatter = NumberFormat("#,###.##");
     var selectedOptions = [];
-    _getChildren(plan, theme){
-    var price1 = []; 
+
+    _getChildren(plan, theme, userId, data, userData){
+
+    var price1 = [];
     var price2 = [];
     var price3 = [];
-    var dedu1, dedu2, dedu3 = 0;
-print(plan);
+    var price = [], dedu = 0;
+    var maternity = 0.toDouble(), transplant = 0.toDouble();
+
+    var dedu1 = 0, dedu2 =0, dedu3 = 0;
+    var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
+
+    // print(data);
     for(var p in plan['price']){ //print(p['age_range']);
 
       if(p['age_range'] == '1 dependiente'){
@@ -328,10 +347,32 @@ print(plan);
       }
       
     }
-    // print(spouse);
-     var sum1 = price1.reduce((a, b) => a + b );
-     var sum2 = price2.reduce((a, b) => a + b );
-     var sum3 = price3.reduce((a, b) => a + b );
+
+    var costAdmin = [], maternityArr = [], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
+
+    for(var pln in data['plans']){
+        // print(pln['maternity']);
+        if(plan['plan_id']==pln['plan_id']){
+          costAdmin.add(pln['cost_admin']);
+          if(userData.maternity) maternityArr.add(pln['maternity']);
+          if(userData.transplant) transplantArr.add(pln['transplant']);
+        }
+    }
+
+    if(costAdmin.length>0)
+      sumCostAdmin = costAdmin.reduce((a, b) => a + b );
+    if(maternityArr.length>0)
+      sumMaternity = maternityArr.reduce((a, b) => a + b );
+    if(transplantArr.length>0)
+      sumTransplant = transplantArr.reduce((a, b) => a + b );
+   
+    // print(sumMaternity );
+     if(price1.length>0)
+     sum1 = price1.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price2.length>0)
+     sum2 = price2.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price3.length>0)
+     sum3 = price3.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
 
      return RadioButtonGroup(
         // margin: EdgeInsets.only(left: 30),
@@ -358,16 +399,28 @@ print(plan);
           //onSelected: (String selected) => print(selected),
           onChange: (String label, int index){ 
             // print("label: $label index: $plan");
-            var values = label.split(' ');
+            // var values = label.split(' ');
+            if(index==0) {price = price1; dedu = dedu1;}
+            if(index==1) {price = price2; dedu = dedu2;}
+            if(index==2) {price = price3; dedu = dedu3;}
             setState(() {
-              
+             
               selectedOptions.removeWhere((item) => item['plan_id'] == plan['plan_id']);
               selectedOptions.add(
                 {
-                "plan_id": plan['plan_id'],
-                "label" : label.toString(),
-                'price': values[4],
-                'deductible': values[7]
+                'plan_id': plan['plan_id'],
+                'company_id':plan['company_id'],
+                'company_name':data['company_name'],
+                'company_logo':data['company_logo'],
+                'plan_name': plan['name'],
+                'user_id': userId, 
+                'deductible': dedu,
+                'option_prices': price,
+                'option_selected': index+1,
+                'maternity': sumMaternity,
+                'transplant': sumTransplant,
+                'cost_admin': sumCostAdmin,
+                'date': DateTime.now().toString(),
                 }
               );
             });
@@ -377,6 +430,37 @@ print(plan);
 
           );
     }
+
+    _saveData() async {
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      // print(selectedOptions);
+      data = selectedOptions;
+
+      for(var i = 0; i < data.length; i++){
+        var res = (await apiRequestPost(url+'v1/account/'+widget.userId+'/plans', data[i]));
+        print(res);
+        // return res;
+      }
+
+
+    }
+
+    apiRequestPost(String url, Map jsonMap) async {
+      HttpClient httpClient = new HttpClient();
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.add(utf8.encode(json.encode(jsonMap)));
+      HttpClientResponse response = await request.close();
+
+      // todo - you should check the response.statusCode
+      String reply = await response.transform(utf8.decoder).join();
+      //print(json.decode(reply)['result']);
+      httpClient.close();
+      if(response.statusCode == 200)
+        return json.decode(reply)['result'] as String;
+
+      }
 
 /*
     _getChildren(data, planId, pln, _radioCompany) {
