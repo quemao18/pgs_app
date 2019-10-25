@@ -32,6 +32,7 @@ class _PlansPageState extends State<PlansPage> {
   bool isCheck = false;
   List planIds = [];
   bool isLoading = false;
+  bool isSaving = false;
   var companies;
   int count=0;
   int dependent=0, spouse =0;
@@ -99,7 +100,7 @@ class _PlansPageState extends State<PlansPage> {
         size: 70.0,
         backgroundColor: Colors.transparent,
         ),
-        Text('\nBuscando los mejores precios...')
+        isSaving ?  Text('\nEnviando solicitud...') : Text('\nBuscando los mejores precios...')
         ],)
         )
       :
@@ -297,7 +298,6 @@ getCompanies(BuildContext context) async {
     var price2 = [];
     var price3 = [];
     var price = [], dedu = 0;
-    var maternity = 0.toDouble(), transplant = 0.toDouble();
 
     var dedu1 = 0, dedu2 =0, dedu3 = 0;
     var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
@@ -432,18 +432,23 @@ getCompanies(BuildContext context) async {
     }
 
     _saveData() async {
+        setState(() {
+            isLoading = true;
+            isSaving = true;
+        });
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       // print(selectedOptions);
       data = selectedOptions;
-
+      String res2;
       for(var i = 0; i < data.length; i++){
         var res = (await apiRequestPost(url+'v1/account/'+widget.userId+'/plans', data[i]));
-        print(res);
-        // return res;
+        res2 = res;
+        // print(res);
       }
+      // print(res2);
 
-
+      return res2;
     }
 
     apiRequestPost(String url, Map jsonMap) async {
@@ -457,8 +462,13 @@ getCompanies(BuildContext context) async {
       String reply = await response.transform(utf8.decoder).join();
       //print(json.decode(reply)['result']);
       httpClient.close();
-      if(response.statusCode == 200)
+      if(response.statusCode == 200){
+        setState(() {
+            isLoading = false;
+            isSaving = false;
+        });
         return json.decode(reply)['result'] as String;
+      }
 
       }
 
