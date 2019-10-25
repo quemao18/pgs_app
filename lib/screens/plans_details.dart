@@ -250,7 +250,7 @@ class _PlansPageState extends State<PlansPage> {
                   MaterialPageRoute(
                   builder: (context) => 
                   //ExpansionTileSample(dataResult2, companiesIds),
-                  LoginPage(message: 'Cotización realizada con éxito, muy pronto nos pondremos en contacto contigo.')
+                  LoginPage(message: 'Cotización realizada con éxito, muy pronto te contactaremos para culminar la emisión.')
                   ),
                   );
                 },

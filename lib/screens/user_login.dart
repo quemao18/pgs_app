@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
+import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
@@ -145,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
             //margin: ,
             child: 
             CachedNetworkImage(
-                    imageUrl: listImg[rand],
+                    imageUrl: widget.message == null ? listImg[rand] : listImg[4],
                     imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -171,24 +173,31 @@ class _LoginPageState extends State<LoginPage> {
                                     // valueColor: new AlwaysStoppedAnimation<Color>(Color(0xFF9e946b)),
                                     // ),
                                     )
-                                    : Column(
+                                    : Column( 
                                     children: <Widget>[
 
-                                      new Center( 
+                                      new Container( 
+                                        padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 40),
                                         child: 
                                         Image( 
                                               color: theme.primaryColor.withOpacity(1 ),
                                               image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
                                               width: (screenSize.width < 500)
-                                                  ? 300.0
+                                                  ? 160.0
                                                   : (screenSize.width / 4) + 12.0,
-                                              height: screenSize.height / 4 + 100,
+                                              height: screenSize.height / 5 + 0,
                                             )
+                                      ),
+                                      
+                                      widget.message == null ? 
+                                      Container(padding: EdgeInsets.only(top:60),):
+                                      new Container(
+                                      child: new Icon(Icons.check_circle_outline, color: Colors.lightGreen[500], size: 110.0,)
                                       ),
                                       Container(
                                         width: 280,
-                                        padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                                       // margin: EdgeInsets.only(top: 0),
+                                        // padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                      //  margin: EdgeInsets.only(bottom: 20),
                                         child: 
                                         widget.message == null ? ListTile(
                                         title: Text( isLoggedIn ? 'Hola '+this.userLogged.name.split(' ')[0] : 'Bienvenido', 
@@ -212,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
 
                                       Container(
-                                      padding:new EdgeInsets.only(top: screenSize.height/5),
+                                      padding: widget.message == null ?  EdgeInsets.only(top: screenSize.height/6): EdgeInsets.only(top: screenSize.height/12),
                                       child: 
                                       Align(
                                         alignment: Alignment.bottomCenter,
@@ -244,7 +253,16 @@ class _LoginPageState extends State<LoginPage> {
                                         
                                       ),
                                       ),
-
+                                      widget.message !=null ? Container(
+                                        width: 180,
+                                        padding: EdgeInsets.only(top:30),
+                                        child: Center(
+                                          child: 
+                                          Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,
+                                          style: TextStyle(height: 1.3, fontSize: 15, color: Colors.white70, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                          ) ,
+                                      ),
+                                      ): Container(),
                                     ],
                                     ),
                                 
