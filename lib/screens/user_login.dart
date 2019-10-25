@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   int rand = next(0, 4);
   int randText = next(0, 3);
   // var facebookLogin = FacebookLogin();
+  // final _random = new Random();
 
   @protected
   initState(){
@@ -141,13 +142,13 @@ class _LoginPageState extends State<LoginPage> {
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
     final ThemeData theme = Theme.of(context);
-    // print(widget.message);
+    // print(rand);
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
             child: 
             CachedNetworkImage(
-                    imageUrl: widget.message == null ? listImg[rand] : listImg[4],
+                    imageUrl: listImg[_random.nextInt(listImg.length)],
                     imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -204,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
                                         textAlign: TextAlign.center,
                                         ),
-                                        subtitle: Text('\n'+listTxt[randText].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
+                                        subtitle: Text('\n'+ listTxt[_random.nextInt(listTxt.length)].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                         textAlign: TextAlign.center,
                                         ),
                                         ): 
@@ -271,17 +272,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     
                     ),
-            placeholder: (context, url) =>       
-                          new Center(
-                          
+            placeholder: (context, url) => 
+                        Center(child:       
+                          new Container(
+                          padding: EdgeInsets.only(top: 30),
                           child:
                           Column(children: <Widget>[
                           new Image(
                           image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
                           width: (screenSize.width < 500)
-                              ? 250.0
+                              ? 160.0
                               : (screenSize.width / 4) + 12.0,
-                          height: screenSize.height / 4 + 100,
+                          height: screenSize.height / 4 + 0,
                           ),
                           LoadingBouncingGrid.square(
                           borderColor: theme.primaryColor,
@@ -291,6 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                           )
                           ],
 
+                        ),
                         ),
                         ),
 

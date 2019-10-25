@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../app_config.dart';
 import 'drawer.dart';
@@ -67,8 +69,19 @@ class _PlansPageState extends State<PlansPage> {
     final Size screenSize = MediaQuery.of(context).size;
     // final formatter = NumberFormat("#,###.##");
     ExpansionTile makeExpansion(data, planName, planDescription, planId, pln, plan) => ExpansionTile(
-              title: new ListTile(title:Text(planName,  style: TextStyle(height: 1.3, fontWeight: FontWeight.bold)), 
-              subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),),
+              title: new ListTile(
+                // leading: Icon(Icons.access_alarm),
+                title:Text(planName,  style: TextStyle(height: 1.3, fontWeight: FontWeight.bold)), 
+                subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),
+                trailing: plan['url_pdf'] !=null ? 
+                IconButton(
+                  icon: Icon(MdiIcons.download, 
+                  size: 35, 
+                  color: theme.primaryColor,), 
+                  onPressed: () => _launchURL(plan['url_pdf']), 
+                )
+                : null,
+              ),
                 children:<Widget>[
                     _getChildren(plan, theme, widget.userId, data, widget.userData),
                     // if(spouse <= 1 && plan['price'].length<1)
@@ -133,6 +146,7 @@ class _PlansPageState extends State<PlansPage> {
                         children.add(
                           Container(child: 
                           ListTile(
+                            
                             leading:    
                             Padding(
                             padding: EdgeInsets.only(top: 4, bottom: 4),
@@ -471,6 +485,15 @@ getCompanies(BuildContext context) async {
       }
 
       }
+
+      _launchURL(url) async {
+      //const url = 'https://pgs-consulting.com/somos-pgs/';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
 
 /*
     _getChildren(data, planId, pln, _radioCompany) {
