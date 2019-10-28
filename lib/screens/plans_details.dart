@@ -75,8 +75,8 @@ class _PlansPageState extends State<PlansPage> {
                 subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),
                 trailing: plan['url_pdf'] !=null ? 
                 IconButton(
-                  icon: Icon(MdiIcons.download, 
-                  size: 35, 
+                  icon: Icon(MdiIcons.openInNew, 
+                  size: 25, 
                   color: theme.primaryColor,), 
                   onPressed: () => _launchURL(plan['url_pdf']), 
                 )
