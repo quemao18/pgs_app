@@ -1,10 +1,13 @@
 
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pgs_contulting/screens/user_data.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../screens/home_material.dart';
 
@@ -13,17 +16,26 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 import '../app_config.dart';
+import 'package:http/http.dart' as http;
+
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
+var data;
 
+bool isLoggedIn = false;
+bool isLoading = false;
+var profileData;
+var userLogged ;
+var userData;
 
 class DrawerItem {
   String title;
   IconData icon;
   StatefulWidget page;
+
   DrawerItem(this.title, this.icon, this.page);
 
 }
@@ -32,14 +44,16 @@ class DrawerItem {
 class DrawerOnly extends StatelessWidget  {
 
   //int _selectedDrawerIndex = 0;
-
   final drawerItems = [
     new DrawerItem("Inicio", MdiIcons.homeOutline, LoginPage(message: null,)),
     new DrawerItem("¿Quienes somos?", MdiIcons.accountMultipleOutline, HomeMaterial()),
     new DrawerItem("Nueva cotización", MdiIcons.calendarAccountOutline, UserFirst(userData: null)),
-    new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, LoginPage(message: null,))
+    new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, UserData())
 
   ];
+
+  final userFb = UserLogged();
+  final userGoogle = UserLogged();
 
   _launchURL(url) async {
   //const url = 'https://pgs-consulting.com/somos-pgs/';
@@ -60,6 +74,7 @@ class DrawerOnly extends StatelessWidget  {
 
   Widget build (BuildContext context) {
     var config = AppConfig.of(context);
+    _getCurrentUser(context);
     final ThemeData theme = Theme.of(context);
 
           var drawerOptions = <Widget>[];
@@ -225,7 +240,46 @@ class DrawerOnly extends StatelessWidget  {
                     ),
       
           );
+
+
+  }
+
+       void _getCurrentUser(BuildContext context) async{
+          // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+          final FirebaseUser user = await _auth.currentUser();
+          // print(user.providerData[1]); 
+          // setState(() {
+            if(user!=null){
+              this.userGoogle.name = user.displayName;
+              this.userGoogle.email = user.providerData[1].email;
+              this.userGoogle.photo = user.photoUrl;
+              isLoggedIn = true;
+            }
+            else
+            isLoggedIn = false;
+          // });
+          // print(this.userGoogle.email);
+          userLogged = this.userGoogle;
+          _getUserApi(context);
+          
+          
         }
+
+    _getUserApi(BuildContext context) async{
+        // isLoading = true;
+        var config = AppConfig.of(context);
+        var url = config.apiBaseUrl;
+        var res = await http.get(Uri.encodeFull(url+'v1/account/'+userLogged.email+'/email'), headers: {"Accept": "application/json"});
+        var resBody = json.decode(res.body);
+        print(resBody);
+        if (res.statusCode == 200) {
+        // this.userLogged.userData = resBody;
+          userData = resBody;
+        }else{
+          userData = null;
+        }
+
+    }
 
   _logout(BuildContext context) async {
     print("Logged out");
@@ -234,5 +288,7 @@ class DrawerOnly extends StatelessWidget  {
     _auth.signOut();
     Navigator.of(context).pushReplacementNamed('/login');
   }
+
+ 
       
 }

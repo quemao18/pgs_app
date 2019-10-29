@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:ffi';
+// import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -73,12 +73,12 @@ class _PlansPageState extends State<PlansPage> {
                 // leading: Icon(Icons.access_alarm),
                 title:Text(planName,  style: TextStyle(height: 1.3, fontWeight: FontWeight.bold)), 
                 subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),
-                trailing: plan['url_pdf'] !=null ? 
+                trailing: plan['url_info'] !=null ? 
                 IconButton(
                   icon: Icon(MdiIcons.openInNew, 
                   size: 25, 
                   color: theme.primaryColor,), 
-                  onPressed: () => _launchURL(plan['url_pdf']), 
+                  onPressed: () => _launchURL(plan['url_info']), 
                 )
                 : null,
               ),
@@ -352,7 +352,7 @@ getCompanies(BuildContext context) async {
         price2.add(p['price2']);
         price3.add(p['price3']);
       }
-      if(spouse>2) spouse=0; 
+      if(spouse>1) {spouse=0; price1 = price1.reversed.toList();  price2 = price2.reversed.toList();  price3 = price3.reversed.toList(); } 
       if(p['age_range']=='Deducible'){ 
         print('Deducible');
         dedu1 = p['price1']; 
@@ -439,7 +439,7 @@ getCompanies(BuildContext context) async {
               );
             });
             
-            // print(selectedOptions.toList());
+            print(selectedOptions.toList());
           },
 
           );

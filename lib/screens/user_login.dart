@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -12,12 +11,15 @@ import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:pgs_contulting/screens/drawer.dart';
 import 'package:pgs_contulting/screens/user_first.dart';
+import '../app_config.dart';
 import './progress_hud.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:loading_animations/loading_animations.dart';
+
+import 'user_data.dart';
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,6 +38,7 @@ class UserLogged{
   String name = '';
   String email = '';
   String photo = '';
+  // var userData;
 }
 
 
@@ -54,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   var profileData;
   var userLogged ;
+  var userData = null;
   final userFb = UserLogged();
   final userGoogle = UserLogged();
   // bool _success;
@@ -83,7 +87,14 @@ class _LoginPageState extends State<LoginPage> {
   initState(){
     super.initState();
     _getCurrentUser();
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      // setState(() {
+        // _getPlansUser(context);
+      // });
+    });
   }
+
 
    onLoginStatusChanged(bool isLoggedIn, {profileData, userLogged}) {
     setState(() {
@@ -101,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     //var config = AppConfig.of(context);
 // print(isLoggedIn);
+// print(userData);
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(
@@ -142,7 +154,11 @@ class _LoginPageState extends State<LoginPage> {
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
     final ThemeData theme = Theme.of(context);
-    // print(rand);
+    // var dataUser;
+    // this.userLogged.userData.then((val) {
+    //     dataUser = val;
+    //   });
+    // print(this.userLogged.userData);
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
@@ -222,8 +238,11 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
 
                                       Container(
-                                      padding: widget.message == null ?  EdgeInsets.only(top: screenSize.height/6): EdgeInsets.only(top: screenSize.height/12),
+                                      padding: widget.message == null ?  
+                                      EdgeInsets.only(top: screenSize.height/6): EdgeInsets.only(top: screenSize.height/30),
                                       child: 
+                                      Column(children: <Widget>[
+                                      
                                       Align(
                                         alignment: Alignment.bottomCenter,
                                           child: this.isLoggedIn==true ?
@@ -253,6 +272,36 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         
                                       ),
+
+                                     userData!=null && this.isLoggedIn == true ? 
+                                     Align(
+                                        alignment: Alignment.bottomCenter,
+                                          child: 
+                                            RoundedButton(
+                                              buttonName: "Mis Cotizaciones",
+                                              onTap:  () {
+                                                  // Navigator.pop(context);
+                                                  // _getUserApi(context);
+                                                  // print(userData);
+                                                  Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => UserData()
+                                                          ),
+                                                  );
+                                              },
+                                              width: screenSize.width/2,
+                                              height: 50.0,
+                                              bottomMargin: 10.0,
+                                              borderWidth: 1.0,
+                                              //buttonColor: primaryColor,
+                                            ), 
+                                            
+                                        
+                                      ): Container(),
+
+                                      ],),
+                                   
                                       ),
                                       widget.message !=null ? Container(
                                         width: 180,
@@ -460,8 +509,27 @@ class _LoginPageState extends State<LoginPage> {
     });
     // print(this.userGoogle.email);
     this.userLogged = this.userGoogle;
+    _getUserApi(context);
+    
     
   }
+
+  _getUserApi(BuildContext context) async{
+    // isLoading = true;
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      var res = await http.get(Uri.encodeFull(url+'v1/account/'+this.userLogged.email+'/email'), headers: {"Accept": "application/json"});
+      var resBody = json.decode(res.body);
+        // print(resBody);
+        if (res.statusCode == 200) {
+          // this.userLogged.userData = resBody;
+             userData = resBody;
+        }else{
+            userData = null;
+        }
+
+  }
+
   _displayLoginButton() {
     // final Size screenSize = MediaQuery.of(context).size;
         return Column(children: <Widget>[
