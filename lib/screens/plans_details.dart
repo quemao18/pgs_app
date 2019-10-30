@@ -256,7 +256,8 @@ class _PlansPageState extends State<PlansPage> {
         floatingActionButton:
         Visibility(child:                              
         FloatingActionButton(
-                onPressed: (){   
+                onPressed: (){
+                  // Navigator.of(context).pop();   
                   // print(selectedOptions);
                   _saveData();
                   Navigator.push(

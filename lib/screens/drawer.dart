@@ -1,7 +1,4 @@
 
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -16,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 import '../app_config.dart';
-import 'package:http/http.dart' as http;
 
 
 
@@ -74,7 +70,7 @@ class DrawerOnly extends StatelessWidget  {
 
   Widget build (BuildContext context) {
     var config = AppConfig.of(context);
-    _getCurrentUser(context);
+    // _getCurrentUser(context);
     final ThemeData theme = Theme.of(context);
 
           var drawerOptions = <Widget>[];
@@ -243,43 +239,6 @@ class DrawerOnly extends StatelessWidget  {
 
 
   }
-
-       void _getCurrentUser(BuildContext context) async{
-          // FirebaseUser user = await FirebaseAuth.instance.currentUser();
-          final FirebaseUser user = await _auth.currentUser();
-          // print(user.providerData[1]); 
-          // setState(() {
-            if(user!=null){
-              this.userGoogle.name = user.displayName;
-              this.userGoogle.email = user.providerData[1].email;
-              this.userGoogle.photo = user.photoUrl;
-              isLoggedIn = true;
-            }
-            else
-            isLoggedIn = false;
-          // });
-          // print(this.userGoogle.email);
-          userLogged = this.userGoogle;
-          _getUserApi(context);
-          
-          
-        }
-
-    _getUserApi(BuildContext context) async{
-        // isLoading = true;
-        var config = AppConfig.of(context);
-        var url = config.apiBaseUrl;
-        var res = await http.get(Uri.encodeFull(url+'v1/account/'+userLogged.email+'/email'), headers: {"Accept": "application/json"});
-        var resBody = json.decode(res.body);
-        print(resBody);
-        if (res.statusCode == 200) {
-        // this.userLogged.userData = resBody;
-          userData = resBody;
-        }else{
-          userData = null;
-        }
-
-    }
 
   _logout(BuildContext context) async {
     print("Logged out");

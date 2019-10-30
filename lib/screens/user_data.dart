@@ -6,15 +6,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
+import 'package:pgs_contulting/screens/user_login.dart';
 
 import '../app_config.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
+var data2 ;
 final FirebaseAuth _auth = FirebaseAuth.instance;
 var children = <Widget>[];
 // var userLogged;
-bool isLoadding = false;
+
 class UserData extends StatefulWidget {
 //  final userLogged;
 //   UserData({Key key, this.userLogged}) : super(key: key);
@@ -26,10 +29,8 @@ class UserData extends StatefulWidget {
 }
 
 class UserDataState extends State<UserData> {
-
-  // var email = '' ;
-  // var data;
-  var data2;
+  bool isLoadding = false;
+  bool existUser = true;
   @protected
   initState(){
     super.initState();
@@ -65,13 +66,14 @@ class UserDataState extends State<UserData> {
           _buildCoverImage(screenSize),
           SafeArea(
             child: SingleChildScrollView(
-              child: Column(
+              child: this.existUser == true ? Column(
                 children: <Widget>[
                   FutureBuilder(
                     future: data2,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         //return Text(snapshot.data['name']);
+                        
                         return Column(children: <Widget>[
                         SizedBox(height: screenSize.height / 16.4),
                          _buildProfileImage(snapshot.data['photo']),
@@ -98,7 +100,8 @@ class UserDataState extends State<UserData> {
                             ),
                             );
                     },
-                  ),
+                  )
+                  ,
 
                   // _buildProfileImage(data['photo']),
                   // _buildFullName(data['name']),
@@ -113,7 +116,38 @@ class UserDataState extends State<UserData> {
                   // SizedBox(height: 8.0),
                   // _buildButtons(),
                 ],
-              ),
+              ):
+              Container(
+                padding: EdgeInsets.only(top:200),
+                child: 
+                Column(children: <Widget>[
+                  ListTile(
+                        title: Text( 'No tienes ninguna contización realizada.', 
+                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
+                        textAlign: TextAlign.center,
+                        ),
+                        subtitle: Text('\nIntenta realizar una cotización\n', style: TextStyle(color: Colors.black45, fontSize: 15, height: 1.3),
+                        textAlign: TextAlign.center,
+                        ),
+                        ),
+                        RoundedButton(
+                        buttonName: "Volver",
+                        onTap:  () {
+                            Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginPage(message: null,)
+                                    ),
+                            );
+                        },
+                            width: screenSize.width/2,
+                            height: 50.0,
+                            bottomMargin: 10.0,
+                            borderWidth: 1.0,
+                            buttonColor: theme.primaryColor,
+                        )  
+                ],)
+              )
             ),
           ),
         ],
@@ -193,7 +227,8 @@ class UserDataState extends State<UserData> {
   }
 
   Widget _builPlans(context, plans, theme) {
-
+  var children = <Widget>[];
+  var childrenRev = <Widget>[];
   // print(plans);
   final formatter = NumberFormat("#,###.##");
   String priceUser = '';
@@ -216,9 +251,9 @@ class UserDataState extends State<UserData> {
   priceDependents = plan['option_prices'][2]!=null ? 'Precio Dependientes USD ' + formatter.format(plan['option_prices'][2]).toString():'';
 
   deductible = plan ['deductible']!=null ? 'Deducible USD ' + formatter.format(plan['deductible']) : ''; 
-  maternity = plan ['maternity']!=null ? 'Complicaciones por maternidad USD ' + formatter.format(plan['maternity']) : '';
-  transplant = plan ['transplant']!=null ? 'Transplante de organos USD ' + formatter.format(plan['transplant']) : ''; 
-  costAdmin = plan ['cost_admin']!=null ? 'Costos administrativos USD ' + formatter.format(plan['cost_admin']) : '';
+  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad USD ' + formatter.format(plan['maternity']) : '';
+  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Transplante de organos USD ' + formatter.format(plan['transplant']) : ''; 
+  costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos USD ' + formatter.format(plan['cost_admin']) : '';
 
 
   if(plan['option_prices'].length>0)
@@ -314,11 +349,12 @@ class UserDataState extends State<UserData> {
     );
     
   } //end for plans
-  children = children.reversed.toList();
-    // print(children);
+  // print(children.length);
+  childrenRev = children.reversed.toList();
+  // print(childrenRev.length);
 
     return Container(           
-      child: Column(children: children),
+      child: Column(children: childrenRev),
       );
 
  
@@ -338,18 +374,25 @@ class UserDataState extends State<UserData> {
       setState(() {
       isLoading = true;  
       });
+      var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[1].email+'/email'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
         // print(resBody);
         if (res.statusCode == 200) { 
-          // this.userLogged.userData = resBody;
+          res2 = resBody;
+          if(resBody['msg'] == 'User not found') {
+          setState(() {
+           this.existUser = false; 
+          });
+          res2 = null;
+          }
           
         }else{
-          // data = null;
+          res2 = null;
         }
-        return resBody;
+        return res2;
 
   }
   

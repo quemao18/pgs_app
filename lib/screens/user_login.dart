@@ -26,6 +26,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
 
+
 final _random = new Random();
 
 int next(int min, int max) => min + _random.nextInt(max - min);
@@ -53,11 +54,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
   bool isLoggedIn = false;
   bool isLoading = false;
+  bool isConexion = true;
+  bool existUser = true;
   var profileData;
   var userLogged ;
-  var userData = null;
+  var userData;
   final userFb = UserLogged();
   final userGoogle = UserLogged();
   // bool _success;
@@ -82,15 +86,22 @@ class _LoginPageState extends State<LoginPage> {
   int randText = next(0, 3);
   // var facebookLogin = FacebookLogin();
   // final _random = new Random();
+  String textShow;
+  String imgShow;
 
   @protected
   initState(){
-    super.initState();
+    // if(this.isLoggedIn)
+    this.imgShow = listImg[_random.nextInt(listImg.length)];
+    this.textShow = listTxt[_random.nextInt(listTxt.length)];
     _getCurrentUser();
-
-    Future.delayed(Duration(milliseconds: 100), () {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {   
       // setState(() {
         // _getPlansUser(context);
+        if(this.isLoggedIn)
+        this.userData =_getUserApi(context);
+
       // });
     });
   }
@@ -102,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
       this.isLoggedIn = isLoggedIn;
       this.profileData = profileData;
       this.userLogged = userLogged;
+      // userData =_getUserApi(context);
       //return UserFirst(userData: userLogged);
       // print(this.profileData);
     });
@@ -110,41 +122,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //var config = AppConfig.of(context);
-// print(isLoggedIn);
-// print(userData);
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text(
-        //     "Facebook Login",
-        //     style: TextStyle(color: Colors.white),
-        //   ),
-        //   actions: <Widget>[
-        //     IconButton(
-        //       icon: Icon(
-        //         Icons.exit_to_app,
-        //         color: Colors.white,
-        //       ),
-        //       onPressed: () => facebookLogin.isLoggedIn
-        //           .then((isLoggedIn) => isLoggedIn ? _logout() : {}),
-        //     ),
-        //   ],
-        // ),
-        //  appBar: new AppBar(
-        //   title: new Text(config.appName),
-        //   actions: isLoggedIn==true ? <Widget>[
-        //     IconButton(
-        //       icon: Icon(
-        //         Icons.exit_to_app,
-        //         color: Colors.white,
-        //       ),
-        //       onPressed: () => facebookLogin.isLoggedIn
-        //           .then((isLoggedIn) => isLoggedIn ? _logout() : {}),
-        //     ),
-        //   ]:null,
-        // )
-        // ,
-        // drawer: DrawerOnly(),
+        key: _scaffoldstate,
         body:
         _home()
       );
@@ -154,17 +133,13 @@ class _LoginPageState extends State<LoginPage> {
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
     final ThemeData theme = Theme.of(context);
-    // var dataUser;
-    // this.userLogged.userData.then((val) {
-    //     dataUser = val;
-    //   });
-    // print(this.userLogged.userData);
+
     return Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
             child: 
             CachedNetworkImage(
-                    imageUrl: listImg[_random.nextInt(listImg.length)],
+                    imageUrl: this.imgShow,
                     imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -221,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20, height: 1),
                                         textAlign: TextAlign.center,
                                         ),
-                                        subtitle: Text('\n'+ listTxt[_random.nextInt(listTxt.length)].toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
+                                        subtitle: Text('\n'+ this.textShow.toString(), style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.3),
                                         textAlign: TextAlign.center,
                                         ),
                                         ): 
@@ -241,11 +216,19 @@ class _LoginPageState extends State<LoginPage> {
                                       padding: widget.message == null ?  
                                       EdgeInsets.only(top: screenSize.height/6): EdgeInsets.only(top: screenSize.height/30),
                                       child: 
+                                      
+                                   FutureBuilder(
+                                      future: this.userData,
+                                      // initialData: this.userData,
+                                      builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                      if (snapshot.data != null) { 
+                                      return
                                       Column(children: <Widget>[
                                       
                                       Align(
                                         alignment: Alignment.bottomCenter,
-                                          child: this.isLoggedIn==true ?
+                                          child:
                                             RoundedButton(
                                               buttonName: widget.message == null ? "Cotizar": "Cotizar nuevamente",
                                               onTap:  () {
@@ -256,33 +239,21 @@ class _LoginPageState extends State<LoginPage> {
                                                           ),
                                                   );
                                               },
-                                              width: screenSize.width/2,
-                                              height: 50.0,
-                                              bottomMargin: 10.0,
-                                              borderWidth: 1.0,
-                                              //buttonColor: primaryColor,
-                                            )
-                                            :
-                                          Center(
-                                          child: //isLoggedIn
-                                              //? _displayUserData(profileData)
-                                              //: 
-                                              ProgressHUD(
-                                                  child: _displayLoginButton(), inAsyncCall: isLoading),
-                                        ),
-                                        
-                                      ),
-
-                                     userData!=null && this.isLoggedIn == true ? 
-                                     Align(
+                                                  width: screenSize.width/2,
+                                                  height: 50.0,
+                                                  bottomMargin: 10.0,
+                                                  borderWidth: 1.0,
+                                                  //buttonColor: primaryColor,
+                                                )
+                                                
+                                          ),
+                                        this.existUser ? Align(
                                         alignment: Alignment.bottomCenter,
                                           child: 
                                             RoundedButton(
                                               buttonName: "Mis Cotizaciones",
                                               onTap:  () {
-                                                  // Navigator.pop(context);
-                                                  // _getUserApi(context);
-                                                  // print(userData);
+                                                  // Navigator.of(context).pop();
                                                   Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -295,58 +266,140 @@ class _LoginPageState extends State<LoginPage> {
                                               bottomMargin: 10.0,
                                               borderWidth: 1.0,
                                               //buttonColor: primaryColor,
-                                            ), 
-                                            
-                                        
-                                      ): Container(),
+                                            ),  
+                                        ):Container(),
 
-                                      ],),
-                                   
-                                      ),
-                                      widget.message !=null ? Container(
-                                        width: 180,
-                                        padding: EdgeInsets.only(top:30),
-                                        child: Center(
-                                          child: 
-                                          Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,
-                                          style: TextStyle(height: 1.3, fontSize: 15, color: Colors.white70, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                                          ) ,
-                                      ),
-                                      ): Container(),
-                                    ],
+                                    
+
+                                      ],);
+                                        }
+                                      }
+                                      else if (snapshot.hasError ) {
+                                        _showDialog2('Error de conexión...', 3);
+                                        return  RoundedButton(
+                                              buttonName: "Intentar de nuevo",
+                                              onTap:  () {
+                                                  // Navigator.of(context).pop();
+                                                  Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => LoginPage()
+                                                          ),
+                                                  );
+                                              },
+                                              width: screenSize.width/2,
+                                              height: 50.0,
+                                              bottomMargin: 10.0,
+                                              borderWidth: 1.0,
+                                              //buttonColor: primaryColor,
+                                            ); 
+                                    }else{
+                                      return     
+                                      this.isLoggedIn ? Align(
+                                        alignment: Alignment.bottomCenter,
+                                          child:
+                                            RoundedButton(
+                                              buttonName: widget.message == null ? "Cotizar": "Cotizar nuevamente",
+                                              onTap:  () {
+                                                  Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => UserFirst(userData: userLogged)
+                                                          ),
+                                                  );
+                                              },
+                                                  width: screenSize.width/2,
+                                                  height: 50.0,
+                                                  bottomMargin: 10.0,
+                                                  borderWidth: 1.0,
+                                                  //buttonColor: primaryColor,
+                                                )
+                                                
+                                          ):
+                                          Center(
+                                              child: 
+                                                  ProgressHUD(
+                                                      child: _displayLoginButton(), inAsyncCall: isLoading),
+                                              )
+                                          ;
+                                    }
+                                        
+                                     return  Center(
+                                      child: Container(
+                                        // padding: EdgeInsets.only(top: screenSize.height/3, left: screenSize.width/40),
+                                        child: isConexion ? CircularProgressIndicator(backgroundColor: theme.primaryColor):
+                                        RoundedButton(
+                                              buttonName: "Intentar de nuevo",
+                                              onTap:  () {
+                                                  // Navigator.of(context).pop();
+                                                  Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => LoginPage()
+                                                          ),
+                                                  );
+                                              },
+                                              width: screenSize.width/2,
+                                              height: 50.0,
+                                              bottomMargin: 10.0,
+                                              borderWidth: 1.0,
+                                              //buttonColor: primaryColor,
+                                            ) 
+                                        )
+                                      );
+                                      
+                                      
+                                      
+                                    },
+
                                     ),
-                                
+
+                                  ),
+                       
+                                  widget.message !=null ? Container(
+                                    width: 180,
+                                    padding: EdgeInsets.only(top:30),
+                                    child: Center(
+                                      child: 
+                                      Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,
+                                      style: TextStyle(height: 1.3, fontSize: 15, color: Colors.white70, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                                      ) ,
+                                  ),
+                                  ): Container(),
+                                ],
+                                ),
+                            
                         ),
 
                       ),
                     
                     ),
             placeholder: (context, url) => 
-                        Center(child:       
-                          new Container(
-                          padding: EdgeInsets.only(top: 30),
-                          child:
-                          Column(children: <Widget>[
-                          new Image(
-                          image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
-                          width: (screenSize.width < 500)
-                              ? 160.0
-                              : (screenSize.width / 4) + 12.0,
-                          height: screenSize.height / 4 + 0,
-                          ),
-                          LoadingBouncingGrid.square(
-                          borderColor: theme.primaryColor,
-                          borderSize: 1.0,
-                          size: 70.0,
-                          backgroundColor: Colors.transparent,
-                          )
-                          ],
+                Center(child:       
+                  new Container(
+                  padding: EdgeInsets.only(top: 30),
+                  child:
+                  Column(children: <Widget>[
+                  new Image(
+                  image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
+                  width: (screenSize.width < 500)
+                      ? 160.0
+                      : (screenSize.width / 4) + 12.0,
+                  height: screenSize.height / 4 + 0,
+                  ),
+                  LoadingBouncingGrid.square(
+                  borderColor: theme.primaryColor,
+                  borderSize: 1.0,
+                  size: 70.0,
+                  backgroundColor: Colors.transparent,
+                  )
+                  ],
 
-                        ),
-                        ),
-                        ),
+                ),
+                ),
+                ),
 
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
               )
              
                     
@@ -493,7 +546,19 @@ class _LoginPageState extends State<LoginPage> {
       );
   }*/
 
-  void _getCurrentUser() async{
+  
+
+  _showDialog2(text, tempo){
+  _scaffoldstate.currentState.showSnackBar(
+    new SnackBar(
+        duration: new Duration(seconds: tempo),
+        content: new Text(text),
+      )
+      );
+  }
+
+
+  _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
     // print(user.providerData[1]); 
@@ -509,48 +574,44 @@ class _LoginPageState extends State<LoginPage> {
     });
     // print(this.userGoogle.email);
     this.userLogged = this.userGoogle;
-    _getUserApi(context);
     
     
   }
 
   _getUserApi(BuildContext context) async{
     // isLoading = true;
+    // print(this.userLogged.email);
+      var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/account/'+this.userLogged.email+'/email'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
-        // print(resBody);
+      print(resBody['msg']);
         if (res.statusCode == 200) {
           // this.userLogged.userData = resBody;
-             userData = resBody;
+          setState(() {
+            res2 = resBody;
+            if(resBody['msg'] == 'User not found'){
+             this.isConexion = true;
+             this.existUser = false; 
+             res2 = null;
+            }
+          });
         }else{
-            userData = null;
+            setState(() {
+              res2 = null;
+             this.isConexion = false; 
+            });
         }
+        // print(res2);
+        return res2;
 
   }
 
   _displayLoginButton() {
     // final Size screenSize = MediaQuery.of(context).size;
         return Column(children: <Widget>[
-              // RaisedButton(
-              //   child: Text(
-              //     "Iniciar sesión con Facebook",
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              //   //color: Colors.blue,
-              //   onPressed: () => initiateFacebookLogin(),
-              //   //onPressed: () => _signInWithFacebook(),
-              // ),
-              // RaisedButton(
-              //     child: Text(
-              //       "Iniciar sesión con Google",
-              //       style: TextStyle(color: Colors.white),
-              //     ),
-              //     //color: Colors.blue,
-              //     onPressed: () => _signInWithGoogle(),
-              //     //onPressed: () => _signInWithFacebook(),
-              //   ),
+      
               Container(
                   width: 210,
                   margin: EdgeInsets.only(left: 0, top: 0),
@@ -575,26 +636,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
-              // RoundedButton(
-              //   buttonName: "Iniciar sesión con Facebook",
-              //   onTap:  initiateFacebookLogin,
-              //   width: screenSize.width/1.4,
-              //   height: 50.0,
-              //   bottomMargin: 10.0,
-              //   borderWidth: 1.0,
-              //   //buttonColor: primaryColor,
-              // ),
-
-              // RoundedButton(
-              //   buttonName: "Iniciar sesión con Google",
-              //   onTap:  _signInWithGoogle,
-              //   width: screenSize.width/1.4,
-              //   height: 50.0,
-              //   bottomMargin: 10.0,
-              //   borderWidth: 1.0,
-              //   //buttonColor: primaryColor,
-              // ),
-
+            
     ],
     
     );
