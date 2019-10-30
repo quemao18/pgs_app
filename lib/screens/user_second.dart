@@ -433,16 +433,20 @@ class _UserSecond extends State<UserSecond>{
 
 
   _addItem() {
-    if(_textFieldControllerAge.text!='')
+    if(_textFieldControllerAge.text!=''){
     setState(() {
       count = count + 1;
       //_ageDependent = _textFieldControllerAge.text;
       ages.add(
         _textFieldControllerAge.text
       );
+     
       FocusScope.of(context).requestFocus(FocusNode());
     });
-  else{
+      // _textFieldControllerAge.text = '';
+      WidgetsBinding.instance.addPostFrameCallback( (_) => _textFieldControllerAge.clear());
+
+  }else{
   _textFieldControllerAge.text = '';
   }
   }
