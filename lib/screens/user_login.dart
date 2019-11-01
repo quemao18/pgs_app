@@ -575,7 +575,6 @@ class _LoginPageState extends State<LoginPage> {
     // print(this.userGoogle.email);
     this.userLogged = this.userGoogle;
     
-    
   }
 
   _getUserApi(BuildContext context) async{
@@ -584,14 +583,16 @@ class _LoginPageState extends State<LoginPage> {
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
-      var res = await http.get(Uri.encodeFull(url+'v1/account/'+this.userLogged.email+'/email'), headers: {"Accept": "application/json"});
+      var res = await http.get(Uri.encodeFull(url+'v1/account/'+this.userLogged.email+'/email_logged'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
-      print(resBody['msg']);
+      // print(resBody['msg']);
         if (res.statusCode == 200) {
           // this.userLogged.userData = resBody;
           setState(() {
+            if(resBody.length>0)
             res2 = resBody;
-            if(resBody['msg'] == 'User not found'){
+            else
+            if(resBody['Error']){
              this.isConexion = true;
              this.existUser = false; 
              res2 = null;

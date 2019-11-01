@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:pgs_contulting/screens/drawer.dart' as prefix0;
 import 'package:pgs_contulting/screens/list_options.dart';
+import 'package:pgs_contulting/screens/user_login.dart';
 import '../app_config.dart';
 import '../models/user.dart';
 
@@ -9,10 +12,15 @@ import '../models/user.dart';
 
 import 'drawer.dart';
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
 class UserThird extends StatefulWidget{
   
   final User user;
   final User user2;
+  
+  
 
   UserThird({Key key, this.user, this.user2}) : super(key: key);
 
@@ -36,6 +44,8 @@ class _UserThird extends State<UserThird>{
 
   int value = 0;
   bool _keyboardState= false;
+  final userGoogle = UserLogged();
+  var userLogged;
 
   @protected
   void initState() {
@@ -46,6 +56,7 @@ class _UserThird extends State<UserThird>{
           _keyboardState = visible;
         },
       );
+  _getCurrentUser();
   }
 
   @override
@@ -58,7 +69,7 @@ class _UserThird extends State<UserThird>{
     //print(widget.user2.spouseAge);
     var config = AppConfig.of(context);
     final ThemeData theme = Theme.of(context);
-    
+
     return Scaffold(
       key: _scaffoldstate,
         appBar: new AppBar(
@@ -159,7 +170,7 @@ class _UserThird extends State<UserThird>{
                                     if (form.validate()) {
                                       form.save();
                                       //print(widget.user);
-                                      _user.save(context,widget.user, widget.user2).then((id) {
+                                      _user.save(context,widget.user, widget.user2, userLogged).then((id) {
                                            print("Result: $id");
                                            if(id==null)
                                           _showDialog2('Error', 5);
@@ -174,7 +185,7 @@ class _UserThird extends State<UserThird>{
                                           }
                                       } 
                                      
-                                      
+
                                       );
                                       
                                       //saveUser(context, widget.user, _user)
@@ -201,7 +212,24 @@ _showDialog2(text, tempo){
   }
 
 
-
+  _getCurrentUser() async{
+    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final FirebaseUser user = await _auth.currentUser();
+    // print(user.providerData[1]); 
+    setState(() {
+      if(user!=null){
+        this.userGoogle.name = user.displayName;
+        this.userGoogle.email = user.providerData[1].email;
+        this.userGoogle.photo = user.photoUrl;
+        isLoggedIn = true;
+      }
+      else
+      isLoggedIn = false;
+    });
+    this.userLogged = this.userGoogle;
+    print(this.userLogged.photo);
+    
+  }
 
 
 

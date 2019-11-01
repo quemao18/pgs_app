@@ -63,7 +63,7 @@ class UserDataState extends State<UserData> {
       SingleChildScrollView(child: 
       Stack(
         children: <Widget>[
-          _buildCoverImage(screenSize),
+          // _buildCoverImage(screenSize),
           SafeArea(
             child: SingleChildScrollView(
               child: this.existUser == true ? Column(
@@ -73,15 +73,21 @@ class UserDataState extends State<UserData> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         //return Text(snapshot.data['name']);
-                        
-                        return Column(children: <Widget>[
-                        SizedBox(height: screenSize.height / 16.4),
-                         _buildProfileImage(snapshot.data['photo']),
-                         _buildFullName(snapshot.data['name']),
-                         _buildAge(context, snapshot.data['age'].toString() + ' años', theme),
-                         _buildSeparator(screenSize, theme),
-                         _builPlans(context, snapshot.data['plans'], theme),
-                        ],);
+                        // print(snapshot.data);
+                        children = <Widget> [];
+
+                        for(var data in snapshot.data){
+                        // print(data);
+                        children.add(SizedBox(height: screenSize.height / 26.4));
+                        // children.add(_buildProfileImage(data['photo_logged']));
+                        children.add(_buildFullName(data['name']));
+                        children.add(_buildAge(context, data['age'].toString() + ' años', theme));
+                        children.add(_buildSeparator(screenSize, theme));
+                        children.add(_builPlans(context, data['plans'], theme));
+
+                        }
+
+                        return Column(children: children);
 
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
@@ -157,7 +163,7 @@ class UserDataState extends State<UserData> {
   
   }//WIdget main
 
-  Widget _buildCoverImage(Size screenSize) {
+  /*Widget _buildCoverImage(Size screenSize) {
     return Container(
       height: screenSize.height / 6,
       decoration: BoxDecoration(
@@ -189,7 +195,7 @@ class UserDataState extends State<UserData> {
         ),
       ),
     );
-  }
+  }*/
 
   Widget _buildFullName(name) {
 
@@ -377,12 +383,14 @@ class UserDataState extends State<UserData> {
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
-      var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[1].email+'/email'), headers: {"Accept": "application/json"});
+      var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[1].email+'/email_logged'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
         // print(resBody);
         if (res.statusCode == 200) { 
+          if(resBody.length>0)
           res2 = resBody;
-          if(resBody['msg'] == 'User not found') {
+          else
+          if(resBody['Error']) {
           setState(() {
            this.existUser = false; 
           });

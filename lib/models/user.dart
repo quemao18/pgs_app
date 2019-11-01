@@ -32,7 +32,7 @@ class User {
   };
   // bool newsletter = false;
 
-  save(context, user, user2) async {
+  save(context, user, user2, userLogged) async {
     print('saving user using a web service');
 
     var config = AppConfig.of(context);
@@ -43,7 +43,7 @@ class User {
       "last_name": user.lastName,
       "username": user.email,
       "email": user.email,
-      "photo": user.photo,
+      "photo": '',
       "password":"",
       "user_type":4,
       "gender": user.gender, 
@@ -55,7 +55,10 @@ class User {
       "dependents_ages": user2.dependentsAges,
       "maternity": this.maternity ,
       "smoker": this.smoker ,
-      "transplant": this.transplant 
+      "transplant": this.transplant,
+      "email_logged": userLogged.email,
+      "name_logged": userLogged.name,
+      "photo_logged": userLogged.photo
     };
 
       //apiRequestPost(url+'v1/account', data);
