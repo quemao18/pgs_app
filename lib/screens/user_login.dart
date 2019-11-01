@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoggedIn = false;
   bool isLoading = false;
   bool isConexion = true;
-  bool existUser = true;
+  bool existUser = false;
   var profileData;
   var userLogged ;
   var userData;
@@ -589,14 +589,17 @@ class _LoginPageState extends State<LoginPage> {
         if (res.statusCode == 200) {
           // this.userLogged.userData = resBody;
           setState(() {
-            if(resBody.length>0)
-            res2 = resBody;
-            else
-            if(resBody['Error']){
+            if(resBody[0] ==  null){
              this.isConexion = true;
              this.existUser = false; 
              res2 = null;
             }
+            else
+            if(resBody.length>0){
+            res2 = resBody;
+            this.existUser = true;
+            }
+       
           });
         }else{
             setState(() {

@@ -385,16 +385,24 @@ class UserDataState extends State<UserData> {
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[1].email+'/email_logged'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
-        // print(resBody);
+
+        // print(resBody[0]);
+
         if (res.statusCode == 200) { 
-          if(resBody.length>0)
-          res2 = resBody;
-          else
-          if(resBody['Error']) {
+          
+          if(resBody[0]==null) {
           setState(() {
            this.existUser = false; 
           });
           res2 = null;
+          }
+          else
+          if(resBody.length>0){
+          res2 = resBody;
+          setState(() {
+            this.existUser = true;
+          });
+          
           }
           
         }else{
