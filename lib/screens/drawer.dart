@@ -146,11 +146,14 @@ class _DrawerOnly extends State<DrawerOnly> {
                             ),
         
                            currentAccountPicture:
-                            this.userGoogle.photo != '' ? ClipRRect(
-                            borderRadius: new BorderRadius.circular(50),
-                            child: 
-                             Image.network(this.userGoogle.photo),
-                             ):Container(),
+                            this.userGoogle.photo != '' ?  Container(
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: new NetworkImage(this.userGoogle.photo)
+                                  )
+                              )):Container(),
                             accountName: new Text(this.userGoogle.name), accountEmail: new Text(this.userGoogle.email)
         
                         ),
