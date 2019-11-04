@@ -251,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                                         this.existUser ? Align(
                                         alignment: Alignment.bottomCenter,
                                           child: 
-                                            RoundedButton(
+                                            !isLoading ? RoundedButton(
                                               buttonName: "Mis Cotizaciones",
                                               onTap:  () {
                                                   // Navigator.of(context).pop();
@@ -267,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                                               bottomMargin: 10.0,
                                               borderWidth: 1.0,
                                               //buttonColor: primaryColor,
-                                            ),  
+                                            ): CircularProgressIndicator(backgroundColor: theme.primaryColor,),  
                                         ):Container(),
 
                                     
@@ -579,7 +579,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _getUserApi(BuildContext context) async{
-    // isLoading = true;
+    isLoading = true;
     // print(this.userLogged.email);
       var res2;
       var config = AppConfig.of(context);
@@ -600,12 +600,15 @@ class _LoginPageState extends State<LoginPage> {
             res2 = resBody;
             this.existUser = true;
             }
+
+            isLoading = false;
        
           });
         }else{
             setState(() {
               res2 = null;
              this.isConexion = false; 
+             isLoading = false;
             });
         }
         // print(res2);
