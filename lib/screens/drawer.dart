@@ -147,7 +147,7 @@ class _DrawerOnly extends State<DrawerOnly> {
                             ),
         
                            currentAccountPicture:
-                            this.userGoogle.photo != '' ?  Container(
+                            this.userGoogle.photo != '' || this.userGoogle.photo!=null  ? Container(
                               decoration: new BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: new DecorationImage(
