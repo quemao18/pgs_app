@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     _getCurrentUser();
     super.initState();
     this.userData = null;
-    Future.delayed(Duration(milliseconds: 500), () {   
+    Future.delayed(Duration(milliseconds: 1000), () {   
       // setState(() {
         // _getPlansUser(context);
         if(this.isLoggedIn)
