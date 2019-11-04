@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     this.textShow = listTxt[_random.nextInt(listTxt.length)];
     _getCurrentUser();
     super.initState();
+    this.userData = null;
     Future.delayed(Duration(milliseconds: 500), () {   
       // setState(() {
         // _getPlansUser(context);
