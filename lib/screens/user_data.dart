@@ -336,7 +336,7 @@ class UserDataState extends State<UserData> {
           padding: EdgeInsets.only(top: 0, bottom: 0),
           child: 
           CachedNetworkImage(
-              height: 30, width: 40,
+              height: 35, width: 35,
               imageUrl: plan['company_logo'],
               placeholder: (context, url) => new CircularProgressIndicator(),
               errorWidget: (context, url, error) => new Icon(Icons.image),

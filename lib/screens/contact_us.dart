@@ -280,7 +280,7 @@ class _ContactUs extends State<ContactUs> {
                   ? phoneNumber1
                   : defaultMessage),
               subtitle: Text(
-                "Teléfono 1",
+                "Teléfono móvil",
                 style: TextStyle(color: Colors.black54),
               ),
               leading: IconButton(
@@ -303,7 +303,7 @@ class _ContactUs extends State<ContactUs> {
                   ? phoneNumber2
                   : defaultMessage),
               subtitle: Text(
-                "Teléfono 2",
+                "Teléfono de oficina",
                 style: TextStyle(color: Colors.black54),
               ),
               leading: IconButton(
