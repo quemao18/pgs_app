@@ -346,12 +346,7 @@ class _ContactUs extends State<ContactUs> {
               leading: IconButton(
                   icon: Icon(Icons.share, color: theme.primaryColor),
                   onPressed: () {
-                    Share.share("""
-                        Nombre: $nome
-                        Tel 1: $phoneNumber1
-                        Tel 2: $phoneNumber2
-                        Email: $email
-                      """);
+                    Share.share("""Nombre: $nome\nTel 1: $phoneNumber1\nTel 2: $phoneNumber2\nEmail: $email""");
                   }),
             ),
           ),
