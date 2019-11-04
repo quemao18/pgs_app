@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:pgs_contulting/screens/drawer.dart' as prefix0;
+import 'package:pgs_contulting/screens/drawer.dart';
 import 'package:pgs_contulting/screens/list_options.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import '../app_config.dart';
@@ -66,7 +66,7 @@ class _UserThird extends State<UserThird>{
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.user2.spouseAge);
+    // print(widget.user.gender);
     var config = AppConfig.of(context);
     final ThemeData theme = Theme.of(context);
 
@@ -106,7 +106,7 @@ class _UserThird extends State<UserThird>{
                           Container(
                             child: 
                             Column(children: <Widget>[
-                              Container(
+                            widget.user.gender =='female' &&  int.parse(widget.user.age) >=18 && int.parse(widget.user.age) <=45 ?  Container(
                               // height: 40,
                               padding: EdgeInsets.all(10),
                               //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -118,7 +118,7 @@ class _UserThird extends State<UserThird>{
                                     setState(() => _user.maternity = val );
                                   }),
         
-                              ),
+                              ):Container(),
                               // Container(
                                 //    height: 40,
                                 // //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -227,7 +227,7 @@ _showDialog2(text, tempo){
       isLoggedIn = false;
     });
     this.userLogged = this.userGoogle;
-    print(this.userLogged.photo);
+    // print(this.userLogged.photo);
     
   }
 

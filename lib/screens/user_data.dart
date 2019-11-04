@@ -64,6 +64,7 @@ class UserDataState extends State<UserData> {
       Stack(
         children: <Widget>[
           // _buildCoverImage(screenSize),
+          _buildTitle(context, theme),
           SafeArea(
             child: SingleChildScrollView(
               child: this.existUser == true ? Column(
@@ -75,17 +76,19 @@ class UserDataState extends State<UserData> {
                         //return Text(snapshot.data['name']);
                         // print(snapshot.data);
                         children = <Widget> [];
-
+                        children.add(Padding(padding: EdgeInsets.only(top:screenSize.height/10),));
                         for(var data in snapshot.data){
                         // print(data);
-                        children.add(SizedBox(height: screenSize.height / 26.4));
+                        // children.add(SizedBox(height: screenSize.height / 6.4));
                         // children.add(_buildProfileImage(data['photo_logged']));
-                        children.add(_buildFullName(data['name']));
-                        children.add(_buildAge(context, data['age'].toString() + ' años', theme));
-                        children.add(_buildSeparator(screenSize, theme));
-                        children.add(_builPlans(context, data['plans'], theme));
+                        children.add(_buildExpansion(data, theme));
+                        // children.add(_buildFullName(data['name']));
+                        // children.add(_buildAge(context, data['age'].toString() + ' años', theme));
+                        // children.add(_buildSeparator(screenSize, theme));
+                        // children.add(_builPlans(context, data['plans'], theme));
 
                         }
+                        
 
                         return Column(children: children);
 
@@ -197,14 +200,35 @@ class UserDataState extends State<UserData> {
     );
   }*/
 
+  Widget _buildExpansion(data, theme){
+    return 
+    Container(
+    // decoration: BoxDecoration(
+    // color: Colors.grey,
+    // borderRadius: BorderRadius.circular(4.0),
+    // ),
+    child: 
+    ExpansionTile(
+      title: ListTile(
+        title: _buildFullName(data['name']),
+        subtitle: _buildAge(context, data, theme),
+      ),
+      children: <Widget>[
+        _builPlans(context, data['plans'], theme)
+      ],
+
+    )
+    );
+  }
+
   Widget _buildFullName(name) {
 
     TextStyle _nameTextStyle = TextStyle(
       // fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 20.0,
-      height: 1.2,
-      fontWeight: FontWeight.w700,
+      color: Colors.black87,
+      fontSize: 18.0,
+      height: 1.3,
+      fontWeight: FontWeight.w600,
     );
 
     return Text(
@@ -213,15 +237,39 @@ class UserDataState extends State<UserData> {
     );
   }
 
-  Widget _buildAge(BuildContext context, age, theme) {
+  Widget _buildTitle(BuildContext context, theme) {
+    return Container(
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 5.0),
+            child: Column(
+              children: <Widget>[
+              ListTile(
+                title: Text('Mis Cotizaciones', 
+                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 20, height: 1.3),
+                textAlign: TextAlign.center,
+                ),
+                subtitle: Text('Últimas 3 cotizaciones realizadas por usuario.', 
+                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
+                textAlign: TextAlign.center,
+                ),
+                ),
+            ],
+            ),
+            
+          );
+  }
+
+  Widget _buildAge(BuildContext context, data, theme) {
+    String age = data['age'].toString() + ' años. ';
+    String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años. ': '';
+    String dependents = data['dependents']!=null && data['dependents']>0 ? ' '+ data['dependents'].toString() + ' hijo(s). ': '';
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-      decoration: BoxDecoration(
-        // color: theme.primaryColor,
-        borderRadius: BorderRadius.circular(4.0),
-      ),
+      // decoration: BoxDecoration(
+      //   // color: theme.primaryColor,
+      //   borderRadius: BorderRadius.circular(4.0),
+      // ),
       child: Text(
-        age,
+        age + spouse + dependents,
         style: TextStyle(
           // fontFamily: 'Spectral',
           color: Colors.black,
@@ -281,14 +329,14 @@ class UserDataState extends State<UserData> {
         title: 
         ListTile(
 
-          trailing: Text('USD '+formatter.format(total).toString(), style: TextStyle(fontWeight: FontWeight.bold),) ,
+          trailing: Text('USD '+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
           
           leading:    
           Padding(
           padding: EdgeInsets.only(top: 0, bottom: 0),
           child: 
           CachedNetworkImage(
-              height: 50, width: 60,
+              height: 30, width: 40,
               imageUrl: plan['company_logo'],
               placeholder: (context, url) => new CircularProgressIndicator(),
               errorWidget: (context, url, error) => new Icon(Icons.image),
@@ -298,7 +346,7 @@ class UserDataState extends State<UserData> {
             style: TextStyle(fontWeight: FontWeight.bold)
             ), 
             subtitle: Text(plan['plan_name'],
-            style: TextStyle(height: 1.5)
+            style: TextStyle(height: 1.3, fontSize: 12)
             ),
             ),
             children: <Widget>[
@@ -366,14 +414,14 @@ class UserDataState extends State<UserData> {
  
   }
 
-  Widget _buildSeparator(Size screenSize, theme) {
-    return Container(
-      width: screenSize.width / 1.6,
-      height: 2.0,
-      color: theme.accentColor,
-      margin: EdgeInsets.only(top: 4.0, bottom: 10),
-    );
-  }
+  // Widget _buildSeparator(Size screenSize, theme) {
+  //   return Container(
+  //     width: screenSize.width / 1.6,
+  //     height: 2.0,
+  //     color: theme.accentColor,
+  //     margin: EdgeInsets.only(top: 4.0, bottom: 10),
+  //   );
+  // }
 
     _getUserApi(BuildContext context) async{
       final FirebaseUser user = await _auth.currentUser();
