@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -151,9 +152,10 @@ class _DrawerOnly extends State<DrawerOnly> {
                                   shape: BoxShape.circle,
                                   image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: new NetworkImage(this.userGoogle.photo)
+                                      image: new CachedNetworkImageProvider(this.userGoogle.photo)
                                   )
-                              )):Container(),
+                              )
+                            ):Container(),
                             accountName: new Text(this.userGoogle.name), accountEmail: new Text(this.userGoogle.email)
         
                         ),
