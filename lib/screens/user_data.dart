@@ -13,7 +13,7 @@ import '../app_config.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
-var data2 ;
+var data2;
 final FirebaseAuth _auth = FirebaseAuth.instance;
 var children = <Widget>[];
 // var userLogged;
@@ -35,7 +35,8 @@ class UserDataState extends State<UserData> {
   initState(){
     super.initState();
     // _getCurrentUser();
-  Future.delayed(const Duration(milliseconds: 100), () {
+  data2 = null;
+  Future.delayed(const Duration(milliseconds: 1000), () {
     setState(() { 
      data2 = _getUserApi(context);
     });
