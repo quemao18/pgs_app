@@ -68,6 +68,8 @@ class _PlansPageState extends State<PlansPage> {
     final ThemeData theme = Theme.of(context);
     final Size screenSize = MediaQuery.of(context).size;
     // final formatter = NumberFormat("#,###.##");
+
+
     ExpansionTile makeExpansion(data, planName, planDescription, planId, pln, plan) => ExpansionTile(
               title: new ListTile(
                 // leading: Icon(Icons.access_alarm),
@@ -105,7 +107,7 @@ class _PlansPageState extends State<PlansPage> {
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
       child: isLoading?  
         Container(
-        margin: EdgeInsets.only(top: screenSize.height/5),
+        margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/5),
         child: Column(children: <Widget>[
           LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
@@ -127,92 +129,82 @@ class _PlansPageState extends State<PlansPage> {
                   return new Text('Error: ${snapshot.error}');
                else{
               //return new Text('Result: ${snapshot.data}');
-              //print(snapshot.data);
-              return ListView.builder(
-                    //   separatorBuilder: (context, index) => Divider(
-                    //   color: Colors.black45,
-                    // ),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data == null? 0: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                 
-                      final children = <Widget>[];
-                      bool show = false; 
-                      // pln++;
-                      // for(var comp  in snapshot.data)
-                      // print(comp['plans'][0]['plan_id']);
-                      // if(widget.plansIds.contains(comp['plans'][0]['plan_id']) || widget.plansIds.contains(comp['plans'][1]['plan_id']))
-                        children.add(
-                          Container(child: 
-                          ListTile(
+              //print(snapshot.data);];
+                var childrenMain = <Widget>[];
+                var childrenExp = <Widget>[];
+                var title =  Container() ;
+                bool show = false; 
+                
+                for(var data in snapshot.data){
+
+                 title = 
+                      Container(
+                      child: 
+                        ListTile(
+                          leading:    
+                          Padding(
+                          padding: EdgeInsets.only(top: 4, bottom: 4),
+                          child: 
+                          CachedNetworkImage(
+                              height: 50, width: 50,
+                              imageUrl: data['company_logo'],
+                              placeholder: (context, url) => new CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => new Icon(Icons.image),
+                          ),),
+                          title:
+                          Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: 
+                          Text(data['company_name'],
+                            style: TextStyle(fontWeight: FontWeight.bold, height: 1.5, fontSize: 18)
+                            )), 
+                            subtitle: Text('',),
+                          ),
                             
-                            leading:    
-                            Padding(
-                            padding: EdgeInsets.only(top: 4, bottom: 4),
-                            child: 
-                            CachedNetworkImage(
-                                height: 50, width: 50,
-                                imageUrl: snapshot.data[index]['company_logo'],
-                                placeholder: (context, url) => new CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => new Icon(Icons.image),
-                            ),),
-                            title:Text(snapshot.data[index]['company_name'],
-                              style: TextStyle(fontWeight: FontWeight.bold)
-                              ), 
-                              subtitle: Text(snapshot.data[index]['company_description'],
-                              style: TextStyle(height: 1.5)
-                              ),
-                              ),
-                              
-                          ), 
-                        );
-                        // children.add(Divider(color:theme.primaryColor,));
+                      ); 
+
+
                         show = false;
 
-                        for(var plan in snapshot.data[index]['plans']){
+                        for(var plan in data['plans']){
                           if(widget.plansIds.contains(plan['plan_id'])){
-                          // print(plan);
-                          // print(plan['name']);
-                          // pln++;
                           show = true;
-
-                          children.add(
-                            // Card(
-                            // elevation: 8,  
-                            // child: 
-                            Container(child: 
-                            makeExpansion(snapshot.data[index], plan['name'], plan['description'], plan['plan_id'], pln, plan),
-                            //  ),
-                            ),
+                          childrenExp.add(
+                            makeExpansion(data, plan['name'], plan['description'], plan['plan_id'], pln, plan),
                           );
                           pln++;
-                          // children.add(Divider());
                           }
-                      
+                          
                         }
-                        // print(snapshot.data[index]);
-                        pln = 0;
-                        return show  ? Container(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        padding: const EdgeInsets.all(0.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: theme.primaryColor)
-                        ),               
-                          child: Column(children: children),
-                        ): Container();
-                    //  }else
-                    //     return Container();
-                  
-                      },
                         
-                      );
+                  var c = Column(children: childrenExp,);
+
+                  if(show)
+                  childrenMain.add(
+                  
+                    Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.all(0.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: theme.primaryColor)
+                    ),               
+                    child: Column(children: <Widget>[title, c],)
+                    )
+                  
+                  );
+
+                 childrenExp = [];
+                 title = null;
+                 pln = 0;
+                 }
+
+                  return Column(children: childrenMain);
                         
                }
                
-              }//end builder
-         },
+              }
+         },//end builder
         )
 
 
@@ -228,23 +220,12 @@ class _PlansPageState extends State<PlansPage> {
       SingleChildScrollView(
         child: Stack(
           children: <Widget>[
+            _buildTitle(context, theme),
             Container(
-            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 30.0),
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 90.0),
             child: Column(
               children: <Widget>[
-              ListTile(
-                title: Text('Planes seleccionados', 
-                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 20, height: 1.3),
-                textAlign: TextAlign.center,
-                ),
-                subtitle: Text('Verifica los precios y selecciona los que mas se adapten a tus necesidades.', 
-                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
-                textAlign: TextAlign.center,
-                ),
-                ),
-
               makeBody,
-             
             ],
             ),
             
@@ -278,6 +259,29 @@ class _PlansPageState extends State<PlansPage> {
 
       //bottomNavigationBar: makeBottom,
   }
+
+
+  Widget _buildTitle(BuildContext context, theme) {
+    return Container(
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+            child: Column(
+              children: <Widget>[
+              ListTile(
+                title: Text('Planes seleccionados',
+                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 20, height: 1.3),
+                textAlign: TextAlign.center,
+                ),
+                subtitle: Text('Verifica los precios y selecciona los que mas se adapten a tus necesidades.', 
+                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
+                textAlign: TextAlign.center,
+                ),
+                ),
+            ],
+            ),
+            
+          );
+  }
+
 
 
 getCompanies(BuildContext context) async {

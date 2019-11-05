@@ -58,18 +58,24 @@ class _ListPageState extends State<ListPage> {
 
     ExpansionTile makeExpansion(data) => ExpansionTile(
               leading: 
-              Padding(
-              padding: EdgeInsets.only(top: 4, bottom: 4),
-              child: 
               CachedNetworkImage(
-                  height: 60, width: 60,
+                  height: 40, 
+                  width: 40,
                   imageUrl: data['company_logo'],
                   placeholder: (context, url) => new CircularProgressIndicator(),
                   errorWidget: (context, url, error) => new Icon(Icons.image),
               ),
               //Image.network(data['company_logo']),
+              
+              
+              title: Container(
+                width: 50,
+                child: ListTile(
+                title: Text(data['company_name'], 
+                style: TextStyle(height: 1.5, fontWeight: FontWeight.bold),), 
+                subtitle: Text(data['company_description']),
+                ),
               ),
-              title: new ListTile(title:Text(data['company_name']), subtitle: Text(data['company_description']),),
                 children: (data['plans'][0]['price'].length > 0) ?
                   data['plans'].map<Widget>((document) {
                     // print(data['plans'][1]);
@@ -121,13 +127,17 @@ class _ListPageState extends State<ListPage> {
 
     ); 
 
-    final makeBody = Container(
+    final makeBody = 
+    
+    Container(
+      // height: screenSize.height,
       //width: 400,
-      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+      // padding: EdgeInsets.only(top:screenSize.height/14),
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
       child:  isLoading?  
         Container(
-        margin: EdgeInsets.only(top: screenSize.height/5),
+        margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/4.5),
         child: Column(children: <Widget>[
           LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
@@ -147,41 +157,59 @@ class _ListPageState extends State<ListPage> {
                if (snapshot.hasError)
                   return new Text('Error: ${snapshot.error}');
                else{
+
+                 var children = <Widget>[];
+
+                 for(var data in snapshot.data){
+                   children.add(
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: theme.primaryColor)
+                        ),     
+                        child:
+                        makeExpansion(data),
+                      )
+                   );
+                 }
+                return Column(children: children);
               //return new Text('Result: ${snapshot.data}');
               // print(snapshot.data);
-              return ListView.builder(
-                        //   separatorBuilder: (context, index) => Divider(
-                        //   color: Colors.black45,
-                        // ),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data == null? 0: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                        // print(snapshot.data[index]);
-                        // if(snapshot.data[index]['plans'][0]['price'].length>1)
-                        return 
-                          // Container(
-                            // child: Card(
-                            // elevation: 16,
-                            // //decoration: BoxDecoration(color: Color(0xFF9e946b),),
-                            // child: 
-                            Container(
-                                  margin: const EdgeInsets.only(bottom: 10.0),
-                                  decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: theme.primaryColor)
-                                ),     
-                              child:
-                            makeExpansion(snapshot.data[index]),
-                            // ),
-                            // )
-                          );
-                          // return Container();
-                        },
-                      );
+
+              // return
+              // ListView.builder(
+              //           //   separatorBuilder: (context, index) => Divider(
+              //           //   color: Colors.black45,
+              //           // ),
+              //           scrollDirection: Axis.vertical,
+              //           shrinkWrap: true,
+              //           itemCount: snapshot.data == null? 0: snapshot.data.length,
+              //           itemBuilder: (BuildContext context, int index) {
+              //           // print(snapshot.data[index]);
+              //           // if(snapshot.data[index]['plans'][0]['price'].length>1)
+              //           return 
+                          
+              //               Container(
+              //                     margin: const EdgeInsets.only(bottom: 10.0),
+              //                     padding: EdgeInsets.all(20),
+              //                     decoration: BoxDecoration(
+              //                     borderRadius: BorderRadius.circular(10),
+              //                     border: Border.all(color: theme.primaryColor)
+              //                   ),     
+              //                 child:
+              //               makeExpansion(snapshot.data[index]),
+
+              //             );
+              //             // return Container();
+              //           },
+                        
+              //         );
+                 
                }
-              }//end builder
-         },
+              }
+         },//end builder
         )
 
     );
@@ -196,27 +224,15 @@ class _ListPageState extends State<ListPage> {
       SingleChildScrollView(
         child: Stack(
           children: <Widget>[
+             _buildTitle(context, theme),
+            SafeArea(child: 
             Container(
-            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 30.0),
-            child: Column(
-              children: <Widget>[
-              ListTile(
-                title: Text('Planes disponibles según tu perfil', 
-                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 18),
-                textAlign: TextAlign.center,
-                ),
-                subtitle: Text('Selecciona al menos uno para continuar.', 
-                style: TextStyle(color: Colors.black54, fontSize: 13),
-                textAlign: TextAlign.center,
-                ),
-                ),
-
+            // height: screenSize.height/1.2,
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 90.0),
+            child:
               makeBody,
-             
-            ],
             ),
-            
-          ),
+            )
           ]
       ),
         
@@ -245,6 +261,26 @@ class _ListPageState extends State<ListPage> {
       //bottomNavigationBar: makeBottom,
   }
 
+  Widget _buildTitle(BuildContext context, theme) {
+    return Container(
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+            child: Column(
+              children: <Widget>[
+              ListTile(
+                title: Text('Planes disponibles según tu perfil',
+                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 20, height: 1.3),
+                textAlign: TextAlign.center,
+                ),
+                subtitle: Text('Selecciona al menos uno para continuar.', 
+                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
+                textAlign: TextAlign.center,
+                ),
+                ),
+            ],
+            ),
+            
+          );
+  }
 
 builData(data, plan, check){
 

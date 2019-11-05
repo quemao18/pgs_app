@@ -57,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
   bool isLoggedIn = false;
   bool isLoading = false;
+  bool isLoadingApi = false;
   bool isConexion = true;
   bool existUser = false;
   var profileData;
@@ -248,10 +249,10 @@ class _LoginPageState extends State<LoginPage> {
                                                 )
                                                 
                                           ),
-                                        this.existUser ? Align(
+                                        existUser ? Align(
                                         alignment: Alignment.bottomCenter,
                                           child: 
-                                            !isLoading ? RoundedButton(
+                                            !isLoadingApi ? RoundedButton(
                                               buttonName: "Mis Cotizaciones",
                                               onTap:  () {
                                                   // Navigator.of(context).pop();
@@ -267,8 +268,9 @@ class _LoginPageState extends State<LoginPage> {
                                               bottomMargin: 10.0,
                                               borderWidth: 1.0,
                                               //buttonColor: primaryColor,
-                                            ): CircularProgressIndicator(backgroundColor: theme.primaryColor,),  
-                                        ):Container(),
+                                            ):
+                                             CircularProgressIndicator(backgroundColor: theme.primaryColor),
+                                        ): Container()
 
                                     
 
@@ -579,7 +581,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _getUserApi(BuildContext context) async{
-    isLoading = true;
+    isLoadingApi = true;
     // print(this.userLogged.email);
       var res2;
       var config = AppConfig.of(context);
@@ -601,14 +603,14 @@ class _LoginPageState extends State<LoginPage> {
             this.existUser = true;
             }
 
-            isLoading = false;
+            isLoadingApi = false;
        
           });
         }else{
             setState(() {
               res2 = null;
              this.isConexion = false; 
-             isLoading = false;
+             isLoadingApi = false;
             });
         }
         // print(res2);

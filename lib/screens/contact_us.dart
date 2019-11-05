@@ -274,6 +274,9 @@ class _ContactUs extends State<ContactUs> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
+          GestureDetector(
+          onTap: () { _launchCaller(phoneNumber1); },
+          child:
           Card(
             child: ListTile(
               title: Text(phoneNumber1.toString().isNotEmpty
@@ -297,6 +300,9 @@ class _ContactUs extends State<ContactUs> {
               ),
             ),
           ),
+          ),
+          GestureDetector(onTap: () { _launchCaller(phoneNumber2); },
+          child:
           Card(
             child: ListTile(
               title: Text(phoneNumber2.toString().isNotEmpty
@@ -320,6 +326,10 @@ class _ContactUs extends State<ContactUs> {
               // ),
             ),
           ),
+          ),
+          GestureDetector(
+          onTap: () {  _launchMail(email); },
+          child:
           Card(
             child: ListTile(
               title: Text(email.toString().isNotEmpty ? email : defaultMessage),
@@ -334,6 +344,10 @@ class _ContactUs extends State<ContactUs> {
                   }),
             ),
           ),
+          ),
+          GestureDetector(
+          onTap: () { Share.share("""Nombre: $nome\nTel 1: $phoneNumber1\nTel 2: $phoneNumber2\nEmail: $email"""); },
+          child:
           Card(
             child: ListTile(
               title: Text(
@@ -349,6 +363,7 @@ class _ContactUs extends State<ContactUs> {
                     Share.share("""Nombre: $nome\nTel 1: $phoneNumber1\nTel 2: $phoneNumber2\nEmail: $email""");
                   }),
             ),
+          )
           ),
           Card(
             child: existWhatsapp
