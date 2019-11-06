@@ -313,10 +313,11 @@ getCompanies(BuildContext context) async {
 
     _getChildren(plan, theme, userId, data, userData){
 
-    var price1 = [];
-    var price2 = [];
-    var price3 = [];
+    var price1 = [0,0,0];
+    var price2 = [0,0,0];
+    var price3 = [0,0,0]; 
     var price = [], dedu = 0;
+    var spouse = 0;
 
     var dedu1 = 0, dedu2 =0, dedu3 = 0;
     var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
@@ -327,23 +328,23 @@ getCompanies(BuildContext context) async {
       if(p['age_range'] == '1 dependiente'){
         print('1 dependiente');
         dependent++;
-        price1.add(p['price1']); 
-        price2.add(p['price2']);
-        price3.add(p['price3']);
+        price1[2] = (p['price1']); 
+        price2[2] = (p['price2']);
+        price3[2] = (p['price3']);
       }
       if(p['age_range'] == '2 dependientes'){
         print('2 dependientes');
         dependent++;
-        price1.add(p['price1']); 
-        price2.add(p['price2']);
-        price3.add(p['price3']);
+        price1[2] = (p['price1']); 
+        price2[2] = (p['price2']);
+        price3[2] = (p['price3']);
       }
       if(p['age_range'] == '3+ dependientes'){
         print('3 dependientes');
         dependent++;
-        price1.add(p['price1']); 
-        price2.add(p['price2']);
-        price3.add(p['price3']);
+        price1[2] = (p['price1']); 
+        price2[2] = (p['price2']);
+        price3[2] = (p['price3']);
       }
       //if(p!=null && p['age_range']!='Deducible' && p.length>1){
       if(p['age_range']!='Deducible' && (
@@ -352,12 +353,23 @@ getCompanies(BuildContext context) async {
         p['age_range'] != '3+ dependientes')
         ){ 
         print('Edades');
+        if(spouse == 0)
+        {
+        price1[0] = (p['price1']); 
+        price2[0] = (p['price2']);
+        price3[0] = (p['price3']);
+        }else{
+        price1[1] = (p['price1']); 
+        price2[1] = (p['price2']);
+        price3[1] = (p['price3']);
+        }
+
         spouse++;
-        price1.add(p['price1']); 
-        price2.add(p['price2']);
-        price3.add(p['price3']);
       }
-      if(spouse>1) {spouse=0; price1 = price1.reversed.toList();  price2 = price2.reversed.toList();  price3 = price3.reversed.toList(); } 
+
+      // if(spouse > 0) price1.add(0);
+      // if(spouse>1) {spouse=0; price1 = price1.reversed.toList();  price2 = price2.reversed.toList();  price3 = price3.reversed.toList(); } 
+      // else
       if(p['age_range']=='Deducible'){ 
         print('Deducible');
         dedu1 = p['price1']; 

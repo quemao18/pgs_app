@@ -299,11 +299,11 @@ class UserDataState extends State<UserData> {
   total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
     // print(plan)
   if(plan['option_prices'].length>0)
-  priceUser = plan['option_prices'][0]!=null ? 'Precio USD ' + formatter.format(plan['option_prices'][0]).toString():'';
+  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Precio USD ' + formatter.format(plan['option_prices'][0]).toString():'';
   if(plan['option_prices'].length>1)
-  priceSpouse = plan['option_prices'][1]!=null ? 'Precio Conyugue USD ' + formatter.format(plan['option_prices'][1]).toString():'';
+  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Precio Conyugue USD ' + formatter.format(plan['option_prices'][1]).toString():'';
   if(plan['option_prices'].length>2)
-  priceDependents = plan['option_prices'][2]!=null ? 'Precio Dependientes USD ' + formatter.format(plan['option_prices'][2]).toString():'';
+  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Precio Dependientes USD ' + formatter.format(plan['option_prices'][2]).toString():'';
 
   deductible = plan ['deductible']!=null ? 'Deducible USD ' + formatter.format(plan['deductible']) : ''; 
   maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad USD ' + formatter.format(plan['maternity']) : '';
