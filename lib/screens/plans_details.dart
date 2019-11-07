@@ -86,16 +86,6 @@ class _PlansPageState extends State<PlansPage> {
               ),
                 children:<Widget>[
                     _getChildren(plan, theme, widget.userId, data, widget.userData),
-                    // if(spouse <= 1 && plan['price'].length<1)
-                    // Container(margin: EdgeInsets.only(bottom: 5),
-                    // child:
-                    // Text('No se encontró ningún plan para su conyugue.', ),
-                    // ),
-                    // if(dependent == 0 )
-                    // Container(margin: EdgeInsets.only(bottom: 5),
-                    // child:
-                    // Text('No se encontró ningún plan para su hijo.', ),
-                    // ),
                 ]
                 
               );
@@ -511,91 +501,5 @@ getCompanies(BuildContext context) async {
         throw 'Could not launch $url';
       }
     }
-
-/*
-    _getChildren(data, planId, pln, _radioCompany) {
-    print(pln);
-    // optionPlan = planId;
-    var price1 = []; 
-    var price2 = [];
-    var dedu1, dedu2, dedu3 = 0;
-    var price1Tot;
-
-    // print(data['company_id']);
-
-    for(var p in data['plans'][0]['price'] ){ //print(p['plan_id']);
-      if(p!=null && p['age_range']!='Deducible' && p.length>1){
-        price1.add(p['price1']); 
-        price2.add(p['price2']);
-      }else{
-        dedu1 = p['price1']; 
-        dedu2 = p['price2'];
-      }
-
-    }
-
-
-    // String companyId = data['company_id'];
-    // print(companyId);
-    var sum1 = price1.reduce((a, b) => a + b );
-    var sum2 = price2.reduce((a, b) => a + b );
-    // Plan plan1 = Plan(planId: planId, price1Total: sum1, companyId: companyId);
-    // Plan plan2 = Plan(planId: planId, price1Total: sum2);
-    // if(_radioValue.contains(companyId))
-    // _radioValue.remove(companyId);
-    // else
-    // _radioValue.add(companyId);
-    // print(_radioValue[pln]);
-
-    // optionPlan = companyId;
-    return [
-        RadioListTile(
-        title:  
-        ListTile(title:Text('Pago UDS '+formatter.format(sum1),
-        style: TextStyle(fontWeight: FontWeight.bold)
-        ), 
-        subtitle: Text('Deducible USD '+ formatter.format(dedu1).toString(),
-        style: TextStyle(height: 1.5)
-        ),
-        ),
-        value: pln,
-        groupValue: _radioValue,
-        onChanged: (currentPlan) {
-              setState(() {
-                //  print("Current Plan ${currentPlan.planId}");
-                //  setSelectedPlan(currentPlan);
-                _radioValue = currentPlan;
-                print(currentPlan);
-
-              });
-            },
-          // selected: selectedPlan.planId == plan1.planId,
-        ),
-        // RadioListTile(
-        // title:  
-        // ListTile(title:Text('Pago UDS '+formatter.format(plan2.price1Total),
-        // style: TextStyle(fontWeight: FontWeight.bold)
-        // ), 
-        // subtitle: Text('Deducible USD'+ formatter.format(dedu2).toString(),
-        // style: TextStyle(height: 1.5)
-        // ),
-        // ),
-        // value: planId+'_option'+(pln-1+2).toString(),
-        // groupValue: optionPlan,
-        // onChanged: (currentPlan) {
-        //       setState(() {
-        //         //  print("Current Plan ${currentPlan.planId}");
-        //         //  setSelectedPlan(currentPlan);
-        //         optionPlan = currentPlan;
-        //         print(currentPlan);
-
-        //       });
-        //     },
-        //     // activeColor: Colors.green,
-        // selected: optionPlan == planId+'option2',
-        // )
-      ];
-}
-*/
 
 }

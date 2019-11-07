@@ -175,37 +175,6 @@ class _ListPageState extends State<ListPage> {
                    );
                  }
                 return Column(children: children);
-              //return new Text('Result: ${snapshot.data}');
-              // print(snapshot.data);
-
-              // return
-              // ListView.builder(
-              //           //   separatorBuilder: (context, index) => Divider(
-              //           //   color: Colors.black45,
-              //           // ),
-              //           scrollDirection: Axis.vertical,
-              //           shrinkWrap: true,
-              //           itemCount: snapshot.data == null? 0: snapshot.data.length,
-              //           itemBuilder: (BuildContext context, int index) {
-              //           // print(snapshot.data[index]);
-              //           // if(snapshot.data[index]['plans'][0]['price'].length>1)
-              //           return 
-                          
-              //               Container(
-              //                     margin: const EdgeInsets.only(bottom: 10.0),
-              //                     padding: EdgeInsets.all(20),
-              //                     decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     border: Border.all(color: theme.primaryColor)
-              //                   ),     
-              //                 child:
-              //               makeExpansion(snapshot.data[index]),
-
-              //             );
-              //             // return Container();
-              //           },
-                        
-              //         );
                  
                }
               }

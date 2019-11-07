@@ -1,15 +1,13 @@
 
 import 'dart:convert';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 
 import '../app_config.dart';
+import 'detail_page.dart';
 import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,12 +75,13 @@ class UserDataState extends State<UserData> {
                         //return Text(snapshot.data['name']);
                         // print(snapshot.data);
                         children = <Widget> [];
-                        children.add(Padding(padding: EdgeInsets.only(top:screenSize.height/10),));
+                        children.add(Padding(padding: EdgeInsets.only(top:screenSize.height/12),));
                         for(var data in snapshot.data){
                         // print(data);
                         // children.add(SizedBox(height: screenSize.height / 6.4));
                         // children.add(_buildProfileImage(data['photo_logged']));
-                        children.add(_buildExpansion(data, theme));
+                        children.add(_makeCard(data, theme));
+                        // children.add(_buildExpansion(data, theme));
                         // children.add(_buildFullName(data['name']));
                         // children.add(_buildAge(context, data['age'].toString() + ' años', theme));
                         // children.add(_buildSeparator(screenSize, theme));
@@ -113,18 +112,6 @@ class UserDataState extends State<UserData> {
                   )
                   ,
 
-                  // _buildProfileImage(data['photo']),
-                  // _buildFullName(data['name']),
-                  // _buildAge(context, data['age'].toString() + ' años', theme),
-                  // _buildSeparator(screenSize, theme),
-                  // _builPlans(context, data['plans'], theme),
-                  // _buildStatContainer(),
-                  // _buildBio(context),
-
-                  // SizedBox(height: 10.0),
-                  // _buildGetInTouch(context),
-                  // SizedBox(height: 8.0),
-                  // _buildButtons(),
                 ],
               ):
               Container(
@@ -167,76 +154,70 @@ class UserDataState extends State<UserData> {
   
   }//WIdget main
 
-  /*Widget _buildCoverImage(Size screenSize) {
-    return Container(
-      height: screenSize.height / 6,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          colorFilter: new ColorFilter.mode(Colors.black87.withOpacity(0.8), BlendMode.dstATop),
-          image: AssetImage('./assets/images/drawer1.jpg'),
-          fit: BoxFit.cover,
+
+        Widget _makeCard(data, theme){
+
+        return  Card(
+            elevation: 0.0,
+            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            child: Container(
+              decoration: BoxDecoration(
+              // color: Color.fromRGBO(64, 75, 96, .9),
+              border: Border.all(color: theme.primaryColor),
+              borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: _makeListTile(data, theme),
+            ),
+          );
+
+        }
+
+       Widget _makeListTile(data, theme) {
+        String age = data['age'].toString() + ' años. ';
+        String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años. ': '';
+        String dependents = data['dependents']!=null && data['dependents']>0 ? ' '+ data['dependents'].toString() + ' dependiente(s). ': '';
+ 
+        return  
+        Container(
+        height: 80,
+        child:
+        ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+        leading: Container(
+          padding: EdgeInsets.only(right: 12.0),
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: theme.accentColor))),
+          child: Icon(Icons.person, color: theme.accentColor,),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfileImage(photo) {
-    return Center(
-      child: Container(
-        width: 120.0,
-        height: 120.0,
-        
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: new CachedNetworkImageProvider(photo),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(60.0),
-          border: Border.all(
-            color: Colors.white,
-            width: 4.0,
-          ),
+        title: 
+        Container(
+        padding: EdgeInsets.only(top:10),
+        child:
+        Text(
+          (data['name']),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-      ),
-    );
-  }*/
+        ),
+        // subtitle: Text(age + spouse + dependents,),
 
-  Widget _buildExpansion(data, theme){
-    return 
-    Container(
-    // decoration: BoxDecoration(
-    // color: Colors.grey,
-    // borderRadius: BorderRadius.circular(4.0),
-    // ),
-    child: 
-    ExpansionTile(
-      title: ListTile(
-        title: _buildFullName(data['name']),
-        subtitle: _buildAge(context, data, theme),
-      ),
-      children: <Widget>[
-        _builPlans(context, data['plans'], theme)
-      ],
+        subtitle: Container(
+          padding: EdgeInsets.only(top: 10),
+          child:
+            // Icon(Icons.linear_scale, color: Colors.yellowAccent),
+            Text(age + spouse + dependents, style: TextStyle(height: 1.2))
 
-    )
-    );
-  }
+        ),
+        trailing:
+          Icon(Icons.keyboard_arrow_right, size: 30.0, color: theme.accentColor,),
 
-  Widget _buildFullName(name) {
-
-    TextStyle _nameTextStyle = TextStyle(
-      // fontFamily: 'Roboto',
-      color: Colors.black87,
-      fontSize: 18.0,
-      height: 1.3,
-      fontWeight: FontWeight.w600,
-    );
-
-    return Text(
-      name,
-      style: _nameTextStyle,
-    );
-  }
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => DetailPage(data: data)));
+        },
+        )
+      );
+      }
 
   Widget _buildTitle(BuildContext context, theme) {
     return Container(
@@ -248,181 +229,16 @@ class UserDataState extends State<UserData> {
                 style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 20, height: 1.3),
                 textAlign: TextAlign.center,
                 ),
-                subtitle: Text('Últimas 3 cotizaciones realizadas por usuario.', 
-                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
-                textAlign: TextAlign.center,
-                ),
+                // subtitle: Text('Últimas 3 cotizaciones realizadas por usuario.', 
+                // style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
+                // textAlign: TextAlign.center,
+                // ),
                 ),
             ],
             ),
             
           );
   }
-
-  Widget _buildAge(BuildContext context, data, theme) {
-    String age = data['age'].toString() + ' años. ';
-    String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años. ': '';
-    String dependents = data['dependents']!=null && data['dependents']>0 ? ' '+ data['dependents'].toString() + ' hijo(s). ': '';
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-      // decoration: BoxDecoration(
-      //   // color: theme.primaryColor,
-      //   borderRadius: BorderRadius.circular(4.0),
-      // ),
-      child: Text(
-        age + spouse + dependents,
-        style: TextStyle(
-          // fontFamily: 'Spectral',
-          color: Colors.black,
-          fontSize: 15.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-    );
-  }
-
-  Widget _builPlans(context, plans, theme) {
-  var children = <Widget>[];
-  var childrenRev = <Widget>[];
-  // print(plans);
-  final formatter = NumberFormat("#,###.##");
-  String priceUser = '';
-  String priceSpouse = '';
-  String priceDependents = '';
-  String deductible = '';
-  String transplant = '';
-  String maternity = '';
-  String costAdmin = '';
-  double total = 0.0;
-  for(var plan in plans){
-  // print(plan['option_prices']);
-  total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
-    // print(plan)
-  if(plan['option_prices'].length>0)
-  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Precio USD ' + formatter.format(plan['option_prices'][0]).toString():'';
-  if(plan['option_prices'].length>1)
-  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Precio Conyugue USD ' + formatter.format(plan['option_prices'][1]).toString():'';
-  if(plan['option_prices'].length>2)
-  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Precio Dependientes USD ' + formatter.format(plan['option_prices'][2]).toString():'';
-
-  deductible = plan ['deductible']!=null ? 'Deducible USD ' + formatter.format(plan['deductible']) : ''; 
-  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad USD ' + formatter.format(plan['maternity']) : '';
-  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Transplante de organos USD ' + formatter.format(plan['transplant']) : ''; 
-  costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos USD ' + formatter.format(plan['cost_admin']) : '';
-
-
-  if(plan['option_prices'].length>0)
-    for(var price in plan['option_prices']) 
-      total += price;
-  
-  total = total + plan['maternity'] + plan['transplant'] + plan['cost_admin'];
-  // print(total);
-  // if(plan['option_prices'].length>0)
-    children.add(
-      Container(
-         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: theme.primaryColor)
-        ),
-        margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),  
-        child: 
-        ExpansionTile(
-        title: 
-        ListTile(
-
-          trailing: Text('USD '+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
-          
-          leading:    
-          Padding(
-          padding: EdgeInsets.only(top: 0, bottom: 0),
-          child: 
-          CachedNetworkImage(
-              height: 35, width: 35,
-              imageUrl: plan['company_logo'],
-              placeholder: (context, url) => new CircularProgressIndicator(),
-              errorWidget: (context, url, error) => new Icon(Icons.image),
-          ),
-          ),
-          title:Text(plan['company_name'],
-            style: TextStyle(fontWeight: FontWeight.bold)
-            ), 
-            subtitle: Text(plan['plan_name'],
-            style: TextStyle(height: 1.3, fontSize: 12)
-            ),
-            ),
-            children: <Widget>[
-             
-            Container(
-              margin: EdgeInsets.all(10),
-              child: 
-              Column(children: <Widget>[
-                 
-                priceUser !='' ? Text(
-                    priceUser,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-
-                 priceSpouse != '' ? Text(
-                    priceSpouse,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-
-                 priceDependents !='' ? Text(
-                    priceDependents,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-                  
-                 Text(
-                    deductible,
-                    style: TextStyle(height: 1.5,)
-                  ),
-                  
-                  maternity !='' ? Text(
-                    maternity,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-
-                 transplant !='' ? Text(
-                    transplant,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-
-                 costAdmin !='' ? Text(
-                    costAdmin,
-                    style: TextStyle(height: 1.5,)
-                  ):Container(),
-              ],)
-            
-            ,),
-
-
-
-
-          ],
-      ), 
-    )
-    );
-    
-  } //end for plans
-  // print(children.length);
-  childrenRev = children.reversed.toList();
-  // print(childrenRev.length);
-
-    return Container(           
-      child: Column(children: childrenRev),
-      );
-
- 
-  }
-
-  // Widget _buildSeparator(Size screenSize, theme) {
-  //   return Container(
-  //     width: screenSize.width / 1.6,
-  //     height: 2.0,
-  //     color: theme.accentColor,
-  //     margin: EdgeInsets.only(top: 4.0, bottom: 10),
-  //   );
-  // }
 
     _getUserApi(BuildContext context) async{
       final FirebaseUser user = await _auth.currentUser();

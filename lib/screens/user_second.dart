@@ -112,7 +112,7 @@ class _UserSecond extends State<UserSecond>{
                                   padding: EdgeInsets.only(top: 10),
                                   child: ListTile(
                                     title: Text('COTIZAR', textAlign: TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                                    subtitle: Text('\nCompleta si deseas una cobertura familiar. Puedes agregar hasta 5 niños',
+                                    subtitle: Text('\nCompleta si deseas una cobertura familiar. Puedes agregar hasta 5 dependientes',
                                     style: TextStyle(fontSize: 15,height: 1.3),
                                     ),
                                     ),
@@ -216,7 +216,7 @@ class _UserSecond extends State<UserSecond>{
                                     child: SwitchListTile(
                                         value: _value1,
                                         onChanged: _onChanged1,
-                                        title: new Text('¿Tiene niños?', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        title: new Text('¿Dependientes?', style: TextStyle(fontWeight: FontWeight.bold),),
                                         activeColor: theme.primaryColor,
                                     )
                                   ),
@@ -230,7 +230,7 @@ class _UserSecond extends State<UserSecond>{
                                      
                                         child: InputField(
                                             //enabled: int.parse(_user.dependents) >= 1 ? true:false,
-                                            hintText: 'Edad del niño/a',
+                                            hintText: 'Edad',
                                             obscureText: false,
                                             bottomMargin: 20,
                                             icon: MdiIcons.humanChild,
