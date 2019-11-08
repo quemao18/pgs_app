@@ -241,11 +241,13 @@ class _UserSecond extends State<UserSecond>{
                                             validator: validateAgeDependent,
                                             controller:_textFieldControllerAge,
                                             onChanged: (value) { 
-                                              
+                                              // print(value);
                                               setState((){ 
                                                 Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
                                                 RegExp regex = new RegExp(pattern);
-                                                if (!regex.hasMatch(value) && value.isEmpty || ages.length>4)
+                                                var numValue = int.tryParse(value);
+                                                if(numValue!=null)
+                                                if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>17)
                                                 { 
                                                   _btnEnabled = false;
                                                 }else{
@@ -486,21 +488,26 @@ class _UserSecond extends State<UserSecond>{
       return null;
   }
 
-  String validateAgeDependent(String value) {
+  String validateAgeDependent(value) {
 
-    if(_value1 == false) {_btnEnabled = false; return null;}
+    // if(_value1 == false) {_btnEnabled = false; return null;}
     Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
     RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value) && value!='')
+    // print(value);
+    var numValue = int.tryParse(value);
+    _btnEnabled = false;
+    // print(numValue);
+    if(numValue!=null)
+    if (!regex.hasMatch(value) && value!='' || numValue>17 )
     { 
       _btnEnabled = false;
-      return 'Coloca una edad válida y presiona + para agregar al niño';
+      return 'Coloca una edad válida, entre 0 y 17, luego presiona +';
     }
-      
     else{
       _btnEnabled = true;
       return null;
     }
+    return null;
   }
 
 

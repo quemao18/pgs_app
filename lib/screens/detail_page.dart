@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -189,7 +191,8 @@ class DetailPage extends StatelessWidget {
   String costAdmin = '';
   double total = 0.0;
   for(var plan in plans){
-  // print(plan['option_prices']);
+  String date ='';
+
   total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
     // print(plan)
   if(plan['option_prices'].length>0)
@@ -210,6 +213,7 @@ class DetailPage extends StatelessWidget {
       total += price;
   
   total = total + plan['maternity'] + plan['transplant'] + plan['cost_admin'];
+
   // print(total);
   // if(plan['option_prices'].length>0)
     children.add(
@@ -224,7 +228,9 @@ class DetailPage extends StatelessWidget {
         title: 
         ListTile(
 
-          trailing: Text('USD '+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
+          trailing: 
+          
+              Text('USD '+formatter.format(total).toString()+'\n'+date.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
           
           leading:    
           Padding(

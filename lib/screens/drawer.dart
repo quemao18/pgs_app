@@ -57,10 +57,10 @@ class _DrawerOnly extends State<DrawerOnly> {
   //int _selectedDrawerIndex = 0;
   final drawerItems = [
     new DrawerItem("Inicio", MdiIcons.homeOutline, LoginPage(message: null,)),
-    new DrawerItem("¿Quienes somos?", MdiIcons.accountMultipleOutline, HomeMaterial()),
+    new DrawerItem("¿Quiénes somos?", MdiIcons.accountMultipleOutline, HomeMaterial()),
     new DrawerItem("Nueva cotización", MdiIcons.calendarAccountOutline, UserFirst(userData: null)),
     new DrawerItem("Mis cotizaciones", MdiIcons.clipboardListOutline, UserData()),
-    new DrawerItem("Contactanos", MdiIcons.phoneOutline, ContactUs())
+    new DrawerItem("Contáctanos", MdiIcons.phoneOutline, ContactUs())
 
   ];
 

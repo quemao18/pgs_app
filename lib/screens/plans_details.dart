@@ -460,13 +460,13 @@ getCompanies(BuildContext context) async {
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       // print(selectedOptions);
-      data = selectedOptions;
+      data = {"plans":selectedOptions};
       String res2;
-      for(var i = 0; i < data.length; i++){
-        var res = (await apiRequestPost(url+'v1/account/'+widget.userId+'/plans', data[i]));
+      // for(var i = 0; i < data.length; i++){
+        var res = (await apiRequestPost(url+'v1/account/'+widget.userId+'/plans',data));
         res2 = res;
         // print(res);
-      }
+      // }
       // print(res2);
 
       return res2;
