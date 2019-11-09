@@ -54,8 +54,8 @@ class DetailPage extends StatelessWidget {
           title: Text(data['name'],
           style: TextStyle(color: Colors.white, fontSize: 30.0)
           ),
-          subtitle: Text(data['age'].toString() + ' años.',
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          subtitle: Text( data['email'] +'\n'+ data['age'].toString() + ' años.',
+          style: TextStyle(color: Colors.white, fontSize: 16, height: 1.2),
           ),
         ),
         SizedBox(height: 20.0),

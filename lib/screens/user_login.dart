@@ -581,7 +581,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _getUserApi(BuildContext context) async{
-    isLoadingApi = true;
+    setState(() {
+      isLoadingApi = true;
+    });
+    
     // print(this.userLogged.email);
       var res2;
       var config = AppConfig.of(context);
