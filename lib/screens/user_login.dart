@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen5.png?alt=media&token=c31b40aa-9edf-4296-8fed-0663127bbf2c'
   ];
   List listTxt = [
-    'No te vendemos una poliza... Te damos razones para tenerla.',
+    'No vendemos pólizas, te damos razones para tenerla.',
     'Cotiza el mejor plan que se adapte a tus necesidades.',
     'Que tu ausencia no afecte el futuro de tu familia.',
     'Imprescindible en tu camino es contar con nuestro respaldo.'
