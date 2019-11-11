@@ -27,6 +27,7 @@ class UserData extends StatefulWidget {
 }
 
 class UserDataState extends State<UserData> {
+  // final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
   bool isLoadding = false;
   bool existUser = true;
   @protected
@@ -240,11 +241,21 @@ class UserDataState extends State<UserData> {
           );
   }
 
+  //   _showDialog2(text, tempo){
+  // _scaffoldstate.currentState.showSnackBar(
+  //   new SnackBar(
+  //       duration: new Duration(seconds: tempo),
+  //       content: new Text(text),
+  //     )
+  //     );
+  // }
+
     _getUserApi(BuildContext context) async{
       final FirebaseUser user = await _auth.currentUser();
       setState(() {
       isLoading = true;  
       });
+      try{
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
@@ -274,6 +285,11 @@ class UserDataState extends State<UserData> {
           res2 = null;
         }
         return res2;
+      }catch(_){
+        print('error');
+        // _showDialog2('Error de conexión', 3);
+
+      }
 
   }
   

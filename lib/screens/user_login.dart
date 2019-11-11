@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
@@ -93,14 +95,17 @@ class _LoginPageState extends State<LoginPage> {
   @protected
   initState(){
     // if(this.isLoggedIn)
+
     this.imgShow = listImg[_random.nextInt(listImg.length)];
     this.textShow = listTxt[_random.nextInt(listTxt.length)];
     _getCurrentUser();
     super.initState();
     this.userData = null;
+    this.isConexion = false;
     Future.delayed(Duration(milliseconds: 1000), () {   
       // setState(() {
         // _getPlansUser(context);
+        _checkConnection();
         if(this.isLoggedIn)
         this.userData =_getUserApi(context);
 
@@ -122,12 +127,77 @@ class _LoginPageState extends State<LoginPage> {
   //  UserFirst(userData: profileData);
   }
 
+ Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {
+    var loginBtn = new Container(
+      height: 40,
+      width: 80,
+      padding: EdgeInsets.all(5.0),
+      alignment: FractionalOffset.center,
+      decoration: new BoxDecoration(
+        color: bgColor,
+        borderRadius: new BorderRadius.all(const Radius.circular(10.0)),
+        // boxShadow: <BoxShadow>[
+        //   BoxShadow(
+        //     color: const Color(0xFF696969),
+        //     offset: Offset(1.0, 6.0),
+        //     blurRadius: 0.001,
+        //   ),
+        // ],
+      ),
+      child: Text(
+        buttonLabel,
+        style: new TextStyle(
+            color: textColor, fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
+    );
+    return loginBtn;
+  }
+  
+  Future<bool> _onBackPressed() {
+    // Navigator.of(context).pop(false);
+        // Navigator.of(context).pushReplacementNamed('/login');
+    final ThemeData theme = Theme.of(context);
+
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+                title: new Text('¿Estás seguro?'),
+                content: new Text('¿Realmente quieres salir del app?'),
+                actions: <Widget>[
+                  new GestureDetector(
+                    onTap: () => {
+                      // widget.message == null ? 
+                      Navigator.of(context).pop(false)
+                      // Navigator.of(context).pushReplacementNamed('/login')
+                      },
+                    child: roundedButton("No", theme.primaryColor,
+                        const Color(0xFFFFFFFF)),
+                  ),
+                  new GestureDetector(
+                    onTap: () => SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+                    child: roundedButton(" Si ", theme.primaryColor,
+                        const Color(0xFFFFFFFF)),
+                  ),
+                ],
+              ),
+        ) ??
+        false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+    WillPopScope(
+      onWillPop: 
+        _onBackPressed,
+        // return new Future.value(false);,
+      child:
+     Scaffold(
         key: _scaffoldstate,
         body:
         _home()
+      )
       );
     
   }
@@ -223,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                                       future: this.userData,
                                       // initialData: this.userData,
                                       builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
+                                      if (snapshot.hasData && this.isConexion) {
                                       if (snapshot.data != null) { 
                                       return
                                       Column(children: <Widget>[
@@ -277,8 +347,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ],);
                                         }
                                       }
-                                      else if (snapshot.hasError ) {
-                                        _showDialog2('Error de conexión...', 3);
+                                      else if (snapshot.hasError || !this.isConexion) {
+                                        // _showDialog2('Error de conexión...', 3);
                                         return  RoundedButton(
                                               buttonName: "Intentar de nuevo",
                                               onTap:  () {
@@ -580,12 +650,38 @@ class _LoginPageState extends State<LoginPage> {
     
   }
 
+  _checkConnection() async{
+        
+    try {
+    var config = AppConfig.of(context);
+    var url = config.apiBaseUrl;
+    // final result = await InternetAddress.lookup(url+'v1/');
+    var res = await http.get(Uri.encodeFull(url+'v1/'), headers: {"Accept": "application/json"});
+    // if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    if(res.statusCode == 200){
+      print('connected');
+      setState(() {
+      this.isConexion = true;
+        
+      });
+    }
+    } on SocketException catch (_) {
+    print('not connected');
+    _showDialog2('Error de conexión...', 3);
+    setState(() {
+      this.isConexion = false;
+      
+    });
+    }
+
+  }
+
   _getUserApi(BuildContext context) async{
     setState(() {
       isLoadingApi = true;
     });
-    
     // print(this.userLogged.email);
+    try{
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
@@ -618,6 +714,10 @@ class _LoginPageState extends State<LoginPage> {
         }
         // print(res2);
         return res2;
+    }catch(_){
+      print('error');
+      // _showDialog2('Error de conexión', 3);
+    }
 
   }
 
