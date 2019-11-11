@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -110,7 +109,7 @@ class DetailPage extends StatelessWidget {
     );
 
     final bottomContentText = Text(
-      'Planes cotizados',
+      'Últimos 10 planes cotizados',
       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold,),
     );
 
@@ -188,8 +187,50 @@ class DetailPage extends StatelessWidget {
   String maternity = '';
   String costAdmin = '';
   double total = 0.0;
-  for(var plan in plans){
+  List dates =[];
+  for(var i = 0; i < plans.length; i++){
+  String date = '';
+  var raw = plans[i]['date'].toString();
+
+  var numeric = raw.split(' ');//.split(')')[0];
+  // print(numeric[0]); 
+  var milis = numeric[1];
+
+  milis = milis.substring(0, milis.length-1);
+// print(milis);
+  try{
+  var format = DateFormat('dd/MM/yy');
+  DateTime d = DateTime.fromMillisecondsSinceEpoch(int.parse(milis));
+  date =(format.format(d));
+  dates.add(date);
+  }catch(e){
+
+  }
+  }
+
   String date ='';
+
+  for(var plan in plans){
+
+
+  var raw = plan['date'].toString();
+  
+
+  var numeric = raw.split(' ');//.split(')')[0];
+  // print(numeric[0]); 
+  var milis = numeric[1];
+
+  milis = milis.substring(0, milis.length-1);
+// print(milis);
+  try{
+  var format = DateFormat('dd/MM/yy');
+  DateTime d = DateTime.fromMillisecondsSinceEpoch(int.parse(milis));
+  date =(format.format(d));
+  
+  }catch(e){
+
+  }
+
 
   total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
     // print(plan)
@@ -214,6 +255,7 @@ class DetailPage extends StatelessWidget {
 
   // print(total);
   // if(plan['option_prices'].length>0)
+  
     children.add(
       Container(
          decoration: BoxDecoration(
@@ -227,8 +269,12 @@ class DetailPage extends StatelessWidget {
         ListTile(
 
           trailing: 
-          
-              Text('USD '+formatter.format(total).toString()+'\n'+date.toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
+            Column(children: <Widget>[
+              SizedBox(height: 5,),
+              Text('\tUSD '+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
+              Text(date.toString(), style: TextStyle(fontSize: 13,height: 1.3)),
+
+            ],),
           
           leading:    
           Padding(
@@ -299,9 +345,13 @@ class DetailPage extends StatelessWidget {
           ],
       ), 
     )
-    );
-    
+    ); 
+
+  if(!dates.contains(date))
+ children.add(Text(date));
+     
   } //end for plans
+   
   // print(children.length);
   childrenRev = children.reversed.toList();
   // print(childrenRev.length);
