@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
     _getCurrentUser();
     super.initState();
     this.userData = null;
+    isLoading = true;
     this.isConexion = false;
     Future.delayed(Duration(milliseconds: 1000), () {   
       // setState(() {
@@ -293,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                                       future: this.userData,
                                       // initialData: this.userData,
                                       builder: (context, snapshot) {
-                                      if (snapshot.hasData && this.isConexion) {
+                                      if (snapshot.hasData && this.isConexion && !isLoading) {
                                       if (snapshot.data != null) { 
                                       return
                                       Column(children: <Widget>[
@@ -322,7 +323,7 @@ class _LoginPageState extends State<LoginPage> {
                                         existUser ? Align(
                                         alignment: Alignment.bottomCenter,
                                           child: 
-                                            !isLoadingApi ? RoundedButton(
+                                            !isLoading ? RoundedButton(
                                               buttonName: "Mis Cotizaciones",
                                               onTap:  () {
                                                   // Navigator.of(context).pop();
@@ -367,7 +368,8 @@ class _LoginPageState extends State<LoginPage> {
                                               //buttonColor: primaryColor,
                                             ); 
                                     }else{
-                                      return     
+                         
+                                      return 
                                       this.isLoggedIn ? Align(
                                         alignment: Alignment.bottomCenter,
                                           child:
@@ -395,6 +397,7 @@ class _LoginPageState extends State<LoginPage> {
                                                       child: _displayLoginButton(), inAsyncCall: isLoading),
                                               )
                                           ;
+                                   
                                     }
                                         
                                      return  Center(
@@ -662,7 +665,7 @@ class _LoginPageState extends State<LoginPage> {
       print('connected');
       setState(() {
       this.isConexion = true;
-        
+      isLoading = false;
       });
     }
     } on SocketException catch (_) {
@@ -670,7 +673,7 @@ class _LoginPageState extends State<LoginPage> {
     _showDialog2('Error de conexión...', 3);
     setState(() {
       this.isConexion = false;
-      
+      isLoading = false;
     });
     }
 
@@ -679,6 +682,7 @@ class _LoginPageState extends State<LoginPage> {
   _getUserApi(BuildContext context) async{
     setState(() {
       isLoadingApi = true;
+      isLoading = true;
     });
     // print(this.userLogged.email);
     try{
@@ -693,6 +697,7 @@ class _LoginPageState extends State<LoginPage> {
           setState(() {
             if(resBody[0] ==  null){
              this.isConexion = true;
+            
              this.existUser = false; 
              res2 = null;
             }
@@ -703,6 +708,7 @@ class _LoginPageState extends State<LoginPage> {
             }
 
             isLoadingApi = false;
+            isLoading = false;
        
           });
         }else{
@@ -710,12 +716,16 @@ class _LoginPageState extends State<LoginPage> {
               res2 = null;
              this.isConexion = false; 
              isLoadingApi = false;
+             isLoading = false;
             });
         }
         // print(res2);
         return res2;
     }catch(_){
       print('error');
+      setState(() {
+        isLoading = false;
+      });
       // _showDialog2('Error de conexión', 3);
     }
 

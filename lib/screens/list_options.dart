@@ -287,6 +287,7 @@ getCompanies(BuildContext context) async {
   setState(() {
       isLoading = true;
   });
+  try{
   var config = AppConfig.of(context);
   //String userId = 'f77542ba-21aa-48ad-a2d9-fa68607166ae';
       var url = config.apiBaseUrl;
@@ -301,9 +302,14 @@ getCompanies(BuildContext context) async {
             return resBody;
         }else{
           throw Exception('Failed to load post');
-        }
-      
-  }
+        }   
+    }
+    catch(_){
+    print('error');
+    // _showDialog2('Error de conexión', 3);
+    }
+
+}
 
 }
 
