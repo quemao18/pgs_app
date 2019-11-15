@@ -5,7 +5,7 @@ import 'app_config.dart';
 
 void main() {
   var configuredApp = new AppConfig(
-    appName: 'PGS Consulting Group DEV',
+    appName: 'PGS Health DEV',
     flavorName: 'developement',
     email: 'servicioalcliente@pgs-consulting.com',
     phone1: '+584245881728',

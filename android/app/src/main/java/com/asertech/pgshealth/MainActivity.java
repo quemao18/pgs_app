@@ -1,4 +1,4 @@
-package com.example.pgsconsulting;
+package com.asertech.pgshealth;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

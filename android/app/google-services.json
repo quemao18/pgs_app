@@ -8,12 +8,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:855167360160:android:e81fc3832f4be2d49f7dc5",
+        "mobilesdk_app_id": "1:855167360160:android:22a00cc92c091f479f7dc5",
         "android_client_info": {
-          "package_name": "com.example.pgsconsulting"
+          "package_name": "com.asertech.pgshealth"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "855167360160-tq8d925dj7gtb1on4rkndo4gfoqii10p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asertech.pgshealth",
+            "certificate_hash": "a21dc0b7841240fbf33d9417d5f262dc0607a8c0"
+          }
+        },
+        {
+          "client_id": "855167360160-752na6aulnk2j4ivoflu5ea1jchjdo8r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asertech.pgshealth",
+            "certificate_hash": "78a66493aae5a302c6c3d51fa91066c39a429251"
+          }
+        },
         {
           "client_id": "855167360160-g3pk95429p5t2u7v60rohg026fm26a1b.apps.googleusercontent.com",
           "client_type": 3

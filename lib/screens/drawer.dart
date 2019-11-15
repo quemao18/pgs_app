@@ -221,7 +221,7 @@ class _DrawerOnly extends State<DrawerOnly> {
                                     ListTile(
         
                                       title: Text('Términos y condiciones de privacidad', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45),),
-                                      onTap: () => _launchURL('https://pgs-consulting.com/somos-pgs/'),
+                                      onTap: () => _launchURL('https://pgs-consulting.firebaseapp.com/#/policity'),
                      
         
                                     ), 
