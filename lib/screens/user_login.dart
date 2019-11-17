@@ -23,7 +23,6 @@ import 'package:loading_animations/loading_animations.dart';
 
 import 'user_data.dart';
 
-
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
