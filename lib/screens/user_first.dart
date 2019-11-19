@@ -345,7 +345,11 @@ class _UserFirst extends State<UserFirst> {
   }
 
     getCountries(BuildContext context) async{
+    
       isLoading = true;
+      
+    try{
+
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/country/countries/'), headers: {"Accept": "application/json"});
@@ -359,9 +363,16 @@ class _UserFirst extends State<UserFirst> {
         }else{
           throw Exception('Failed to load post');
         }
-      
-    }
 
+    }catch(_){
+      print('error in countries');
+      setState(() {
+        isLoading = false;
+      });
+      // _showDialog2('Error de conexión', 3);
+    }
+    
+  }
 
   
 }
