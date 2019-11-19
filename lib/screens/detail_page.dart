@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+  
 class DetailPage extends StatelessWidget {
   final data;
   DetailPage({Key key, this.data}) : super(key: key);
@@ -38,7 +39,7 @@ class DetailPage extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: 55.0),
         Icon(
-          Icons.person,
+          data['gender'] == 'male' ? MdiIcons.human:MdiIcons.humanFemale,
           color: Colors.white,
           size: 40.0,
         ),
@@ -175,6 +176,7 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _builPlans(context, plans, theme) {
+    
   var children = <Widget>[];
   var childrenRev = <Widget>[];
   // print(plans);
@@ -211,8 +213,8 @@ class DetailPage extends StatelessWidget {
   String date ='';
 
   for(var plan in plans){
-
-
+  // print(this.data['email_logged']);
+  // print(plan['email_logged']);
   var raw = plan['date'].toString();
   
 
@@ -255,7 +257,7 @@ class DetailPage extends StatelessWidget {
 
   // print(total);
   // if(plan['option_prices'].length>0)
-  
+    if(this.data['email_logged'] == plan['email_logged'])
     children.add(
       Container(
          decoration: BoxDecoration(
