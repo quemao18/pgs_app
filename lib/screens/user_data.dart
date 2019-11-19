@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 
@@ -189,7 +190,7 @@ class UserDataState extends State<UserData> {
           decoration: new BoxDecoration(
               border: new Border(
                   right: new BorderSide(width: 1.0, color: theme.accentColor))),
-          child: Icon(Icons.person, color: theme.accentColor,),
+          child: Icon(data['gender'] == 'male' ?  MdiIcons.human:MdiIcons.humanFemale, color: theme.accentColor, size:35,),
         ),
         title: 
         Container(
