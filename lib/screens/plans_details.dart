@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import 'package:pgs_contulting/screens/drawer.dart';
 import 'package:pgs_contulting/screens/user_login.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +18,8 @@ import '../app_config.dart';
 import 'drawer.dart';
 
 import 'package:http/http.dart' as http;
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
 class PlansPage extends StatefulWidget {
@@ -38,7 +43,7 @@ class _PlansPageState extends State<PlansPage> {
   var companies;
   int count=0;
   int dependent=0, spouse =0;
-
+  String emailLogged = '';
 
   var data;
   @override
@@ -53,6 +58,7 @@ class _PlansPageState extends State<PlansPage> {
       });
     });
 
+    _getEmailLogged();
 
   }
 
@@ -301,8 +307,7 @@ getCompanies(BuildContext context) async {
     final formatter = NumberFormat("#,###.##");
     var selectedOptions = [];
 
-    _getChildren(plan, theme, userId, data, userData){
-
+    _getChildren(plan, theme, userId, data, userData)  {
     var price1 = [0,0,0];
     var price2 = [0,0,0];
     var price3 = [0,0,0]; 
@@ -435,6 +440,7 @@ getCompanies(BuildContext context) async {
                 'company_logo':data['company_logo'],
                 'plan_name': plan['name'],
                 'user_id': userId, 
+                'email_logged': emailLogged,
                 'deductible': dedu,
                 'option_prices': price,
                 'option_selected': index+1,
@@ -445,7 +451,7 @@ getCompanies(BuildContext context) async {
                 }
               );
             });
-            
+            // print(user.providerData[1].email);
             print(selectedOptions.toList());
           },
 
@@ -493,6 +499,16 @@ getCompanies(BuildContext context) async {
 
       }
 
+      _getEmailLogged() async{
+      final FirebaseUser user = await _auth.currentUser();
+      setState(() {
+        if(user!=null){
+        this.emailLogged = user.providerData[1].email;
+        }
+      });
+
+      }
+      
       _launchURL(url) async {
       //const url = 'https://pgs-consulting.com/somos-pgs/';
       if (await canLaunch(url)) {
