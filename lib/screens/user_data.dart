@@ -190,7 +190,7 @@ class UserDataState extends State<UserData> {
           decoration: new BoxDecoration(
               border: new Border(
                   right: new BorderSide(width: 1.0, color: theme.accentColor))),
-          child: Icon(data['gender'] == 'male' ?  MdiIcons.human:MdiIcons.humanFemale, color: theme.accentColor, size:35,),
+          child: Icon(data['gender'] == 'male' ?  MdiIcons.humanMale:MdiIcons.humanFemale, color: theme.accentColor, size:35,),
         ),
         title: 
         Container(

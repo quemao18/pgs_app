@@ -39,7 +39,7 @@ class DetailPage extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: 55.0),
         Icon(
-          data['gender'] == 'male' ? MdiIcons.human:MdiIcons.humanFemale,
+          data['gender'] == 'male' ? MdiIcons.humanMale:MdiIcons.humanFemale,
           color: Colors.white,
           size: 40.0,
         ),

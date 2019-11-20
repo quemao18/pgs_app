@@ -23,10 +23,15 @@ import 'package:loading_animations/loading_animations.dart';
 
 import 'user_data.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
-
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+final databaseReference = Firestore.instance;
 
 final _random = new Random();
 
@@ -94,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
   @protected
   initState(){
     // if(this.isLoggedIn)
-
+    _saveDeviceToken();
     this.imgShow = listImg[_random.nextInt(listImg.length)];
     this.textShow = listTxt[_random.nextInt(listTxt.length)];
     _getCurrentUser();
@@ -111,6 +116,10 @@ class _LoginPageState extends State<LoginPage> {
 
       // });
     });
+
+    firebaseCloudMessagingListeners();
+
+
   }
 
 
@@ -763,6 +772,77 @@ class _LoginPageState extends State<LoginPage> {
     
     );
 
+  }
+
+  void firebaseCloudMessagingListeners() {
+  if (Platform.isIOS) iOSPermission();
+
+  _firebaseMessaging.getToken().then((token){
+    print(token);
+  });
+
+  _firebaseMessaging.configure(
+    onMessage: (Map<String, dynamic> message) async {
+      print('on message $message');
+       showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                        content: ListTile(
+                        title: Text(message['notification']['title']),
+                        subtitle: Text(message['notification']['body']),
+                        ),
+                        actions: <Widget>[
+                        FlatButton(
+                            child: Text('Ok'),
+                            onPressed: () => Navigator.of(context).pop(),
+                        ),
+                    ],
+                ),
+       );
+    },
+    onResume: (Map<String, dynamic> message) async {
+      print('on resume $message');
+    },
+    onLaunch: (Map<String, dynamic> message) async {
+      print('on launch $message');
+    },
+  );
+}
+
+void iOSPermission() {
+  _firebaseMessaging.requestNotificationPermissions(
+      IosNotificationSettings(sound: true, badge: true, alert: true)
+  );
+  _firebaseMessaging.onIosSettingsRegistered
+      .listen((IosNotificationSettings settings)
+  {
+    print("Settings registered: $settings");
+  });
+}
+
+  /// Get the token, save it to the database for current user
+  _saveDeviceToken() async {
+    // Get the current user
+    // String uid = 'jeffd23';
+    // FirebaseUser user = await _auth.currentUser();
+    final FirebaseUser currentUser = await _auth.currentUser();
+    // Get the token for this device
+    String fcmToken = await _firebaseMessaging.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = databaseReference
+          .collection('users')
+          .document(currentUser.uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
   }
 
 
