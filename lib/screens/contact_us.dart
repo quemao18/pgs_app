@@ -399,6 +399,7 @@ class _ContactUs extends State<ContactUs> {
   // }
 
     _getUserApi(BuildContext context) async{
+      try{
       final FirebaseUser user = await _auth.currentUser();
       setState(() {
       isLoading = true;  
@@ -432,6 +433,14 @@ class _ContactUs extends State<ContactUs> {
           res2 = null;
         }
         return res2;
+      }catch(_){
+        print('error in contact us');
+        
+           setState(() {
+          isLoading = false;  
+          });
+        return null;
+      }
 
   }
   

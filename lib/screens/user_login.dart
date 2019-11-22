@@ -83,16 +83,12 @@ class _LoginPageState extends State<LoginPage> {
   'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen5.png?alt=media&token=c31b40aa-9edf-4296-8fed-0663127bbf2c'
   ];
   List listTxt = [
-    'No vendemos pólizas, te damos razones para tenerla.',
-    'Cotiza el mejor plan que se adapte a tus necesidades.',
-    'Que tu ausencia no afecte el futuro de tu familia.',
+    'No te ofrecemos una póliza, te damos razones para tenerla.',
+    'El seguro no es un derecho, es un privilegio.',
+    'Tu salud, tu vida y tu familia nos Importan.',
     'Imprescindible en tu camino es contar con nuestro respaldo.'
   ];
-  // int maxImg = listImg.length;
-  int rand = next(0, 4);
-  int randText = next(0, 3);
-  // var facebookLogin = FacebookLogin();
-  // final _random = new Random();
+
   String textShow;
   String imgShow;
 
@@ -107,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     this.userData = null;
     isLoading = true;
     this.isConexion = false;
-    Future.delayed(Duration(milliseconds: 1000), () {   
+    Future.delayed(Duration(milliseconds: 100), () {   
       // setState(() {
         // _getPlansUser(context);
         _checkConnection();
@@ -118,7 +114,10 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     firebaseCloudMessagingListeners();
-
+  //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   systemNavigationBarColor: Colors.black, // navigation bar color
+  //   statusBarColor: Colors.transparent, // status bar color
+  // ));
 
   }
 
@@ -248,12 +247,12 @@ class _LoginPageState extends State<LoginPage> {
                                     )
                                     : Column( 
                                     children: <Widget>[
-
+                                          
                                       new Container( 
-                                        padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 40),
+                                        padding:new EdgeInsets.only(top: screenSize.height/9),
                                         child: 
                                         Image( 
-                                              color: theme.primaryColor.withOpacity(1 ),
+                                              color: Color(0xFF9e946b).withOpacity(1 ),
                                               image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
                                               width: (screenSize.width < 500)
                                                   ? 160.0
@@ -263,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       
                                       widget.message == null ? 
-                                      Container(padding: EdgeInsets.only(top:60),):
+                                      Container(padding: EdgeInsets.only(top:screenSize.height/12),):
                                       new Container(
                                       child: new Icon(Icons.check_circle_outline, color: Colors.lightGreen[500], size: 110.0,)
                                       ),
@@ -295,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                       Container(
                                       padding: widget.message == null ?  
-                                      EdgeInsets.only(top: screenSize.height/6): EdgeInsets.only(top: screenSize.height/30),
+                                      EdgeInsets.only(top: screenSize.height/5): EdgeInsets.only(top: screenSize.height/14),
                                       child: 
                                       
                                    FutureBuilder(
@@ -442,7 +441,7 @@ class _LoginPageState extends State<LoginPage> {
                        
                                   widget.message !=null ? Container(
                                     width: 180,
-                                    padding: EdgeInsets.only(top:30),
+                                    padding: EdgeInsets.only(top:screenSize.height/12),
                                     child: Center(
                                       child: 
                                       Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,
@@ -461,7 +460,7 @@ class _LoginPageState extends State<LoginPage> {
             placeholder: (context, url) => 
                 Center(child:       
                   new Container(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: screenSize.height/10),
                   child:
                   Column(children: <Widget>[
                   new Image(
@@ -825,15 +824,16 @@ void iOSPermission() {
     // Get the current user
     // String uid = 'jeffd23';
     // FirebaseUser user = await _auth.currentUser();
-    final FirebaseUser currentUser = await _auth.currentUser();
+    // final FirebaseUser currentUser = await _auth.currentUser();
     // Get the token for this device
+    try{
     String fcmToken = await _firebaseMessaging.getToken();
-
+    // print(this.userLogged.email);
     // Save it to Firestore
     if (fcmToken != null) {
       var tokens = databaseReference
           .collection('users')
-          .document(currentUser.uid)
+          .document(this.userLogged.email)
           .collection('tokens')
           .document(fcmToken);
 
@@ -842,6 +842,9 @@ void iOSPermission() {
         'createdAt': FieldValue.serverTimestamp(), // optional
         'platform': Platform.operatingSystem // optional
       });
+    }
+    }catch(_){
+      print('error save data base firebase');
     }
   }
 

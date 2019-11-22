@@ -7,7 +7,7 @@ description: Cotizador de Seguros.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -34,6 +34,8 @@ dependencies:
   share: ^0.6.3+1
   firebase_messaging: ^5.1.8
   cloud_firestore: ^0.12.10
+  flutter_statusbarcolor: ^0.2.3
+
 
 
   # The following adds the Cupertino Icons font to your application.

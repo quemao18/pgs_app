@@ -96,7 +96,7 @@ class DetailPage extends StatelessWidget {
         ),
         Positioned(
           left: screenSize.width/1.7,
-          top: 50,
+          top: screenSize.height/15,
           child: 
           Image( color: Colors.white70,
           image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
@@ -110,7 +110,7 @@ class DetailPage extends StatelessWidget {
     );
 
     final bottomContentText = Text(
-      'Últimos 10 planes cotizados',
+      'Últimos planes cotizados',
       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold,),
     );
 
@@ -279,16 +279,14 @@ class DetailPage extends StatelessWidget {
             ],),
           
           leading:    
-          Padding(
-          padding: EdgeInsets.only(top: 0, bottom: 0),
-          child: 
+    
           CachedNetworkImage(
-              height: 35, width: 35,
+              height: 50, width: 50,
               imageUrl: plan['company_logo'],
               placeholder: (context, url) => new CircularProgressIndicator(),
               errorWidget: (context, url, error) => new Icon(Icons.image),
           ),
-          ),
+          
           title:Text(plan['company_name'],
             style: TextStyle(fontWeight: FontWeight.bold)
             ), 

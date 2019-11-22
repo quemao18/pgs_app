@@ -66,7 +66,7 @@ class _UserThird extends State<UserThird>{
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.user.gender);
+    // print(widget.user2.spouseGender);
     var config = AppConfig.of(context);
     final ThemeData theme = Theme.of(context);
 
@@ -106,7 +106,9 @@ class _UserThird extends State<UserThird>{
                           Container(
                             child: 
                             Column(children: <Widget>[
-                            widget.user.gender =='female' &&  int.parse(widget.user.age) >=18 && int.parse(widget.user.age) <=45 ?  Container(
+                            widget.user.gender =='female' &&  int.parse(widget.user.age) >=18 && int.parse(widget.user.age) <=45 || 
+                            widget.user2.spouseGender =='female' &&  int.parse(widget.user2.spouseAge) >=18 && int.parse(widget.user2.spouseAge) <=45
+                             ?  Container(
                               // height: 40,
                               padding: EdgeInsets.all(10),
                               //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),

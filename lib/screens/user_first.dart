@@ -52,6 +52,8 @@ class _UserFirst extends State<UserFirst> {
         countries = getCountries(context);
       });
     });
+
+
   }
 
   @override
@@ -73,7 +75,8 @@ class _UserFirst extends State<UserFirst> {
 
     final ThemeData theme = Theme.of(context);
     var config = AppConfig.of(context);
-    
+
+
     return Scaffold(
         appBar: new AppBar(
           title: new Text(config.appName),
@@ -239,7 +242,11 @@ class _UserFirst extends State<UserFirst> {
                                   future: countries ,
                                   builder: (context, snapshot){
                                     if (snapshot.hasData) {
-                                      //print(snapshot.data);
+                                      // print(snapshot.data);
+                                      var list = [];
+                                      for(var pa in snapshot.data)
+                                        if(pa['status'])
+                                        list.add(pa);
                                       return new DropdownButtonFormField(
                                         decoration: InputDecoration(
                                         contentPadding: EdgeInsets.only(left:20, top: 10),
@@ -256,12 +263,15 @@ class _UserFirst extends State<UserFirst> {
                                           }
                                           return null;
                                         },
-                                        items: snapshot.data.map<DropdownMenuItem<String>>((value) {
-                                          //print(value['country_id']);
+                                        items: list.map<DropdownMenuItem<String>>((value) {
+                                          // print(value['status']);
+                                          // if(!value['status'])
+                                          // return DropdownMenuItem(value: ''.toString(), child: Container());
                                           return DropdownMenuItem(
                                             value: value['country_id'].toString(),
                                             child: Text(value['name']),
                                           );
+                                          
                                         }).toList(),
                                         onChanged: (value) {
                                             setState(() {
@@ -373,6 +383,8 @@ class _UserFirst extends State<UserFirst> {
     }
     
   }
+
+
 
   
 }

@@ -36,8 +36,8 @@ class _ListPageState extends State<ListPage> {
   void initState() {
 
     super.initState();
-
-    Future.delayed(Duration(milliseconds: 100), () {
+    companies = null;
+    Future.delayed(Duration(milliseconds: 50), () {
       setState(() {
         companies = getCompanies(context);
       });
@@ -59,8 +59,8 @@ class _ListPageState extends State<ListPage> {
     ExpansionTile makeExpansion(data) => ExpansionTile(
               leading: 
               CachedNetworkImage(
-                  height: 40, 
-                  width: 40,
+                  height: 60, 
+                  width: 60,
                   imageUrl: data['company_logo'],
                   placeholder: (context, url) => new CircularProgressIndicator(),
                   errorWidget: (context, url, error) => new Icon(Icons.image),
@@ -135,7 +135,7 @@ class _ListPageState extends State<ListPage> {
       // padding: EdgeInsets.only(top:screenSize.height/14),
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
-      child:  isLoading?  
+      child:  isLoading || companies==null?  
         Container(
         margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/4.5),
         child: Column(children: <Widget>[
@@ -164,7 +164,7 @@ class _ListPageState extends State<ListPage> {
                    children.add(
                       Container(
                         margin: const EdgeInsets.only(bottom: 10.0),
-                        padding: EdgeInsets.all(20),
+                        // padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: theme.primaryColor)

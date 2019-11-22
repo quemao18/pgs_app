@@ -89,14 +89,15 @@ class _DrawerOnly extends State<DrawerOnly> {
     // _getCurrentUser();
     // print(this.userGoogle.photo);
     final ThemeData theme = Theme.of(context);
-
-          var drawerOptions = <Widget>[];
+    final Size screenSize = MediaQuery.of(context).size;
+    var drawerOptions = <Widget>[];
+    
           for (var i = 0; i < this.drawerItems.length; i++) {
             var d = this.drawerItems[i];
             drawerOptions.add(
               new ListTile(
                 leading: new Icon(d.icon),
-                title: new Text(d.title),
+                title: new Text(d.title, style: TextStyle(fontSize: 16),),
                 // selected: i == _selectedDrawerIndex,
                 onTap: () {
                   if(i==1) {
@@ -203,10 +204,10 @@ class _DrawerOnly extends State<DrawerOnly> {
                         //         ),
         
                         //       ),
-
+                          SizedBox(height: screenSize.height>700 ? screenSize.height/4.5 : screenSize.height/9,),
                           Container(
-                          margin: EdgeInsets.only(right: 10,),
-                          padding:new EdgeInsets.only(top: 80.0),
+                          // margin: EdgeInsets.only(right: 10,),
+                          // padding:new EdgeInsets.only(top: screenSize.height/9),
         
                           child: new Align(
         
@@ -252,7 +253,7 @@ class _DrawerOnly extends State<DrawerOnly> {
         
                                     ListTile(
         
-                                      title: Text('Salir'),
+                                      title: Text('Salir', style: TextStyle(fontSize: 16),),
         
                                       leading: Icon(Icons.exit_to_app),
         

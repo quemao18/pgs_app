@@ -50,8 +50,8 @@ class _PlansPageState extends State<PlansPage> {
   void initState() {
 
     super.initState();
-
-    Future.delayed(Duration(milliseconds: 100), () {
+    companies = null;
+    Future.delayed(Duration(milliseconds: 50), () {
       setState(() {
         companies = getCompanies(context);
         //companies = [];
@@ -101,7 +101,7 @@ class _PlansPageState extends State<PlansPage> {
       //width: 400,
       margin: new EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
-      child: isLoading?  
+      child: isLoading || companies==null?  
         Container(
         margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/5),
         child: Column(children: <Widget>[
