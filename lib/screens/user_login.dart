@@ -294,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                       Container(
                                       padding: widget.message == null ?  
-                                      EdgeInsets.only(top: screenSize.height/5): EdgeInsets.only(top: screenSize.height/14),
+                                      EdgeInsets.only(top: screenSize.height/5): EdgeInsets.only(top: screenSize.height/30),
                                       child: 
                                       
                                    FutureBuilder(
@@ -441,7 +441,7 @@ class _LoginPageState extends State<LoginPage> {
                        
                                   widget.message !=null ? Container(
                                     width: 180,
-                                    padding: EdgeInsets.only(top:screenSize.height/12),
+                                    padding: EdgeInsets.only(top:screenSize.height/18),
                                     child: Center(
                                       child: 
                                       Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,

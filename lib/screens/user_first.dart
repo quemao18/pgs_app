@@ -118,6 +118,7 @@ class _UserFirst extends State<UserFirst> {
                             hintText: "Nombre",
                             controller: _nameTextController,
                             obscureText: false,
+                            textCapitalization: true,
 
                             icon: Icons.person,
                             bottomMargin: 20.0,
@@ -180,9 +181,16 @@ class _UserFirst extends State<UserFirst> {
                                     keyboardType: TextInputType.number,
                                     // decoration:InputDecoration(labelText: 'Edad'),
                                     validator: validateAge,
+
                                     onSaved: (val) =>
-                                        setState(() => _user.age = val )
+                                        setState(() => _user.age = val ),
+                                    onChanged: (value ) { 
+                                    if(int.parse(value) > 17) 
+                                      FocusScope.of(context).requestFocus(new FocusNode()); 
+                                    },
                                     ),  
+                                  
+                                    
                                 ),
                              Container(
                               //width: 200,

@@ -17,6 +17,7 @@ class InputField extends StatelessWidget {
   final bool autovalidate;
   final Key key;
   final bool enabled;
+  final bool textCapitalization;
 
   //passing props in the Constructor.
   InputField(
@@ -38,7 +39,8 @@ class InputField extends StatelessWidget {
       this.validator,
       this.onSaved,
       this.controller,
-      this.hintStyle});
+      this.hintStyle, 
+      this.textCapitalization=false});
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,7 @@ class InputField extends StatelessWidget {
             enabled: enabled,
             onChanged: onChanged,
             autovalidate: autovalidate,
+            textCapitalization: textCapitalization ? TextCapitalization.sentences: TextCapitalization.none,
             
             // decoration: new InputDecoration(
             //   hintText: hintText,

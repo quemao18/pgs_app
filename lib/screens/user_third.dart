@@ -20,10 +20,7 @@ class UserThird extends StatefulWidget{
   final User user;
   final User user2;
   
-  
-
   UserThird({Key key, this.user, this.user2}) : super(key: key);
-
   
   @override
   _UserThird createState()=> _UserThird();

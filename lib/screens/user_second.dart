@@ -157,7 +157,11 @@ class _UserSecond extends State<UserSecond>{
                                                 setState((){ 
                                                   _user.spouseAge = val;
                                                 });
-                                            }
+                                            },
+                                            onChanged: (value ) { 
+                                              if(int.parse(value) > 17) 
+                                                FocusScope.of(context).requestFocus(new FocusNode()); 
+                                              },
                                         ),
                                         
                                         ),

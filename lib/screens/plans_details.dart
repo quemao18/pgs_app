@@ -36,6 +36,7 @@ class PlansPage extends StatefulWidget {
 }
 
 class _PlansPageState extends State<PlansPage> {
+
   bool isCheck = false;
   List planIds = [];
   bool isLoading = false;
@@ -74,7 +75,6 @@ class _PlansPageState extends State<PlansPage> {
     final ThemeData theme = Theme.of(context);
     final Size screenSize = MediaQuery.of(context).size;
     // final formatter = NumberFormat("#,###.##");
-
 
     ExpansionTile makeExpansion(data, planName, planDescription, planId, pln, plan) => ExpansionTile(
               title: new ListTile(
@@ -282,10 +282,12 @@ class _PlansPageState extends State<PlansPage> {
 
 getCompanies(BuildContext context) async {
   //print(widget.userId);
+  try{
   setState(() {
       isLoading = true;
   });
-  var config = AppConfig.of(context);
+
+    var config = AppConfig.of(context);
   //String userId = 'f77542ba-21aa-48ad-a2d9-fa68607166ae';
       var url = config.apiBaseUrl;
       var res = await http.get(Uri.encodeFull(url+'v1/company/companies/'+widget.userId+'/options'), 
@@ -301,6 +303,9 @@ getCompanies(BuildContext context) async {
         }else{
           throw Exception('Failed to load post');
         }
+    }catch(_){
+      print('error in options details');
+    }
       
   }
 
@@ -311,13 +316,16 @@ getCompanies(BuildContext context) async {
     var price1 = [0,0,0];
     var price2 = [0,0,0];
     var price3 = [0,0,0]; 
+    var price1Arr =[];
+    var price2Arr =[];
+    var price3Arr =[];
+    
     var price = [], dedu = 0;
-    var spouse = 0;
 
     var dedu1 = 0, dedu2 =0, dedu3 = 0;
     var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
 
-    // print(data);
+    // print(userData.age);
     for(var p in plan['price']){ //print(p['age_range']);
 
       if(p['age_range'] == '1 dependiente'){
@@ -347,21 +355,14 @@ getCompanies(BuildContext context) async {
         p['age_range'] != '2 dependientes'&&
         p['age_range'] != '3+ dependientes')
         ){ 
-        print('Edades');
-        if(spouse == 0)
-        {
-        price1[0] = (p['price1']); 
-        price2[0] = (p['price2']);
-        price3[0] = (p['price3']);
-        }else{
-        price1[1] = (p['price1']); 
-        price2[1] = (p['price2']);
-        price3[1] = (p['price3']);
-        }
-
-        spouse++;
-      }
-
+        // print('Edades');
+        print(p['age_range']);
+        price1Arr.add(p['price1']);
+        price2Arr.add(p['price2']);
+        price3Arr.add(p['price3']);
+      } 
+       
+      
       // if(spouse > 0) price1.add(0);
       // if(spouse>1) {spouse=0; price1 = price1.reversed.toList();  price2 = price2.reversed.toList();  price3 = price3.reversed.toList(); } 
       // else
@@ -372,6 +373,36 @@ getCompanies(BuildContext context) async {
         dedu3 = p['price3'];
       }
       
+    }
+    // print(price1Arr);
+    if(price1Arr.length>1){
+      price1[0] = price1Arr[1];
+      price1[1] = price1Arr[0];
+    }else{
+      if(price1Arr.length>0)
+      price1[0] = price1Arr[0];
+      if(price1Arr.length>1)
+      price1[1] = price1Arr[1];
+    }
+
+    if(price2Arr.length>1){
+      price2[0] = price2Arr[1];
+      price2[1] = price2Arr[0];
+    }else{
+      if(price2Arr.length>0)
+      price2[0] = price2Arr[0];
+      if(price2Arr.length>1)
+      price2[1] = price2Arr[1];
+    }
+
+    if(price3Arr.length>1){
+      price3[0] = price3Arr[1];
+      price3[1] = price3Arr[0];
+    }else{
+      if(price3Arr.length>0)
+      price3[0] = price3Arr[0];
+      if(price3Arr.length>1)
+      price3[1] = price3Arr[1];
     }
 
     var costAdmin = [], maternityArr = [], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
@@ -393,13 +424,14 @@ getCompanies(BuildContext context) async {
       sumTransplant = transplantArr.reduce((a, b) => a + b );
    
     // print(sumMaternity );
-     if(price1.length>0)
+     if(price1.length>0 && price1.reduce((a, b) => a + b )>0)
      sum1 = price1.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-     if(price2.length>0)
+     if(price2.length>0 && price2.reduce((a, b) => a + b )>0)
      sum2 = price2.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-     if(price3.length>0)
+     if(price3.length>0 && price3.reduce((a, b) => a + b )>0)
      sum3 = price3.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-
+    
+     if(sum1>0 && sum2>0 && sum3>0)
      return RadioButtonGroup(
         // margin: EdgeInsets.only(left: 30),
         activeColor: theme.primaryColor,
@@ -456,6 +488,18 @@ getCompanies(BuildContext context) async {
           },
 
           );
+          else
+          return  ListTile(
+                title: Text('No califica para este producto',
+                style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 15, height: 1.3),
+                textAlign: TextAlign.center,
+                ),
+                subtitle: Text('Ponte en contacto con nosotros para mayor información', 
+                style: TextStyle(color: Colors.black54, fontSize: 13, height: 1.5),
+                textAlign: TextAlign.center,
+                ),
+                );
+      
     }
 
     _saveData() async {
