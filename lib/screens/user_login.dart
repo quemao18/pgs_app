@@ -599,9 +599,9 @@ class _LoginPageState extends State<LoginPage> {
     
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
     // print(user.email);
-    // assert(user.providerData[1].email !=null);
+    assert(user.providerData[1].email !=null);
     assert(user.providerData[0].displayName != null);
-    assert(user.providerData[0].email != null);
+    // assert(user.providerData[0].email != null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
@@ -666,16 +666,11 @@ class _LoginPageState extends State<LoginPage> {
   _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
-    print(user.providerData); 
+    // print(user.providerData); 
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
-
-        if(user.providerData[0]!=null)
-        this.userGoogle.email = user.providerData[0].email;
-        if(user.providerData[1]!=null)
-        this.userGoogle.email = user.providerData[1].email;
-
+        this.userGoogle.email = user.email;
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
