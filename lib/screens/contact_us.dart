@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -406,9 +407,9 @@ class _ContactUs extends State<ContactUs> {
       });
 
       String email='';
-      if(user.providerData[0]!=null)
+      if(Platform.isIOS)
       email = user.providerData[0].email;
-      if(user.providerData[1]!=null)
+      else
       email = user.providerData[1].email;
 
       var res2;

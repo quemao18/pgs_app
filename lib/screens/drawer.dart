@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -287,8 +289,12 @@ class _DrawerOnly extends State<DrawerOnly> {
       if(user!=null){
         print(user); 
         this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.providerData[0].email;
+        if (Platform.isIOS)
+        this.userGoogle.email =user.providerData[0].email;
+        else
+        this.userGoogle.email =user.providerData[1].email;
         this.userGoogle.photo = user.photoUrl;
+        print(userGoogle);
         isLoggedIn = true;
       }
       else

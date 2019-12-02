@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -259,9 +260,9 @@ class UserDataState extends State<UserData> {
       try{
 
       String email='';
-      if(user.providerData[0]!=null)
+      if(Platform.isIOS)
       email = user.providerData[0].email;
-      if(user.providerData[1]!=null)
+      else
       email = user.providerData[1].email;
 
       var res2;

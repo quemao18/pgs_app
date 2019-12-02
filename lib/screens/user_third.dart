@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -219,9 +221,9 @@ _showDialog2(text, tempo){
       if(user!=null){
         this.userGoogle.name = user.displayName;
 
-        if(user.providerData[0]!=null)
+      if(Platform.isIOS)
         this.userGoogle.email = user.providerData[0].email;
-        if(user.providerData[1]!=null)
+      else
         this.userGoogle.email = user.providerData[1].email;
         
         this.userGoogle.photo = user.photoUrl;

@@ -562,8 +562,12 @@ class _LoginPageState extends State<LoginPage> {
     );
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
     // assert(user.email != null);
-    assert(user.providerData[0].displayName != null);
+    assert(user.displayName != null);
+    if(Platform.isIOS)
     assert(user.providerData[0].email != null);
+    else
+    assert(user.providerData[1].email != null);
+  
     assert(user.displayName != null);
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
@@ -601,9 +605,11 @@ class _LoginPageState extends State<LoginPage> {
     if(user!=null)
     print(user);
     // if(user.email== null)
+    if (Platform.isIOS)
     assert(user.providerData[0].email !=null);
+    else
+    assert(user.providerData[1].email !=null);
     // else
-    assert(user.email !=null);
     // assert(user.providerData[0].displayName != null);
     // assert(user.providerData[0].email != null);
     assert(user.displayName != null);

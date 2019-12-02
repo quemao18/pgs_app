@@ -548,9 +548,9 @@ getCompanies(BuildContext context) async {
       setState(() {
         if(user!=null){
         // this.emailLogged = user.providerData[0].email;
-        if(user.providerData[0]!=null)
+        if(Platform.isIOS)
         this.emailLogged = user.providerData[0].email;
-        if(user.providerData[1]!=null)
+        else
         this.emailLogged = user.providerData[1].email;
         }
       });
