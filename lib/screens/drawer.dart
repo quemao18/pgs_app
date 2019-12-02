@@ -282,16 +282,12 @@ class _DrawerOnly extends State<DrawerOnly> {
   _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
-    // print(user.providerData[1]); 
+
     setState(() {
       if(user!=null){
+        print(user); 
         this.userGoogle.name = user.displayName;
-        
-        if(user.providerData[0]!=null)
         this.userGoogle.email = user.providerData[0].email;
-        if(user.providerData[1]!=null)
-        this.userGoogle.email = user.providerData[1].email;
-
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
