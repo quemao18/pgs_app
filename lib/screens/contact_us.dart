@@ -407,7 +407,7 @@ class _ContactUs extends State<ContactUs> {
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
-      var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[1].email+'/email_logged'), headers: {"Accept": "application/json"});
+      var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[0].email+'/email_logged'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
 
         // print(resBody[0]);

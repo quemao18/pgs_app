@@ -2,6 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb760291197745965</string>
+				<string>com.googleusercontent.apps.855167360160-53k27fse47mkcoq6kvcm28fu1afnqmq6</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>760291197745965</string>
+	<key>FacebookDisplayName</key>
+	<string>Facebook Auth</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -11,7 +27,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>flutter_realistic_forms</string>
+	<string>PGS Health</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -20,6 +36,15 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -39,37 +64,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSExceptionDomains</key>
+	<dict>
+		<key>app-measurement.com</key>
+		<dict/>
+		<key>NSExceptionAllowsInsecureHTTPLoads</key>
+		<true/>
+	</dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<!-- facebook login  -->
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<!--
-				Replace "000000000000" with your Facebook App ID here.
-				**NOTE**: The scheme needs to start with `fb` and then your ID.
-				-->
-				<string>fb760291197745965</string>
-			</array>
-		</dict>
-	</array>
-	<key>FacebookAppID</key>
-	<!-- Replace "000000000000" with your Facebook App ID here. -->
-	<string>760291197745965</string>
-	<key>FacebookDisplayName</key>
-	<!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
-	<string>Facebook Auth</string>
-
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
-
-	<!-- end facebook login -->
 </dict>
 </plist>

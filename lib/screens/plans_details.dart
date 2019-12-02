@@ -483,7 +483,7 @@ getCompanies(BuildContext context) async {
                 }
               );
             });
-            // print(user.providerData[1].email);
+            // print(user.s].email);
             print(selectedOptions.toList());
           },
 
@@ -547,7 +547,7 @@ getCompanies(BuildContext context) async {
       final FirebaseUser user = await _auth.currentUser();
       setState(() {
         if(user!=null){
-        this.emailLogged = user.providerData[1].email;
+        this.emailLogged = user.providerData[0].email;
         }
       });
 

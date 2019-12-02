@@ -218,7 +218,7 @@ _showDialog2(text, tempo){
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.providerData[1].email;
+        this.userGoogle.email = user.providerData[0].email;
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }

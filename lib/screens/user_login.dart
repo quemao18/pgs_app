@@ -537,6 +537,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Example code of how to sign in with google.
    void _signInWithGoogle() async {
+     try{
          setState(() {
       isLoading = true;
     });
@@ -568,6 +569,10 @@ class _LoginPageState extends State<LoginPage> {
         // _success = false;
       }
     });
+    } catch (error) {
+   print(error.toString());
+      return null;
+    }
   }
 
   // Example code of how to sign in with Facebook.
@@ -644,11 +649,11 @@ class _LoginPageState extends State<LoginPage> {
   _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
-    // print(user.providerData[1]); 
+    // print(user.providerData); 
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.providerData[1].email;
+        this.userGoogle.email = user.providerData[0].email;
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
@@ -843,7 +848,8 @@ void iOSPermission() {
         'platform': Platform.operatingSystem // optional
       });
     }
-    }catch(_){
+    }catch(e){
+      print(e.toString());
       print('error save data base firebase');
     }
   }

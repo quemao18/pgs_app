@@ -204,7 +204,7 @@ class _DrawerOnly extends State<DrawerOnly> {
                         //         ),
         
                         //       ),
-                          SizedBox(height: screenSize.height>700 ? screenSize.height/4.5 : screenSize.height/9,),
+                          SizedBox(height: screenSize.height>700 ? screenSize.height/4.5 : screenSize.height/12,),
                           Container(
                           // margin: EdgeInsets.only(right: 10,),
                           // padding:new EdgeInsets.only(top: screenSize.height/9),
@@ -239,7 +239,7 @@ class _DrawerOnly extends State<DrawerOnly> {
                           Divider(color: theme.primaryColor,),
                           ),
                           Container(
-                          // padding:new EdgeInsets.only(top: 180.0),
+                          // margin:new EdgeInsets.only(bottom: 10.0),
                           // color: theme.accentColor,
                           child: new Align(
         
@@ -286,7 +286,7 @@ class _DrawerOnly extends State<DrawerOnly> {
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.providerData[1].email;
+        this.userGoogle.email = user.providerData[0].email;
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
