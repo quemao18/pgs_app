@@ -257,10 +257,17 @@ class UserDataState extends State<UserData> {
       isLoading = true;  
       });
       try{
+
+      String email='';
+      if(user.providerData[0]!=null)
+      email = user.providerData[0].email;
+      if(user.providerData[1]!=null)
+      email = user.providerData[1].email;
+
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
-      var res = await http.get(Uri.encodeFull(url+'v1/account/'+user.providerData[0].email+'/email_logged'), headers: {"Accept": "application/json"});
+      var res = await http.get(Uri.encodeFull(url+'v1/account/'+email+'/email_logged'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
 
         // print(resBody[0]);

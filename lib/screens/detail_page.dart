@@ -237,16 +237,16 @@ class DetailPage extends StatelessWidget {
   total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
     // print(plan)
   if(plan['option_prices'].length>0)
-  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Precio USD ' + formatter.format(plan['option_prices'][0]).toString():'';
+  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Precio \$' + formatter.format(plan['option_prices'][0]).toString():'';
   if(plan['option_prices'].length>1)
-  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Precio Conyugue USD ' + formatter.format(plan['option_prices'][1]).toString():'';
+  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Precio Conyugue \$' + formatter.format(plan['option_prices'][1]).toString():'';
   if(plan['option_prices'].length>2)
-  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Precio Dependientes USD ' + formatter.format(plan['option_prices'][2]).toString():'';
+  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Precio Dependientes \$' + formatter.format(plan['option_prices'][2]).toString():'';
 
-  deductible = plan ['deductible']!=null ? 'Deducible USD ' + formatter.format(plan['deductible']) : ''; 
-  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad USD ' + formatter.format(plan['maternity']) : '';
-  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Transplante de organos USD ' + formatter.format(plan['transplant']) : ''; 
-  costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos USD ' + formatter.format(plan['cost_admin']) : '';
+  deductible = plan ['deductible']!=null ? 'Deducible \$' + formatter.format(plan['deductible']) : ''; 
+  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
+  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Transplante de organos \$' + formatter.format(plan['transplant']) : ''; 
+  costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos \$' + formatter.format(plan['cost_admin']) : '';
 
 
   if(plan['option_prices'].length>0)
@@ -273,7 +273,7 @@ class DetailPage extends StatelessWidget {
           trailing: 
             Column(children: <Widget>[
               SizedBox(height: 5,),
-              Text('\tUSD '+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
+              Text('\t\$'+formatter.format(total).toString(), style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),) ,
               Text(date.toString(), style: TextStyle(fontSize: 13,height: 1.3)),
 
             ],),

@@ -436,9 +436,9 @@ getCompanies(BuildContext context) async {
         // margin: EdgeInsets.only(left: 30),
         activeColor: theme.primaryColor,
         labels: <String>[
-          ' Opción 1 UDS '+(formatter.format(sum1)).toString() +'\n'+' Deducible UDS '+(formatter.format(dedu1)).toString(),
-          ' Opción 2 UDS '+(formatter.format(sum2)).toString() +'\n'+' Deducible UDS '+(formatter.format(dedu2)).toString(),
-          ' Opción 3 UDS '+(formatter.format(sum3)).toString() +'\n'+' Deducible UDS '+(formatter.format(dedu3)).toString()
+          ' Opción I - \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
+          ' Opción II - \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
+          ' Opción III - \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
           ],
 
        itemBuilder: (Radio rb, Text txt, int i){
@@ -547,7 +547,11 @@ getCompanies(BuildContext context) async {
       final FirebaseUser user = await _auth.currentUser();
       setState(() {
         if(user!=null){
+        // this.emailLogged = user.providerData[0].email;
+        if(user.providerData[0]!=null)
         this.emailLogged = user.providerData[0].email;
+        if(user.providerData[1]!=null)
+        this.emailLogged = user.providerData[1].email;
         }
       });
 

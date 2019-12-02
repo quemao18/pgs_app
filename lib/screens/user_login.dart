@@ -247,9 +247,22 @@ class _LoginPageState extends State<LoginPage> {
                                     )
                                     : Column( 
                                     children: <Widget>[
-                                          
+                                      // // SizedBox(height: 70,),
+                                      // Align(
+                                      // alignment: Alignment.center,
+                                      // child: 
+                                      //   Image( 
+                                      //         color: Color(0xFF9e946b).withOpacity(1 ),
+                                      //         image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
+                                      //         width: (screenSize.width < 500)
+                                      //             ? 160.0
+                                      //             : (screenSize.width / 4) + 12.0,
+                                      //         height: screenSize.height / 5 + 0,
+                                      //       )
+
+                                      // ,),
                                       new Container( 
-                                        padding:new EdgeInsets.only(top: screenSize.height/9),
+                                        margin:new EdgeInsets.only(top: screenSize.height/7, left: 5),
                                         child: 
                                         Image( 
                                               color: Color(0xFF9e946b).withOpacity(1 ),
@@ -262,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       
                                       widget.message == null ? 
-                                      Container(padding: EdgeInsets.only(top:screenSize.height/12),):
+                                      Container(padding: EdgeInsets.only(top:screenSize.height/15),):
                                       new Container(
                                       child: new Icon(Icons.check_circle_outline, color: Colors.lightGreen[500], size: 110.0,)
                                       ),
@@ -294,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                       Container(
                                       padding: widget.message == null ?  
-                                      EdgeInsets.only(top: screenSize.height/5): EdgeInsets.only(top: screenSize.height/30),
+                                      EdgeInsets.only(top: screenSize.height/7): EdgeInsets.only(top: screenSize.height/50),
                                       child: 
                                       
                                    FutureBuilder(
@@ -441,7 +454,7 @@ class _LoginPageState extends State<LoginPage> {
                        
                                   widget.message !=null ? Container(
                                     width: 180,
-                                    padding: EdgeInsets.only(top:screenSize.height/18),
+                                    padding: EdgeInsets.only(top:screenSize.height/30),
                                     child: Center(
                                       child: 
                                       Text('Una póliza de salud. Garantía de sentirte protegido.',  textAlign: TextAlign.center,
@@ -653,7 +666,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
+
+        if(user.providerData[0]!=null)
         this.userGoogle.email = user.providerData[0].email;
+        if(user.providerData[1]!=null)
+        this.userGoogle.email = user.providerData[1].email;
+
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }

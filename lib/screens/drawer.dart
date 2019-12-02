@@ -286,7 +286,12 @@ class _DrawerOnly extends State<DrawerOnly> {
     setState(() {
       if(user!=null){
         this.userGoogle.name = user.displayName;
+        
+        if(user.providerData[0]!=null)
         this.userGoogle.email = user.providerData[0].email;
+        if(user.providerData[1]!=null)
+        this.userGoogle.email = user.providerData[1].email;
+
         this.userGoogle.photo = user.photoUrl;
         isLoggedIn = true;
       }
