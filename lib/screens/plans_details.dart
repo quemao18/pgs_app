@@ -436,9 +436,9 @@ getCompanies(BuildContext context) async {
         // margin: EdgeInsets.only(left: 30),
         activeColor: theme.primaryColor,
         labels: <String>[
-          ' Opción I - \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
-          ' Opción II - \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
-          ' Opción III - \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
+          ' Opción I \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
+          ' Opción II \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
+          ' Opción III \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
           ],
 
        itemBuilder: (Radio rb, Text txt, int i){
