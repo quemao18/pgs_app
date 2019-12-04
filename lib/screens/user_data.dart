@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pgs_contulting/components/Buttons/roundedButton.dart';
-import 'package:pgs_contulting/screens/user_login.dart';
+import 'package:pgs_health/components/Buttons/roundedButton.dart';
+import 'package:pgs_health/screens/user_login.dart';
 
 import '../app_config.dart';
 import 'detail_page.dart';

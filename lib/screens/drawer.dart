@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:pgs_contulting/screens/contact_us.dart';
-import 'package:pgs_contulting/screens/user_data.dart';
-import 'package:pgs_contulting/screens/user_login.dart';
+import 'package:pgs_health/screens/contact_us.dart';
+import 'package:pgs_health/screens/user_data.dart';
+import 'package:pgs_health/screens/user_login.dart';
 import '../screens/home_material.dart';
 
 import '../screens/user_first.dart';

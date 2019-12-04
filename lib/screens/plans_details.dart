@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'package:pgs_contulting/screens/drawer.dart';
-import 'package:pgs_contulting/screens/user_login.dart';
+import 'package:pgs_health/screens/drawer.dart';
+import 'package:pgs_health/screens/user_login.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../app_config.dart';

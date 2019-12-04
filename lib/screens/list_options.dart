@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:pgs_contulting/screens/plans_details.dart';
+import 'package:pgs_health/screens/plans_details.dart';
 
 import '../app_config.dart';
 import 'drawer.dart';
