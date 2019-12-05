@@ -192,8 +192,8 @@ class DetailPage extends StatelessWidget {
   String costAdmin = '';
   double total = 0.0;
   String dependents='';
-  String spouseAge = '';
-  String spouseGender = '';
+  // String spouseAge = '';
+  // String spouseGender = '';
   List dates =[];
   for(var i = 0; i < plans.length; i++){
   String date = '';
