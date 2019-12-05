@@ -170,7 +170,10 @@ class _UserThird extends State<UserThird>{
                                     final form = _formKey.currentState;
                                     if (form.validate()) {
                                       form.save();
-                                      //print(widget.user);
+                                      // print(widget.user2.dependentsAges.length);
+                                      _user.dependents = widget.user2.dependentsAges.length.toString();
+                                      _user.spouseAge = widget.user2.spouseAge.toString();
+                                      _user.spouseGender = widget.user2.spouseGender.toString();
                                       _user.save(context,widget.user, widget.user2, userLogged).then((id) {
                                            print("Result: $id");
                                            if(id==null)

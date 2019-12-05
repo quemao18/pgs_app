@@ -57,7 +57,7 @@ class DetailPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20.0),
-        Row(
+        /*Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             // Expanded(flex: 1, child: levelIndicator),
@@ -70,7 +70,7 @@ class DetailPage extends StatelessWidget {
                   )),
             // Expanded(flex: 1, child: coursePrice)
           ],
-        ),
+        ),*/
       ],
     );
 
@@ -133,7 +133,7 @@ class DetailPage extends StatelessWidget {
           children: <Widget>[
             bottomContentText,
             SizedBox(height: 20,),
-            _builPlans(context, data['plans'], theme), 
+            _builPlans(context, data['plans'], data, theme), 
             // readButton
             ],
         ),
@@ -150,9 +150,9 @@ class DetailPage extends StatelessWidget {
         )
     );
   }
-
+/*
     Widget _buildAge(BuildContext context, data, theme) {
-    String gender = data['spouse_gender'] == 'female' ? '(Mujer).\n': data['spouse_gender'] == 'male' ? '(Hombre).\n' : '';  
+    String gender = data['spouse_gender'] == 'female' ? '(Mujer).': data['spouse_gender'] == 'male' ? '(Hombre).' : '';  
     // String age = data['age'].toString() + ' años. ';
     String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años ': '';
     String dependents = data['dependents']!=null && data['dependents']>0 ? ' Dependientes: '+ data['dependents'].toString() + '.': '';
@@ -163,7 +163,8 @@ class DetailPage extends StatelessWidget {
       //   borderRadius: BorderRadius.circular(4.0),
       // ),
       child: Text(
-        spouse + gender + dependents,
+        // spouse + gender + dependents,
+        '',
         style: TextStyle(
           // fontFamily: 'Spectral',
           color: Colors.white,
@@ -174,8 +175,9 @@ class DetailPage extends StatelessWidget {
       ),
     ):null;
   }
+  */
 
-  Widget _builPlans(context, plans, theme) {
+  Widget _builPlans(context, plans, data, theme) {
     
   var children = <Widget>[];
   var childrenRev = <Widget>[];
@@ -189,6 +191,9 @@ class DetailPage extends StatelessWidget {
   String maternity = '';
   String costAdmin = '';
   double total = 0.0;
+  String dependents='';
+  String spouseAge = '';
+  String spouseGender = '';
   List dates =[];
   for(var i = 0; i < plans.length; i++){
   String date = '';
@@ -236,12 +241,17 @@ class DetailPage extends StatelessWidget {
 
   total = 0.0; priceUser = ''; priceSpouse = ''; priceDependents = ''; deductible = ''; transplant = ''; maternity =''; costAdmin='';
     // print(plan)
+  if(plan['dependents']!=null) dependents = '(' + plan['dependents'] + ')';
+  // if(plan['spouse_age']!=null) spouseAge = '(' + plan['spouse_age'] + ' años)';
+  // if(plan['spouse_gender']!=null) spouseGender = '- ' + plan['spouse_gender'] + ')';
+  // String gender = plan['spouse_gender'] == 'female' ? 'Mujer)': plan['spouse_gender'] == 'male' ? 'Hombre)' : '';  
+
   if(plan['option_prices'].length>0)
-  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Precio \$' + formatter.format(plan['option_prices'][0]).toString():'';
+  priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Titular \$' + formatter.format(plan['option_prices'][0]).toString():'';
   if(plan['option_prices'].length>1)
-  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Precio Conyugue \$' + formatter.format(plan['option_prices'][1]).toString():'';
+  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Cónyugue \$' + formatter.format(plan['option_prices'][1]).toString():'';
   if(plan['option_prices'].length>2)
-  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Precio Dependientes \$' + formatter.format(plan['option_prices'][2]).toString():'';
+  priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Dependientes '+dependents+' \$' + formatter.format(plan['option_prices'][2]).toString():'';
 
   deductible = plan ['deductible']!=null ? 'Deducible \$' + formatter.format(plan['deductible']) : ''; 
   maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
@@ -297,9 +307,11 @@ class DetailPage extends StatelessWidget {
             children: <Widget>[
              
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.only(left:40, bottom: 10),
               child: 
-              Column(children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
                  
                 priceUser !='' ? Text(
                     priceUser,
@@ -316,11 +328,6 @@ class DetailPage extends StatelessWidget {
                     style: TextStyle(height: 1.5,)
                   ):Container(),
                   
-                 Text(
-                    deductible,
-                    style: TextStyle(height: 1.5,)
-                  ),
-                  
                   maternity !='' ? Text(
                     maternity,
                     style: TextStyle(height: 1.5,)
@@ -335,6 +342,12 @@ class DetailPage extends StatelessWidget {
                     costAdmin,
                     style: TextStyle(height: 1.5,)
                   ):Container(),
+
+                  Text(
+                    deductible,
+                    style: TextStyle(height: 1.5,)
+                  ),
+                  
               ],)
             
             ,),

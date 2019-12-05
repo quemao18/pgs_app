@@ -325,7 +325,7 @@ getCompanies(BuildContext context) async {
     var dedu1 = 0, dedu2 =0, dedu3 = 0;
     var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
 
-    // print(userData.age);
+    // print(userData.dependents);
     for(var p in plan['price']){ //print(p['age_range']);
 
       if(p['age_range'] == '1 dependiente'){
@@ -408,7 +408,6 @@ getCompanies(BuildContext context) async {
     var costAdmin = [], maternityArr = [], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
 
     for(var pln in data['plans']){
-        // print(pln['maternity']);
         if(plan['plan_id']==pln['plan_id']){
           costAdmin.add(pln['cost_admin']);
           if(userData.maternity) maternityArr.add(pln['maternity']);
@@ -474,6 +473,9 @@ getCompanies(BuildContext context) async {
                 'user_id': userId, 
                 'email_logged': emailLogged,
                 'deductible': dedu,
+                'dependents': userData.dependents,
+                'spouse_age': userData.spouseAge,
+                'spouse_gender': userData.spouseGender,
                 'option_prices': price,
                 'option_selected': index+1,
                 'maternity': sumMaternity,
