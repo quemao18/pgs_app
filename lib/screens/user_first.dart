@@ -196,7 +196,7 @@ class _UserFirst extends State<UserFirst> {
                               //width: 200,
                               // height: 60,
                               margin: EdgeInsets.only(left: 0, top: 1),
-                              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
+                              padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 0.0),
                                 decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(width: 1.0, style: BorderStyle.solid, color: theme.primaryColor ),
@@ -238,7 +238,7 @@ class _UserFirst extends State<UserFirst> {
 
                             Container(
                               margin: EdgeInsets.only(top: 20),
-                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0.0),
+                              padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 0.0),
                               decoration: ShapeDecoration(
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide(width: 1.0, style: BorderStyle.solid, color: theme.primaryColor),

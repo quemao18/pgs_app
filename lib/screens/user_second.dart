@@ -126,7 +126,7 @@ class _UserSecond extends State<UserSecond>{
                                     child: SwitchListTile(
                                         value: _value2,
                                         onChanged: _onChanged2,
-                                        title: new Text('¿Conyugue o Casado/a?', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        title: new Text('¿Cónyugue?', style: TextStyle(fontWeight: FontWeight.bold),),
                                         activeColor: theme.primaryColor,
                                     )
                                   ),
@@ -134,15 +134,15 @@ class _UserSecond extends State<UserSecond>{
                                   
                                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12.0),
                                   child: 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  Column(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                             
-                                    Flexible(
-                                        child:
+                                    // Flexible(
+                                        // child:
                                         Container(
-                                          width: 170,
-                                          height: 50,
+                                          // width: 170,
+                                          // height: 50,
                                           // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0.0),
                                         child:  InputField(
                                             hintText: 'Edad',
@@ -171,11 +171,15 @@ class _UserSecond extends State<UserSecond>{
                                         ),
                                         
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: 
+                                        // SizedBox(height: 0,),
+                                      // ),
+                                      // Flexible(
+                                        // child: 
                                       Container(
-                                        padding: EdgeInsets.only(top:0),
+                                        // height: 56,
+                                        // padding: EdgeInsets.only(top:0),
+                                        margin: EdgeInsets.only(left: 0, top: 10),
+                                        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 0.0),
                                         decoration: ShapeDecoration(
                                             shape: RoundedRectangleBorder(
                                               side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  theme.primaryColor ),
@@ -213,7 +217,7 @@ class _UserSecond extends State<UserSecond>{
                                       ),
                                       
                                       ),
-                                      ),
+                                      // ),
                                    
                                       // SizedBox(height: 100.0,),
                                       //SizedBox(width: 0.0,),
