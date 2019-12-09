@@ -33,7 +33,7 @@ final databaseReference = Firestore.instance;
 
 final _random = new Random();
 
-int next(int min, int max) => min + _random.nextInt(max - min);
+// int next(int min, int max) => min + _random.nextInt(max - min);
 
 void main() {
   runApp(LoginPage(message: null,));
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   bool isLoadingApi = false;
   bool isConexion = true;
-  bool existUser = false;
+  bool existUser = true;
   var profileData;
   var userLogged ;
   var userData;
@@ -73,49 +73,48 @@ class _LoginPageState extends State<LoginPage> {
   // var _userID;
   String _message;
   // final TextEditingController _tokenController = TextEditingController();
-  static List listImg = [
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen1.png?alt=media&token=7e207097-6292-434a-bdd4-336c5ac5e88f',
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.png?alt=media&token=507976f1-f48f-40ce-ab9d-bb0c933ab908',
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen3.png?alt=media&token=7bb9ab03-cee0-4126-a4da-03990b6c8819',
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen4.png?alt=media&token=edf4579e-50f6-4a01-bebd-69128740be0c',
-  'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen5.png?alt=media&token=c31b40aa-9edf-4296-8fed-0663127bbf2c'
+  List listImg = [
+  // 'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen1.png?alt=media&token=7e207097-6292-434a-bdd4-336c5ac5e88f',
+  // 'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen2.png?alt=media&token=507976f1-f48f-40ce-ab9d-bb0c933ab908',
+  // 'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen3.png?alt=media&token=7bb9ab03-cee0-4126-a4da-03990b6c8819',
+  // 'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen4.png?alt=media&token=edf4579e-50f6-4a01-bebd-69128740be0c',
+  // 'https://firebasestorage.googleapis.com/v0/b/pgs-consulting.appspot.com/o/pgs_assets%2Fimages%2Fscreen5.png?alt=media&token=c31b40aa-9edf-4296-8fed-0663127bbf2c'
   ];
   List listTxt = [
-    'No te ofrecemos una póliza, te damos razones para tenerla.',
-    'El seguro no es un derecho, es un privilegio.',
-    'Tu salud, tu vida y tu familia nos Importan.',
-    'Imprescindible en tu camino es contar con nuestro respaldo.'
+    // 'No te ofrecemos una póliza, te damos razones para tenerla.',
+    // 'El seguro no es un derecho, es un privilegio.',
+    // 'Tu salud, tu vida y tu familia nos Importan.',
+    // 'Imprescindible en tu camino es contar con nuestro respaldo.'
   ];
 
-  String textShow;
-  String imgShow;
+  String textShow = '';
+  String imgShow = '';
 
   @protected
   initState(){
     // if(this.isLoggedIn)
     _saveDeviceToken();
-    this.imgShow = listImg[_random.nextInt(listImg.length)];
-    this.textShow = listTxt[_random.nextInt(listTxt.length)];
-    _getCurrentUser();
-    super.initState();
+    // this.imgShow = listImg[_random.nextInt(listImg.length)];
+    // this.textShow = listTxt[_random.nextInt(listTxt.length)];
     this.userData = null;
-    isLoading = true;
+    this.isLoading = true;
     this.isConexion = false;
-    Future.delayed(Duration(milliseconds: 100), () {   
-      // setState(() {
-        // _getPlansUser(context);
+    Future.delayed(Duration(milliseconds: 500), () {   
+        _getCurrentUser();
         _checkConnection();
-        if(this.isLoggedIn)
-        this.userData =_getUserApi(context);
+        if(this.isLoggedIn){
+          this.userData =_getUserApi(context);
+          // _saveDeviceToken();
+        }
+        //  _getCurrentUser();
+        _getImages(context);
+        _getTexts(context);
 
-      // });
     });
+    // _saveDeviceToken();
 
     firebaseCloudMessagingListeners();
-  //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   systemNavigationBarColor: Colors.black, // navigation bar color
-  //   statusBarColor: Colors.transparent, // status bar color
-  // ));
+    super.initState();
 
   }
 
@@ -211,13 +210,13 @@ class _LoginPageState extends State<LoginPage> {
   _home(){
     final Size screenSize = MediaQuery.of(context).size;
     final ThemeData theme = Theme.of(context);
-
-    return Container(
+    
+    return !this.isLoading && this.imgShow !='' && this.textShow != '' ? Container(
             //padding:new EdgeInsets.symmetric(horizontal: 50, vertical: 50.0),
             //margin: ,
             child: 
             CachedNetworkImage(
-                    imageUrl: this.imgShow,
+                    imageUrl: this.imgShow ,
                     imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -245,20 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                                     )
                                     : Column( 
                                     children: <Widget>[
-                                      // // SizedBox(height: 70,),
-                                      // Align(
-                                      // alignment: Alignment.center,
-                                      // child: 
-                                      //   Image( 
-                                      //         color: Color(0xFF9e946b).withOpacity(1 ),
-                                      //         image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
-                                      //         width: (screenSize.width < 500)
-                                      //             ? 160.0
-                                      //             : (screenSize.width / 4) + 12.0,
-                                      //         height: screenSize.height / 5 + 0,
-                                      //       )
-
-                                      // ,),
+                                
                                       new Container( 
                                         margin:new EdgeInsets.only(top: screenSize.height/7, left: 5),
                                         child: 
@@ -338,10 +324,12 @@ class _LoginPageState extends State<LoginPage> {
                                                 )
                                                 
                                           ),
-                                        existUser ? Align(
+                                        // existUser ? 
+                                        Align(
                                         alignment: Alignment.bottomCenter,
                                           child: 
-                                            !isLoading ? RoundedButton(
+                                            // !isLoading ? 
+                                            RoundedButton(
                                               buttonName: "Mis Cotizaciones",
                                               onTap:  () {
                                                   // Navigator.of(context).pop();
@@ -357,14 +345,15 @@ class _LoginPageState extends State<LoginPage> {
                                               bottomMargin: 10.0,
                                               borderWidth: 1.0,
                                               //buttonColor: primaryColor,
-                                            ):
-                                             CircularProgressIndicator(backgroundColor: theme.primaryColor),
-                                        ): Container()
+                                            )
+                                            // :CircularProgressIndicator(backgroundColor: theme.primaryColor),
+                                        ),
+                                        // : Container()
 
                                     
 
                                       ],);
-                                        }
+                                      }
                                       }
                                       else if (snapshot.hasError || !this.isConexion) {
                                         // _showDialog2('Error de conexión...', 3);
@@ -498,7 +487,31 @@ class _LoginPageState extends State<LoginPage> {
              
                     
             //),
-          );
+          ):
+          Center(child:       
+                  new Container(
+                  padding: EdgeInsets.only(top: screenSize.height/10),
+                  child:
+                  Column(children: <Widget>[
+                  new Image(
+                  image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
+                  width: (screenSize.width < 500)
+                      ? 160.0
+                      : (screenSize.width / 4) + 12.0,
+                  height: screenSize.height / 4 + 0,
+                  ),
+                  LoadingBouncingGrid.square(
+                  borderColor: theme.primaryColor,
+                  borderSize: 1.0,
+                  size: 70.0,
+                  backgroundColor: Colors.transparent,
+                  )
+                  ],
+
+                ),
+                )
+          )
+          ;
   }
 
   // _loginButton(){
@@ -600,8 +613,8 @@ class _LoginPageState extends State<LoginPage> {
     );
     
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-    if(user!=null)
-    print(user);
+    // if(user!=null)
+    // print(user);
     // if(user.email== null)
     if (Platform.isIOS)
     assert(user.providerData[0].email !=null);
@@ -858,16 +871,16 @@ void iOSPermission() {
     // Get the token for this device
     try{
     String fcmToken = await _firebaseMessaging.getToken();
-    // print(this.userLogged.email);
+    // print(fcmToken);
     // Save it to Firestore
-    if (fcmToken != null) {
+    if (fcmToken != null && this.userLogged.email!=null) {
       var tokens = databaseReference
           .collection('users')
           .document(this.userLogged.email)
           .collection('tokens')
           .document(fcmToken);
 
-      await tokens.setData({
+      await tokens.updateData({
         'token': fcmToken,
         'createdAt': FieldValue.serverTimestamp(), // optional
         'platform': Platform.operatingSystem // optional
@@ -877,6 +890,77 @@ void iOSPermission() {
       print(e.toString());
       print('error save data base firebase');
     }
+  }
+
+  _getImages(BuildContext context) async{
+      try{
+   
+      setState(() {
+      isLoading = true;  
+      });
+
+      var res2;
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      var res = await http.get(Uri.encodeFull(url+'v1/imagesbg'), headers: {"Accept": "application/json"});
+      var resBody = json.decode(res.body);
+
+        // print(resBody[0]);
+
+        if (res.statusCode == 200) { 
+          res2 = resBody;
+          this.imgShow = res2[_random.nextInt(res2.length)];
+          setState(() {
+          isLoading = false;  
+          });
+        }else{
+          this.imgShow = '';
+        }
+  
+      }catch(e){
+        print('error in imagesbg');
+        print((e.toString()));
+           setState(() {
+          isLoading = false;  
+          });
+        // return null;
+      }
+
+  }
+
+
+    _getTexts(BuildContext context) async{
+      try{
+      setState(() {
+      isLoading = true;  
+      });
+
+      var res2;
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      var res = await http.get(Uri.encodeFull(url+'v1/texts'), headers: {"Accept": "application/json"});
+      var resBody = json.decode(res.body);
+
+        // print(resBody[0]);
+        if (res.statusCode == 200) { 
+          res2 = resBody;
+          this.textShow = res2[_random.nextInt(res2.length)];
+           setState(() {
+          isLoading = false;  
+          });
+        }else{
+          this.textShow = '';
+        }
+
+      }catch(e){
+        print('error in texts');
+        print((e.toString()));
+           setState(() {
+          isLoading = false;  
+          });
+        // return null;
+      }
+
   }
 
 

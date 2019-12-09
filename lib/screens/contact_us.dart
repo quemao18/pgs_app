@@ -1,10 +1,7 @@
 
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_launch/flutter_launch.dart';
+
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share/share.dart';
@@ -15,7 +12,6 @@ import 'drawer.dart';
 import 'package:http/http.dart' as http;
 
 var data2 ;
-final FirebaseAuth _auth = FirebaseAuth.instance;
 var children = <Widget>[];
 // var userLogged;
 
@@ -40,7 +36,8 @@ class _ContactUs extends State<ContactUs> {
     // _getCurrentUser();
   Future.delayed(const Duration(milliseconds: 100), () {
     setState(() { 
-     data2 = _getUserApi(context);
+    //  data2 = _getUserApi(context);
+     data2 = _getData(context);
     });
   });
 
@@ -52,7 +49,7 @@ class _ContactUs extends State<ContactUs> {
     //   data = val;
     // });
     // data = widget.userLogged;
-    // print(data);
+    // print(data2.email);
     final ThemeData theme = Theme.of(context);
     Size screenSize = MediaQuery.of(context).size;
     var config = AppConfig.of(context);
@@ -77,11 +74,11 @@ class _ContactUs extends State<ContactUs> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         //return Text(snapshot.data['name']);
-                        // print(snapshot.data);
+                        // print(snapshot.data['phone1']);
                         children = <Widget> [];
                         // children.add(Padding(padding: EdgeInsets.only(top:screenSize.height/10),));
                         children.add(buildHeader(context, config.appName, theme, screenSize));
-                        children.add(buildInformation(config.phone1,config.phone2, config.email, config.appName, theme));
+                        children.add(buildInformation(snapshot.data['phone1'],snapshot.data['phone2'], snapshot.data['email'], config.appName, theme));
 
                         return Column(children: children);
 
@@ -399,44 +396,23 @@ class _ContactUs extends State<ContactUs> {
   //   );
   // }
 
-    _getUserApi(BuildContext context) async{
+      _getData(BuildContext context) async{
       try{
-      final FirebaseUser user = await _auth.currentUser();
+   
       setState(() {
       isLoading = true;  
       });
 
-      String email='';
-      if(Platform.isIOS)
-      email = user.providerData[0].email;
-      else
-      email = user.providerData[1].email;
-
       var res2;
       var config = AppConfig.of(context);
       var url = config.apiBaseUrl;
-      var res = await http.get(Uri.encodeFull(url+'v1/account/'+email+'/email_logged'), headers: {"Accept": "application/json"});
+      var res = await http.get(Uri.encodeFull(url+'v1/'), headers: {"Accept": "application/json"});
       var resBody = json.decode(res.body);
 
         // print(resBody[0]);
 
         if (res.statusCode == 200) { 
-          
-          if(resBody[0]==null) {
-          setState(() {
-           this.existUser = false; 
-          });
-          res2 = null;
-          }
-          else
-          if(resBody.length>0){
           res2 = resBody;
-          setState(() {
-            this.existUser = true;
-          });
-          
-          }
-          
         }else{
           res2 = null;
         }
