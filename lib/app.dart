@@ -16,7 +16,7 @@ class App extends StatelessWidget {
   // ));
 
     return new MaterialApp(
-
+      debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         // Set routes for using the Navigator.
         '/home': (BuildContext context) => new HomeMaterial(),
