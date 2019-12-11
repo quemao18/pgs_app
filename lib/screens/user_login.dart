@@ -25,6 +25,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+
+
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
@@ -90,6 +96,10 @@ class _LoginPageState extends State<LoginPage> {
   String textShow = '';
   String imgShow = '';
 
+  final Future<bool> _isAvailableFuture = AppleSignIn.isAvailable();
+  String errorMessage;
+
+
   @protected
   initState(){
     // if(this.isLoggedIn)
@@ -116,6 +126,75 @@ class _LoginPageState extends State<LoginPage> {
     firebaseCloudMessagingListeners();
     super.initState();
 
+    checkLoggedInState();
+
+    AppleSignIn.onCredentialRevoked.listen((_) {
+      print("Credentials revoked");
+    });
+
+  }
+
+  void logIn() async {
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+
+        // Store user ID
+        await FlutterSecureStorage()
+            .write(key: "userId", value: result.credential.user);
+        print(result.credential);
+        // Navigate to secret page (shhh!)
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //     builder: (_) =>
+        //         SecretMembersOnlyPage(credential: result.credential)));
+        break;
+
+      case AuthorizationStatus.error:
+        print("Sign in failed: ${result.error.localizedDescription}");
+        setState(() {
+          errorMessage = "Sign in failed 😿";
+        });
+        break;
+
+      case AuthorizationStatus.cancelled:
+        print('User cancelled');
+        break;
+    }
+  }
+
+  void checkLoggedInState() async {
+    final userId = await FlutterSecureStorage().read(key: "userId");
+    if (userId == null) {
+      print("No stored user ID");
+      return;
+    }
+
+  final credentialState = await AppleSignIn.getCredentialState(userId);
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        print("getCredentialState returned authorized");
+        break;
+
+      case CredentialStatus.error:
+        print(
+            "getCredentialState returned an error: ${credentialState.error.localizedDescription}");
+        break;
+
+      case CredentialStatus.revoked:
+        print("getCredentialState returned revoked");
+        break;
+
+      case CredentialStatus.notFound:
+        print("getCredentialState returned not found");
+        break;
+
+      case CredentialStatus.transferred:
+        print("getCredentialState returned not transferred");
+        break;
+    }
   }
 
 
@@ -809,6 +888,49 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
+            Platform.isIOS ? Container(width: 210,
+            child: SizedBox(
+                  width: 280,
+                  child: FutureBuilder<bool>(
+                    future: _isAvailableFuture,
+                    builder: (context, isAvailableSnapshot) {
+                      if (!isAvailableSnapshot.hasData) {
+                        return Container(child: Text('Loading...'));
+                      }
+
+                      return isAvailableSnapshot.data 
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  AppleSignInButton(
+                                    onPressed: logIn,
+                                  ),
+                                  if (errorMessage != null) Text(errorMessage),
+                                  SizedBox(
+                                    height: 500,
+                                  ),
+                                  RaisedButton(
+                                    child: Text("Button Test Page"),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  UserFirst()));
+                                    },
+                                  )
+                                ])
+                          : Text(
+                              'Sign in With Apple not available. Must be run on iOS 13+');
+                    },
+                  )
+                  )
+            ,):Container(),
+
             
     ],
     
