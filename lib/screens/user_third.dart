@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pgs_health/screens/drawer.dart';
 import 'package:pgs_health/screens/list_options.dart';
 import 'package:pgs_health/screens/user_login.dart';
@@ -219,24 +220,26 @@ _showDialog2(text, tempo){
   _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
+    final email = await FlutterSecureStorage().read(key: "email");
+    final nameIOS = await FlutterSecureStorage().read(key: "nameIOS");
     // print(user.providerData[1]); 
     setState(() {
-      if(user!=null){
-        this.userGoogle.name = user.displayName;
+      if(user!=null || email!=null){
+        this.userGoogle.name = nameIOS!=null ? nameIOS : user.displayName;
 
       if(Platform.isIOS)
-        this.userGoogle.email = user.providerData[0].email;
+        this.userGoogle.email = email!=null ? email : user.providerData[0].email;
       else
         this.userGoogle.email = user.providerData[1].email;
         
-        this.userGoogle.photo = user.photoUrl;
+        this.userGoogle.photo = user!=null ? user.photoUrl : '';
         isLoggedIn = true;
       }
       else
       isLoggedIn = false;
     });
     this.userLogged = this.userGoogle;
-    // print(this.userLogged.photo);
+    // print(this.userLogged.email);
     
   }
 

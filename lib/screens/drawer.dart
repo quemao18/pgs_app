@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_health/screens/contact_us.dart';
@@ -88,8 +89,6 @@ class _DrawerOnly extends State<DrawerOnly> {
 
   Widget build (BuildContext context) {
     // var config = AppConfig.of(context);
-    // _getCurrentUser();
-    // print(this.userGoogle.photo);
     final ThemeData theme = Theme.of(context);
     final Size screenSize = MediaQuery.of(context).size;
     var drawerOptions = <Widget>[];
@@ -280,21 +279,22 @@ class _DrawerOnly extends State<DrawerOnly> {
   }
 
 
-
   _getCurrentUser() async{
     // FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final FirebaseUser user = await _auth.currentUser();
-
+    final email = await FlutterSecureStorage().read(key: "email");
+    final nameIOS = await FlutterSecureStorage().read(key: "nameIOS");
+    // print(email);
     setState(() {
-      if(user!=null){
-        print(user); 
-        this.userGoogle.name = user.displayName;
+      if(user!=null || email!=null){
+        // print(user); 
+        this.userGoogle.name = nameIOS !=null ? nameIOS : user.displayName;
         if (Platform.isIOS)
-        this.userGoogle.email =user.providerData[0].email;
+        this.userGoogle.email = email!=null ? email : user.providerData[0].email;
         else
         this.userGoogle.email =user.providerData[1].email;
-        this.userGoogle.photo = user.photoUrl;
-        print(userGoogle);
+        this.userGoogle.photo = user!=null ? user.photoUrl: '';
+        // print(userGoogle);
         isLoggedIn = true;
       }
       else
@@ -311,6 +311,7 @@ class _DrawerOnly extends State<DrawerOnly> {
     _googleSignIn.signOut();
     _facebookLogin.logOut();
     _auth.signOut();
+    await FlutterSecureStorage().deleteAll();
     Navigator.of(context).pushReplacementNamed('/login');
   }
 

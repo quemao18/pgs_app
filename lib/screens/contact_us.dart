@@ -33,7 +33,6 @@ class _ContactUs extends State<ContactUs> {
   @protected
   initState(){
     super.initState();
-    // _getCurrentUser();
   Future.delayed(const Duration(milliseconds: 100), () {
     setState(() { 
     //  data2 = _getUserApi(context);

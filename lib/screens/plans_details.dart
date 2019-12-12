@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -547,11 +548,13 @@ getCompanies(BuildContext context) async {
 
       _getEmailLogged() async{
       final FirebaseUser user = await _auth.currentUser();
+      final email = await FlutterSecureStorage().read(key: "email");
+      
       setState(() {
-        if(user!=null){
+        if(user!=null || email!=null){
         // this.emailLogged = user.providerData[0].email;
         if(Platform.isIOS)
-        this.emailLogged = user.providerData[0].email;
+        this.emailLogged = email!=null ? email : user.providerData[0].email;
         else
         this.emailLogged = user.providerData[1].email;
         }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_health/components/Buttons/roundedButton.dart';
@@ -35,7 +36,6 @@ class UserDataState extends State<UserData> {
   @protected
   initState(){
     super.initState();
-    // _getCurrentUser();
   data2 = null;
   Future.delayed(const Duration(milliseconds: 1000), () {
     setState(() { 
@@ -254,6 +254,7 @@ class UserDataState extends State<UserData> {
 
     _getUserApi(BuildContext context) async{
       final FirebaseUser user = await _auth.currentUser();
+      final emailIOS = await FlutterSecureStorage().read(key: "email");
       setState(() {
       isLoading = true;  
       });
@@ -261,7 +262,7 @@ class UserDataState extends State<UserData> {
 
       String email='';
       if(Platform.isIOS)
-      email = user.providerData[0].email;
+      email = emailIOS!=null ? emailIOS : user.providerData[0].email;
       else
       email = user.providerData[1].email;
 

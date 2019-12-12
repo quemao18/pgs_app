@@ -31,6 +31,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
@@ -96,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
   String textShow = '';
   String imgShow = '';
 
-  final Future<bool> _isAvailableFuture = AppleSignIn.isAvailable();
   String errorMessage;
 
 
@@ -104,8 +104,6 @@ class _LoginPageState extends State<LoginPage> {
   initState(){
     // if(this.isLoggedIn)
     _saveDeviceToken();
-    // this.imgShow = listImg[_random.nextInt(listImg.length)];
-    // this.textShow = listTxt[_random.nextInt(listTxt.length)];
     this.userData = null;
     this.isLoading = true;
     this.isConexion = false;
@@ -114,19 +112,16 @@ class _LoginPageState extends State<LoginPage> {
         _checkConnection();
         if(this.isLoggedIn){
           this.userData =_getUserApi(context);
-          // _saveDeviceToken();
         }
-        //  _getCurrentUser();
         _getImages(context);
         _getTexts(context);
 
     });
-    // _saveDeviceToken();
 
     firebaseCloudMessagingListeners();
     super.initState();
 
-    checkLoggedInState();
+    // checkLoggedInState();
 
     AppleSignIn.onCredentialRevoked.listen((_) {
       print("Credentials revoked");
@@ -138,14 +133,37 @@ class _LoginPageState extends State<LoginPage> {
     final AuthorizationResult result = await AppleSignIn.performRequests([
       AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
-
+    setState(() {
+      this.isLoading = true;
+    });
+  // print(result.status);
     switch (result.status) {
+    
       case AuthorizationStatus.authorized:
 
         // Store user ID
         await FlutterSecureStorage()
             .write(key: "userId", value: result.credential.user);
-        print(result.credential);
+        await FlutterSecureStorage()
+            .write(key: "email", value: result.credential.email);
+        await FlutterSecureStorage()
+            .write(key: "nameIOS", value: result.credential.fullName.givenName);
+        // print(result.credential.identityToken);
+        setState(() {
+          this.isLoading = false;
+          if (result.credential != null) { 
+            isLoggedIn = true;
+            // _success = true;
+            // _userID = user.uid;
+            this.userGoogle.name = result.credential.fullName.givenName;
+            this.userGoogle.email = result.credential.email;
+            this.userGoogle.photo = '';
+            onLoginStatusChanged(true, profileData: result.credential, userLogged: userGoogle);
+          } else {
+            isLoggedIn = false;
+            // _success = false;
+          }
+        });
         // Navigate to secret page (shhh!)
         // Navigator.of(context).pushReplacement(MaterialPageRoute(
         //     builder: (_) =>
@@ -156,19 +174,28 @@ class _LoginPageState extends State<LoginPage> {
         print("Sign in failed: ${result.error.localizedDescription}");
         setState(() {
           errorMessage = "Sign in failed 😿";
+          isLoading = false;
         });
         break;
 
       case AuthorizationStatus.cancelled:
         print('User cancelled');
+        setState(() {
+          isLoading = false;
+        });
         break;
     }
   }
 
   void checkLoggedInState() async {
     final userId = await FlutterSecureStorage().read(key: "userId");
+    final email = await FlutterSecureStorage().read(key: "email");
+    final nameIOS = await FlutterSecureStorage().read(key: "nameIOS");
     if (userId == null) {
       print("No stored user ID");
+      setState(() {
+        this.isLoggedIn = false;
+      });
       return;
     }
 
@@ -176,6 +203,12 @@ class _LoginPageState extends State<LoginPage> {
     switch (credentialState.status) {
       case CredentialStatus.authorized:
         print("getCredentialState returned authorized");
+        setState(() {
+          this.isLoggedIn = true;
+          this.userGoogle.email = email;
+          this.userGoogle.name = nameIOS;
+          this.userGoogle.photo = '';
+        });
         break;
 
       case CredentialStatus.error:
@@ -764,14 +797,18 @@ class _LoginPageState extends State<LoginPage> {
 
 
   _getCurrentUser() async{
-    // FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    
     final FirebaseUser user = await _auth.currentUser();
+    final email = await FlutterSecureStorage().read(key: "email");
+    final nameIOS = await FlutterSecureStorage().read(key: "nameIOS");
+    
+    // print(email);
     // print(user.providerData); 
     setState(() {
-      if(user!=null){
-        this.userGoogle.name = user.displayName;
-        this.userGoogle.email = user.email;
-        this.userGoogle.photo = user.photoUrl;
+      if(user!=null || email !=null){
+        this.userGoogle.name = nameIOS!=null ? nameIOS : user.displayName;
+        this.userGoogle.email = email!=null ? email: user.email;
+        this.userGoogle.photo = user!=null ?  user.photoUrl:'';
         isLoggedIn = true;
       }
       else
@@ -888,49 +925,18 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
-            Platform.isIOS ? Container(width: 210,
-            child: SizedBox(
-                  width: 280,
-                  child: FutureBuilder<bool>(
-                    future: _isAvailableFuture,
-                    builder: (context, isAvailableSnapshot) {
-                      if (!isAvailableSnapshot.hasData) {
-                        return Container(child: Text('Loading...'));
-                      }
-
-                      return isAvailableSnapshot.data 
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  AppleSignInButton(
-                                    onPressed: logIn,
-                                  ),
-                                  if (errorMessage != null) Text(errorMessage),
-                                  SizedBox(
-                                    height: 500,
-                                  ),
-                                  RaisedButton(
-                                    child: Text("Button Test Page"),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  UserFirst()));
-                                    },
-                                  )
-                                ])
-                          : Text(
-                              'Sign in With Apple not available. Must be run on iOS 13+');
-                    },
-                  )
-                  )
-            ,):Container(),
-
+               Platform.isIOS ?Container(
+                  width: 210,
+                  margin: EdgeInsets.only(left: 0, top: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(width: 1.0, style: BorderStyle.solid, color:  Colors.white ),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                  ),
+                  child: FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
+              ):Container(),
             
     ],
     
