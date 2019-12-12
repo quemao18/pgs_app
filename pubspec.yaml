@@ -7,7 +7,7 @@ description: Cotizador de Seguros.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.1+12
+version: 1.0.1+13
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -24,7 +24,7 @@ dependencies:
   google_sign_in: ^4.0.7
   material_design_icons_flutter: 3.2.4595
   # keyboard_visibility: ^[CURRENT VERSION NUMBER]
-  cached_network_image: ^1.1.1
+  cached_network_image: ^2.0.0-rc
 
   flutter_keyboard_visibility: ^0.7.0
   intl: ">=0.14.0"
