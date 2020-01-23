@@ -37,6 +37,8 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 final databaseReference = Firestore.instance;
+final Future<bool> _isAvailableFuture = AppleSignIn.isAvailable();
+
 
 final _random = new Random();
 
@@ -99,6 +101,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String errorMessage;
 
+  String errorMessage2;
+
 
   @protected
   initState(){
@@ -130,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void logIn() async {
+     if(await AppleSignIn.isAvailable()) {
     final AuthorizationResult result = await AppleSignIn.performRequests([
       AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
@@ -173,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
       case AuthorizationStatus.error:
         print("Sign in failed: ${result.error.localizedDescription}");
         setState(() {
-          errorMessage = "Sign in failed 😿";
+          errorMessage2 = "${result.error.localizedDescription}";
           isLoading = false;
         });
         break;
@@ -184,6 +189,13 @@ class _LoginPageState extends State<LoginPage> {
           isLoading = false;
         });
         break;
+    }
+     }else{
+      print('Apple SignIn is not available for your device');
+      setState(() {
+          errorMessage = "Apple SignIn is not available for your device";
+          isLoading = false;
+        });
     }
   }
 
@@ -925,7 +937,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
-               Platform.isIOS ?Container(
+               Platform.isIOS || errorMessage == null ?Container(
                   width: 210,
                   margin: EdgeInsets.only(left: 0, top: 10),
                   padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -935,8 +947,37 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
                     ),
                   ),
-                  child: FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
-              ):Container(),
+                  // child: FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
+              child: FutureBuilder<bool>(
+                    future: _isAvailableFuture,
+                    builder: (context, isAvailableSnapshot) {
+                      if (!isAvailableSnapshot.hasData) {
+                        return Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text('Loading...', style: TextStyle(color: Colors.white),));
+                      }
+
+                      return isAvailableSnapshot.data
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  // SizedBox(
+                                  //   height: 10,
+                                  // ),
+                                  FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
+                                  // if (errorMessage2 != null) Text(errorMessage2, style: TextStyle(color: Colors.white)),
+                                  // SizedBox(
+                                  //   height: 500,
+                                  // ),
+                            
+                                ])
+                          : 
+                          Text(
+                              'Sign in With Apple not available.\nMust be run on iOS 13+', 
+                              style: TextStyle(color: Colors.white, fontSize: 12)
+                              );
+                    }),
+              )://Container(),
+              Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text(errorMessage, style: TextStyle(color: Colors.white),))
             
     ],
     
