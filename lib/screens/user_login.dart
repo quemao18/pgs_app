@@ -373,7 +373,7 @@ class _LoginPageState extends State<LoginPage> {
                                         margin:new EdgeInsets.only(top: screenSize.height/7, left: 5),
                                         child: 
                                         Image( 
-                                              color: Color(0xFF9e946b).withOpacity(1 ),
+                                              color: Colors.white70, //0xFF9e946b
                                               image: AssetImage('./assets/images/logos/Sin-fondo-(4).png'),
                                               width: (screenSize.width < 500)
                                                   ? 160.0
