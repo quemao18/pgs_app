@@ -37,7 +37,7 @@ class DetailPage extends StatelessWidget {
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 55.0),
+        SizedBox(height: screenSize.height/12),
         Icon(
           data['gender'] == 'male' ? MdiIcons.humanMale:MdiIcons.humanFemale,
           color: Colors.white,
@@ -86,7 +86,7 @@ class DetailPage extends StatelessWidget {
         ),
         Positioned(
           left: 8.0,
-          top: 50.0,
+          top: screenSize.height/12,
           child: InkWell(
             onTap: () {
               Navigator.pop(context);
@@ -254,8 +254,8 @@ class DetailPage extends StatelessWidget {
   priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Dependientes '+dependents+' \$' + formatter.format(plan['option_prices'][2]).toString():'';
 
   deductible = plan ['deductible']!=null ? 'Deducible \$' + formatter.format(plan['deductible']) : ''; 
-  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
-  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Transplante de organos \$' + formatter.format(plan['transplant']) : ''; 
+  maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Anexo Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
+  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Anexo Transplante de organos \$' + formatter.format(plan['transplant']) : ''; 
   costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos \$' + formatter.format(plan['cost_admin']) : '';
 
 
@@ -264,7 +264,15 @@ class DetailPage extends StatelessWidget {
       total += price;
   
   total = total + plan['maternity'] + plan['transplant'] + plan['cost_admin'];
-
+  String option;
+  if(plan['option_selected']==1) option = 'I';
+  if(plan['option_selected']==2) option = 'II';
+  if(plan['option_selected']==3) option = 'II';
+  if(plan['option_selected']==4) option = 'IV';
+  if(plan['option_selected']==5) option = 'V';
+  if(plan['option_selected']==6) option = 'VI';
+  if(plan['option_selected']==7) option = 'VII';
+  if(plan['option_selected']==8) option = 'VIII';
   // print(total);
   // if(plan['option_prices'].length>0)
     if(this.data['email_logged'] == plan['email_logged'])
@@ -300,7 +308,7 @@ class DetailPage extends StatelessWidget {
           title:Text(plan['company_name'],
             style: TextStyle(fontWeight: FontWeight.bold)
             ), 
-            subtitle: Text(plan['plan_name'],
+            subtitle: Text(plan['plan_name']+ '\nOpción ' +option ,
             style: TextStyle(height: 1.3, fontSize: 12)
             ),
             ),
@@ -312,6 +320,11 @@ class DetailPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+                  Text(
+                    'Prima desglozada:',
+                    style: TextStyle(fontWeight: FontWeight.bold,),
+                  ),
                  
                 priceUser !='' ? Text(
                     priceUser,

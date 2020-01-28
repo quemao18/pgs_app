@@ -10,7 +10,6 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import 'package:pgs_health/screens/drawer.dart';
 import 'package:pgs_health/screens/user_login.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -80,15 +79,31 @@ class _PlansPageState extends State<PlansPage> {
     ExpansionTile makeExpansion(data, planName, planDescription, planId, pln, plan) => ExpansionTile(
               title: new ListTile(
                 // leading: Icon(Icons.access_alarm),
-                title:Text(planName,  style: TextStyle(height: 1.3, fontWeight: FontWeight.bold)), 
+                title:Text(planName,  style: TextStyle(height: 1.1, fontWeight: FontWeight.bold)), 
                 subtitle: Text(planDescription,  style: TextStyle(height: 1.3)),
                 trailing: plan['url_info'] !=null ? 
-                IconButton(
-                  icon: Icon(MdiIcons.openInNew, 
-                  size: 25, 
-                  color: theme.primaryColor,), 
-                  onPressed: () => _launchURL(plan['url_info']), 
-                )
+
+                Column(
+                    children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top:8.0, bottom:0),
+                      child: Text('Detalles', style: TextStyle(fontSize: 12, height: 0)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top:0.0),
+                      child: IconButton(
+                          
+                          icon: Icon(MdiIcons.openInNew, 
+                          size: 25, 
+                          color: theme.primaryColor,), 
+                          onPressed: () => _launchURL(plan['url_info']), 
+                        ),
+                    )
+                  ])
+         
+
+                
+
                 : null,
               ),
                 children:<Widget>[
@@ -231,27 +246,29 @@ class _PlansPageState extends State<PlansPage> {
       ),
         
     ),
-        floatingActionButton:
-        Visibility(child:                              
-        FloatingActionButton(
-                onPressed: (){
-                  // Navigator.of(context).pop();   
-                  // print(selectedOptions);
-                  _saveData();
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                  builder: (context) => 
-                  //ExpansionTileSample(dataResult2, companiesIds),
-                  LoginPage(message: 'Cotización realizada con éxito, muy pronto te contactaremos para culminar la emisión.')
-                  ),
-                  );
-                },
-                
-                child: Icon(Icons.navigate_next)//Text('Siguiente')
+    
+    floatingActionButton: 
+    Visibility(child:
+      FloatingActionButton.extended(
+        label: Text('Enviar'),
+        // icon: Icon(MdiIcons.send),
+        onPressed: () {
+          // Add your onPressed code here!
+          _saveData();
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+          builder: (context) => 
+          //ExpansionTileSample(dataResult2, companiesIds),
+          LoginPage(message: 'Cotización enviada con éxito. Comunícate con nosotros para cualquier pregunta que tengas, mientras enviamos la información a tu correo.')
+          ),
+          );
+        },
+            // backgroundColor: Colors.pink,
+          ),
+          visible: !isLoading && selectedOptions.length > 0,
         ),
-        visible: !isLoading && selectedOptions.length > 0,
-        )
+
 );
 
       //bottomNavigationBar: makeBottom,
@@ -317,14 +334,24 @@ getCompanies(BuildContext context) async {
     var price1 = [0,0,0];
     var price2 = [0,0,0];
     var price3 = [0,0,0]; 
+    var price4 = [0,0,0];
+    var price5 = [0,0,0];
+    var price6 = [0,0,0]; 
+    var price7 = [0,0,0];
+    var price8 = [0,0,0];   
     var price1Arr =[];
     var price2Arr =[];
     var price3Arr =[];
-    
+    var price4Arr =[];
+    var price5Arr =[];
+    var price6Arr =[];
+    var price7Arr =[];
+    var price8Arr =[];   
+    List <String> optionsArr = new List();    
     var price = [], dedu = 0;
 
-    var dedu1 = 0, dedu2 =0, dedu3 = 0;
-    var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble();
+    var dedu1 = 0, dedu2 =0, dedu3 = 0,dedu4 = 0, dedu5 =0, dedu6 = 0,dedu7 = 0, dedu8 =0;
+    var sum1 = 0.toDouble(), sum2 =0.toDouble(), sum3 = 0.toDouble(), sum4 = 0.toDouble(), sum5 =0.toDouble(), sum6 = 0.toDouble(),sum7 = 0.toDouble(), sum8 =0.toDouble();
 
     // print(userData.dependents);
     for(var p in plan['price']){ //print(p['age_range']);
@@ -335,6 +362,11 @@ getCompanies(BuildContext context) async {
         price1[2] = (p['price1']); 
         price2[2] = (p['price2']);
         price3[2] = (p['price3']);
+        price4[2] = (p['price4']); 
+        price5[2] = (p['price5']);
+        price6[2] = (p['price6']);
+        price7[2] = (p['price7']); 
+        price8[2] = (p['price8']);
       }
       if(p['age_range'] == '2 dependientes'){
         print('2 dependientes');
@@ -342,6 +374,11 @@ getCompanies(BuildContext context) async {
         price1[2] = (p['price1']); 
         price2[2] = (p['price2']);
         price3[2] = (p['price3']);
+        price4[2] = (p['price4']); 
+        price5[2] = (p['price5']);
+        price6[2] = (p['price6']);
+        price7[2] = (p['price7']); 
+        price8[2] = (p['price8']);
       }
       if(p['age_range'] == '3+ dependientes'){
         print('3 dependientes');
@@ -349,6 +386,12 @@ getCompanies(BuildContext context) async {
         price1[2] = (p['price1']); 
         price2[2] = (p['price2']);
         price3[2] = (p['price3']);
+        price4[2] = (p['price4']);
+        price5[2] = (p['price5']);
+        price6[2] = (p['price6']);
+        price7[2] = (p['price7']);
+        price8[2] = (p['price8']);
+
       }
       //if(p!=null && p['age_range']!='Deducible' && p.length>1){
       if(p['age_range']!='Deducible' && (
@@ -361,6 +404,11 @@ getCompanies(BuildContext context) async {
         price1Arr.add(p['price1']);
         price2Arr.add(p['price2']);
         price3Arr.add(p['price3']);
+        price4Arr.add(p['price4']);
+        price5Arr.add(p['price5']);
+        price6Arr.add(p['price6']);
+        price7Arr.add(p['price7']);
+        price8Arr.add(p['price8']);
       } 
        
       
@@ -372,6 +420,12 @@ getCompanies(BuildContext context) async {
         dedu1 = p['price1']; 
         dedu2 = p['price2'];
         dedu3 = p['price3'];
+        dedu4 = p['price4'];
+        dedu5 = p['price5'];
+        dedu6 = p['price6'];
+        dedu7 = p['price7'];
+        dedu8 = p['price8'];
+
       }
       
     }
@@ -406,6 +460,56 @@ getCompanies(BuildContext context) async {
       price3[1] = price3Arr[1];
     }
 
+    if(price4Arr.length>1){
+      price4[0] = price4Arr[1];
+      price4[1] = price4Arr[0];
+    }else{
+      if(price4Arr.length>0)
+      price4[0] = price4Arr[0];
+      if(price4Arr.length>1)
+      price4[1] = price4Arr[1];
+    }
+
+    if(price5Arr.length>1){
+      price5[0] = price5Arr[1];
+      price5[1] = price5Arr[0];
+    }else{
+      if(price5Arr.length>0)
+      price5[0] = price5Arr[0];
+      if(price5Arr.length>1)
+      price5[1] = price5Arr[1];
+    }
+
+    if(price6Arr.length>1){
+      price6[0] = price6Arr[1];
+      price6[1] = price6Arr[0];
+    }else{
+      if(price6Arr.length>0)
+      price6[0] = price6Arr[0];
+      if(price6Arr.length>1)
+      price6[1] = price6Arr[1];
+    }
+
+    if(price7Arr.length>1){
+      price7[0] = price7Arr[1];
+      price7[1] = price7Arr[0];
+    }else{
+      if(price7Arr.length>0)
+      price7[0] = price7Arr[0];
+      if(price7Arr.length>1)
+      price7[1] = price7Arr[1];
+    }
+
+    if(price8Arr.length>1){
+      price8[0] = price8Arr[1];
+      price8[1] = price8Arr[0];
+    }else{
+      if(price8Arr.length>0)
+      price8[0] = price8Arr[0];
+      if(price8Arr.length>1)
+      price8[1] = price8Arr[1];
+    }
+
     var costAdmin = [], maternityArr = [], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
 
     for(var pln in data['plans']){
@@ -424,22 +528,71 @@ getCompanies(BuildContext context) async {
       sumTransplant = transplantArr.reduce((a, b) => a + b );
    
     // print(sumMaternity );
-     if(price1.length>0 && price1.reduce((a, b) => a + b )>0)
+     
+     if(price1[0]!=null && price1.length>0 && price1.reduce((a, b) => a + b )>0)
      sum1 = price1.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-     if(price2.length>0 && price2.reduce((a, b) => a + b )>0)
+     if(price2[0]!=null && price2.length>0 && price2.reduce((a, b) => a + b )>0)
      sum2 = price2.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-     if(price3.length>0 && price3.reduce((a, b) => a + b )>0)
+     if(price3[0]!=null && price3.length>0 && price3.reduce((a, b) => a + b )>0)
      sum3 = price3.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
-    
-     if(sum1>0 && sum2>0 && sum3>0)
+     if(price4[0]!=null && price4.length>0 && price4.reduce((a, b) => a + b )>0)
+     sum4 = price4.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price5[0]!=null && price5.length>0 && price5.reduce((a, b) => a + b )>0)
+     sum5 = price5.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price6[0]!=null && price6.length>0 && price6.reduce((a, b) => a + b )>0)
+     sum6 = price6.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price7[0]!=null && price7.length>0 && price7.reduce((a, b) => a + b )>0)
+     sum7 = price7.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     if(price8[0]!=null && price8.length>0 && price8.reduce((a, b) => a + b )>0)
+     sum8 = price8.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+
+          // ' Opción I \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
+          // ' Opción II \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
+          // ' Opción III \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
+          // ' Opción IV \$'+(formatter.format(dedu4)).toString() +'\n'+' \$'+(formatter.format(sum4)).toString(),
+          // ' Opción V \$'+(formatter.format(dedu5)).toString() +'\n'+' \$'+(formatter.format(sum5)).toString(),
+          // ' Opción VI \$'+(formatter.format(dedu6)).toString() +'\n'+' \$'+(formatter.format(sum6)).toString(),
+          // ' Opción VII \$'+(formatter.format(dedu7)).toString() +'\n'+' \$'+(formatter.format(sum7)).toString(),
+          // ' Opción VIII \$'+(formatter.format(dedu8)).toString() +'\n'+' \$'+(formatter.format(sum8)).toString(),
+      optionsArr.length = 0;
+      if(sum1>0)
+        optionsArr.add(
+        ' Opción I \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString()
+        );
+      if(sum2>0)
+        optionsArr.add(
+        ' Opción I \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString()
+        );
+      if(sum3>0)
+        optionsArr.add(
+        ' Opción III \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString()
+        );
+      if(sum4>0)
+        optionsArr.add(
+        ' Opción IV \$'+(formatter.format(dedu4)).toString() +'\n'+' \$'+(formatter.format(sum4)).toString()
+        );
+      if(sum5>0)
+        optionsArr.add(
+        ' Opción V \$'+(formatter.format(dedu5)).toString() +'\n'+' \$'+(formatter.format(sum5)).toString()
+        );
+      if(sum6>0)
+        optionsArr.add(
+        ' Opción VI \$'+(formatter.format(dedu6)).toString() +'\n'+' \$'+(formatter.format(sum6)).toString()
+        );
+      if(sum7>0)
+        optionsArr.add(
+        ' Opción VII \$'+(formatter.format(dedu7)).toString() +'\n'+' \$'+(formatter.format(sum7)).toString()
+        );
+      if(sum8>0)
+        optionsArr.add(
+        ' Opción VIII \$'+(formatter.format(dedu8)).toString() +'\n'+' \$'+(formatter.format(sum8)).toString()
+        );
+      //  if(sum1>0 && sum2>0 && sum3>0 || sum4>0 && sum5>0 && sum6>0 && sum7>0 && sum8>0)
+    if(optionsArr.length>0)
      return RadioButtonGroup(
         // margin: EdgeInsets.only(left: 30),
         activeColor: theme.primaryColor,
-        labels: <String>[
-          ' Opción I \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
-          ' Opción II \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
-          ' Opción III \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
-          ],
+        labels:  optionsArr ,
 
        itemBuilder: (Radio rb, Text txt, int i){
          
@@ -461,6 +614,12 @@ getCompanies(BuildContext context) async {
             if(index==0) {price = price1; dedu = dedu1;}
             if(index==1) {price = price2; dedu = dedu2;}
             if(index==2) {price = price3; dedu = dedu3;}
+            if(index==3) {price = price4; dedu = dedu4;}
+            if(index==4) {price = price5; dedu = dedu5;}
+            if(index==5) {price = price6; dedu = dedu6;}
+            if(index==6) {price = price7; dedu = dedu7;}
+            if(index==7) {price = price8; dedu = dedu8;}
+
             setState(() {
              
               selectedOptions.removeWhere((item) => item['plan_id'] == plan['plan_id']);

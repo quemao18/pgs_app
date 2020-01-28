@@ -82,7 +82,7 @@ class _ListPageState extends State<ListPage> {
                   //  print(document['name']);
                   isCheck =  !document['status'];
                   // var valueAdd;
-                  // if(document['price'].length>1)
+                  if(document['price'].length>1)
                   return new CheckboxListTile(
                   activeColor: theme.primaryColor,
                   title: new 
@@ -113,7 +113,7 @@ class _ListPageState extends State<ListPage> {
 
                       },
                     );
-                  // return Container();
+                  return Container();
                 }).toList()
                 :
                 <Widget>[
@@ -170,7 +170,7 @@ class _ListPageState extends State<ListPage> {
                         border: Border.all(color: theme.primaryColor)
                         ),     
                         child:
-                        makeExpansion(data),
+                        makeExpansion(data)
                       )
                    );
                  }

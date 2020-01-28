@@ -195,7 +195,7 @@ class _UserFirst extends State<UserFirst> {
                              Container(
                               //width: 200,
                               // height: 60,
-                              margin: EdgeInsets.only(left: 0, top: 1),
+                              margin: EdgeInsets.only(left: 0, top: 0),
                               padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 0.0),
                                 decoration: ShapeDecoration(
                                   shape: RoundedRectangleBorder(
@@ -205,7 +205,7 @@ class _UserFirst extends State<UserFirst> {
                                 ),
                                       child: new DropdownButtonFormField(
                                         decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(left:20, top: 12),
+                                        contentPadding: EdgeInsets.only(left:20, top: 8),
                                         prefixIcon: Icon(MdiIcons.genderMaleFemale), 
                                         enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(color: Colors.transparent)
@@ -257,7 +257,7 @@ class _UserFirst extends State<UserFirst> {
                                         list.add(pa);
                                       return new DropdownButtonFormField(
                                         decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(left:20, top: 10),
+                                        contentPadding: EdgeInsets.only(left:20, top: 8),
                                         prefixIcon: Icon(Icons.public),
                                         enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(color: Colors.transparent)

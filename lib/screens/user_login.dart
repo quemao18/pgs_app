@@ -11,6 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_health/components/Buttons/roundedButton.dart';
 import 'package:pgs_health/screens/user_first.dart';
+// import 'package:pgs_health/screens/user_first.dart';
 import '../app_config.dart';
 import './progress_hud.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -415,7 +416,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                       Container(
                                       padding: widget.message == null ?  
-                                      EdgeInsets.only(top: screenSize.height/7): EdgeInsets.only(top: screenSize.height/50),
+                                      EdgeInsets.only(top: screenSize.height/7): EdgeInsets.only(top: screenSize.height/60),
                                       child: 
                                       
                                    FutureBuilder(
@@ -431,12 +432,19 @@ class _LoginPageState extends State<LoginPage> {
                                         alignment: Alignment.bottomCenter,
                                           child:
                                             RoundedButton(
-                                              buttonName: widget.message == null ? "Cotizar": "Cotizar nuevamente",
+                                              buttonName: widget.message == null ? "Cotizar": "Finalizar",
                                               onTap:  () {
                                                   Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) => UserFirst(userData: userLogged)
+                                                          // builder: (context) => UserFirst(userData: userLogged)
+                                                          builder: (context) {
+                                                            if(widget.message==null) 
+                                                              UserFirst(userData: userLogged);
+                                                            else
+                                                              UserData();
+                                                          return null;
+                                                          }
                                                           ),
                                                   );
                                               },
@@ -505,12 +513,20 @@ class _LoginPageState extends State<LoginPage> {
                                         alignment: Alignment.bottomCenter,
                                           child:
                                             RoundedButton(
-                                              buttonName: widget.message == null ? "Cotizar": "Cotizar nuevamente",
+                                              buttonName: widget.message == null ? "Cotizar": "Finalizar",
                                               onTap:  () {
                                                   Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) => UserFirst(userData: userLogged)
+                                                          // builder: (context) => UserFirst(userData: userLogged)
+                                                           builder: (context) {
+                                                            if(widget.message==null) 
+                                                             return UserFirst(userData: userLogged);
+                                                            else
+                                                             return UserData();
+                                                     
+                                                          }
+
                                                           ),
                                                   );
                                               },
@@ -937,7 +953,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
-               Platform.isIOS || errorMessage == null ?Container(
+               Platform.isIOS || errorMessage == null ? Container(
                   width: 210,
                   margin: EdgeInsets.only(left: 0, top: 10),
                   padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -971,10 +987,14 @@ class _LoginPageState extends State<LoginPage> {
                             
                                 ])
                           : 
+                          Container(
+                          height: 50,
+                          padding: EdgeInsets.only(top:12, left: 10),
+                          child: 
                           Text(
                               'Sign in With Apple not available.\nMust be run on iOS 13+', 
                               style: TextStyle(color: Colors.white, fontSize: 12)
-                              );
+                              ));
                     }),
               )://Container(),
               Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text(errorMessage, style: TextStyle(color: Colors.white),))

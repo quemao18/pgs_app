@@ -7,7 +7,7 @@ void main() {
   var configuredApp = new AppConfig(
     appName: 'PGS Health DEV',
     flavorName: 'developement',
-    apiBaseUrl: 'http://192.168.0.5:5000/api/',
+    apiBaseUrl: 'http://192.168.0.14:5000/api/',
     // apiBaseUrl: 'http://192.168.11.47:5000/api/',
     //  apiBaseUrl: 'http://192.168.43.125:5000/api/',
      

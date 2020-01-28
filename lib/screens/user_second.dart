@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_health/components/TextFields/inputField.dart';
 import '../app_config.dart';
@@ -35,7 +36,7 @@ class _UserSecond extends State<UserSecond>{
 
   bool _value1 = false;
   bool _value2 = false;
-  bool _btnEnabled = false;
+  // bool _btnEnabled = false;
 
   String _selectedGender;
   //String _selectedDependent;
@@ -88,16 +89,21 @@ class _UserSecond extends State<UserSecond>{
     //print(widget.user.email);
     final ThemeData theme = Theme.of(context);  
     Size screenSize = MediaQuery.of(context).size;
+    final FocusNode _nodeText1 = FocusNode();
 
     var config = AppConfig.of(context);
-    return Scaffold(
+    return
+    
+     Scaffold(
       key: _scaffoldstate,
         appBar: new AppBar(
           title: new Text(config.appName),
         ),
         drawer: DrawerOnly(), 
         body: 
-
+      // KeyboardActions(
+      //   config:_buildConfig(context),
+      //   child:
         SingleChildScrollView(
           child:
         
@@ -109,7 +115,9 @@ class _UserSecond extends State<UserSecond>{
                 builder: (context) => Form(
                     key: _formKey,
                     
-                          child: Column(
+                          child:
+                         
+                           Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -130,6 +138,7 @@ class _UserSecond extends State<UserSecond>{
                                         activeColor: theme.primaryColor,
                                     )
                                   ),
+                  
                                 Container(
                                   
                                   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12.0),
@@ -224,6 +233,7 @@ class _UserSecond extends State<UserSecond>{
                                     ],
                                   ),
                                 ),
+                               
                                     Container(
                                       //padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0.0),
                                       margin: const EdgeInsets.only(top: 10.0, bottom: 0.0),
@@ -239,39 +249,51 @@ class _UserSecond extends State<UserSecond>{
                                   margin: const EdgeInsets.only(left: 15.0, right: 15.0),
                                   child: 
                                   Row(children: <Widget>[
+                             
                                     Flexible(
                                     child:
                                     InputField(
                                             //enabled: int.parse(_user.dependents) >= 1 ? true:false,
+                                            focusNode: _nodeText1,
                                             hintText: 'Edad',
                                             obscureText: false,
                                             bottomMargin: 20,
                                             icon: MdiIcons.humanChild,
-                                            iconSuf: MdiIcons.plus,
-                                            onPressedSuf: _btnEnabled==false || ages.length>4  ? null: _addItem,
+                                            // iconSuf: MdiIcons.plus,
+                                            // onPressedSuf: _btnEnabled==false || ages.length>4  ? null: _addItem,
                                             enabled: ages.length<5,
                                             autovalidate: true,
                                             validator: validateAgeDependent,
                                             controller:_textFieldControllerAge,
+                                            onFieldSubmitted: (value){
+                                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                            Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
+                                            RegExp regex = new RegExp(pattern);
+                                            var numValue = int.tryParse(value);
+                                            if(numValue!=null)
+                                            if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>23) return null;
+                                              _addItem();
+                                            },
                                             onChanged: (value) { 
                                               // print(value);
+                                              // print(_keyboardState);
                                               _onChanged1(true);
-                                          
-                                              setState((){ 
-                                                Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
-                                                RegExp regex = new RegExp(pattern);
-                                                var numValue = int.tryParse(value);
-                                                if(numValue!=null)
-                                                if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>23)
-                                                { 
-                                                  _btnEnabled = false;
-                                                }else{
-                                                  _btnEnabled = true;
+
+                                              // setState((){ 
+                                              //   Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
+                                              //   RegExp regex = new RegExp(pattern);
+                                              //   var numValue = int.tryParse(value);
+                                              //   if(numValue!=null)
+                                              //   if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>23)
+                                              //   { 
+                                              //     _btnEnabled = false;
+                                              //   }else{
+                                              //     _btnEnabled = true;
                                                 
-                                                }
-                                                 //_user.spouseAge = val;
-                                                 //_ageDependent = val;
-                                                });
+                                              //   }
+                                              //    //_user.spouseAge = val;
+                                              //    //_ageDependent = val;
+                                              //   });
                                              },
                                             onSaved: (val) {
                                                 if (_value1 == false) val = '0'; 
@@ -305,7 +327,7 @@ class _UserSecond extends State<UserSecond>{
                                       Container(
                                         width: screenSize.width/1.2,
                                         child:
-                                        Text('Coloca la edad y presiona +, puedes agregar hasta 5 dependientes.', style: TextStyle(fontSize: 14, color: Colors.black38),),
+                                        Text('Puedes agregar hasta 5 dependientes.', style: TextStyle(fontSize: 14, color: Colors.black38),),
                                       ),
                                               Container(
                                               //height: 80,
@@ -429,7 +451,9 @@ class _UserSecond extends State<UserSecond>{
                         ])
                         )
                         )
-                        )
+                        
+                        ),
+                        // ),
                         ),
                         floatingActionButton:  
                         Visibility(child:                             
@@ -456,6 +480,8 @@ class _UserSecond extends State<UserSecond>{
                         ),
                         visible:  !_keyboardState && (!_value1 || ages.length>0)
                     ),
+                
+                 
               );
   }
 
@@ -469,7 +495,6 @@ class _UserSecond extends State<UserSecond>{
       ages.add(
         _textFieldControllerAge.text
       );
-     
       FocusScope.of(context).requestFocus(FocusNode());
     });
       // _textFieldControllerAge.text = '';
@@ -483,10 +508,10 @@ class _UserSecond extends State<UserSecond>{
   _buildRow(int index, ages, theme){
     if(index<5)
     {
-      _btnEnabled = true;
+      // _btnEnabled = true;
       return _tile(" Niño "+ (index+1).toString(), ages[index].toString() + ' años', Icons.delete_sweep, theme);
     }else{
-      _btnEnabled = false;
+      // _btnEnabled = false;
       _textFieldControllerAge.text = '';
     }
   }
@@ -522,16 +547,16 @@ class _UserSecond extends State<UserSecond>{
     RegExp regex = new RegExp(pattern);
     // print(value);
     var numValue = int.tryParse(value);
-    _btnEnabled = false;
+    // _btnEnabled = false;
     // print(numValue);
     if(numValue!=null)
     if (!regex.hasMatch(value) && value!='' || numValue>23 )
     { 
-      _btnEnabled = false;
+      // _btnEnabled = false;
       return 'Coloca una edad válida, entre 0 y 23, luego presiona +';
     }
     else{
-      _btnEnabled = true;
+      // _btnEnabled = true;
       return null;
     }
     return null;

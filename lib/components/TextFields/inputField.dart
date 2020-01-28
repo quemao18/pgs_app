@@ -10,6 +10,7 @@ class InputField extends StatelessWidget {
   final double bottomMargin;
   final TextStyle textStyle, hintStyle;
   final validator;
+  final onFieldSubmitted;
   final onSaved;
   final controller;
   final onChanged;
@@ -18,10 +19,12 @@ class InputField extends StatelessWidget {
   final Key key;
   final bool enabled;
   final bool textCapitalization;
+  final FocusNode focusNode;
 
   //passing props in the Constructor.
   InputField(
       {this.key,
+      this.focusNode,
       this.hintText,
       this.obscureText,
       this.keyboardType,
@@ -37,6 +40,7 @@ class InputField extends StatelessWidget {
       this.textStyle,
       this.enabled,
       this.validator,
+      this.onFieldSubmitted,
       this.onSaved,
       this.controller,
       this.hintStyle, 
@@ -53,15 +57,17 @@ class InputField extends StatelessWidget {
             // style: textStyle,
             controller: controller,
             key: key,
+            focusNode: focusNode,
             obscureText: obscureText,
             keyboardType: keyboardType,
             validator: validator,
             onSaved: onSaved,
             enabled: enabled,
+            textInputAction: TextInputAction.done,
             onChanged: onChanged,
             autovalidate: autovalidate,
             textCapitalization: textCapitalization ? TextCapitalization.sentences: TextCapitalization.none,
-            
+            onFieldSubmitted: onFieldSubmitted,
             // decoration: new InputDecoration(
             //   hintText: hintText,
             //   hintStyle: hintStyle,
