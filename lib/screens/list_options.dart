@@ -193,7 +193,7 @@ class _ListPageState extends State<ListPage> {
       SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-             _buildTitle(context, theme),
+             _buildTitle(context, theme, screenSize ),
             SafeArea(child: 
             Container(
             // height: screenSize.height/1.2,
@@ -230,9 +230,9 @@ class _ListPageState extends State<ListPage> {
       //bottomNavigationBar: makeBottom,
   }
 
-  Widget _buildTitle(BuildContext context, theme) {
+  Widget _buildTitle(BuildContext context, theme, screenSize) {
     return Container(
-            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: screenSize.height/50),
             child: Column(
               children: <Widget>[
               ListTile(

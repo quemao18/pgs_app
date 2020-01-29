@@ -36,7 +36,7 @@ class _UserSecond extends State<UserSecond>{
 
   bool _value1 = false;
   bool _value2 = false;
-  // bool _btnEnabled = false;
+  bool _btnEnabled = false;
 
   String _selectedGender;
   //String _selectedDependent;
@@ -47,10 +47,12 @@ class _UserSecond extends State<UserSecond>{
   int count = 0;
 
   bool _keyboardState= false;
+  FocusNode myNextNode;
 
   @protected
   void initState() {
     super.initState();
+    myNextNode = FocusNode();
     KeyboardVisibilityNotification().addNewListener(
         onChange: (bool visible) {
           //print(visible);
@@ -89,7 +91,7 @@ class _UserSecond extends State<UserSecond>{
     //print(widget.user.email);
     final ThemeData theme = Theme.of(context);  
     Size screenSize = MediaQuery.of(context).size;
-    final FocusNode _nodeText1 = FocusNode();
+    // final FocusNode _nodeText1 = FocusNode();
 
     var config = AppConfig.of(context);
     return
@@ -199,7 +201,7 @@ class _UserSecond extends State<UserSecond>{
                                       //padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
                                       child: DropdownButtonFormField(
                                         decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(left:20, top: 13),
+                                        contentPadding: EdgeInsets.only(left:20, top: 8),
                                         prefixIcon: Icon(MdiIcons.genderMaleFemale), 
                                         enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(color: Colors.transparent)
@@ -254,13 +256,13 @@ class _UserSecond extends State<UserSecond>{
                                     child:
                                     InputField(
                                             //enabled: int.parse(_user.dependents) >= 1 ? true:false,
-                                            focusNode: _nodeText1,
+                                            // focusNode: _nodeText1,
                                             hintText: 'Edad',
                                             obscureText: false,
                                             bottomMargin: 20,
                                             icon: MdiIcons.humanChild,
-                                            // iconSuf: MdiIcons.plus,
-                                            // onPressedSuf: _btnEnabled==false || ages.length>4  ? null: _addItem,
+                                            iconSuf: MdiIcons.sendCheck,
+                                            onPressedSuf: _btnEnabled==false || ages.length>4  ? null: _addItem,
                                             enabled: ages.length<5,
                                             autovalidate: true,
                                             validator: validateAgeDependent,
@@ -279,21 +281,21 @@ class _UserSecond extends State<UserSecond>{
                                               // print(_keyboardState);
                                               _onChanged1(true);
 
-                                              // setState((){ 
-                                              //   Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
-                                              //   RegExp regex = new RegExp(pattern);
-                                              //   var numValue = int.tryParse(value);
-                                              //   if(numValue!=null)
-                                              //   if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>23)
-                                              //   { 
-                                              //     _btnEnabled = false;
-                                              //   }else{
-                                              //     _btnEnabled = true;
+                                              setState((){ 
+                                                Pattern pattern =r'^(?:[+0]9)?[0-9]{1,2}$';
+                                                RegExp regex = new RegExp(pattern);
+                                                var numValue = int.tryParse(value);
+                                                if(numValue!=null)
+                                                if (!regex.hasMatch(value) && value.isEmpty || ages.length>4 || numValue>23)
+                                                { 
+                                                  _btnEnabled = false;
+                                                }else{
+                                                  _btnEnabled = true;
                                                 
-                                              //   }
-                                              //    //_user.spouseAge = val;
-                                              //    //_ageDependent = val;
-                                              //   });
+                                                }
+                                                 //_user.spouseAge = val;
+                                                 //_ageDependent = val;
+                                                });
                                              },
                                             onSaved: (val) {
                                                 if (_value1 == false) val = '0'; 
@@ -456,9 +458,13 @@ class _UserSecond extends State<UserSecond>{
                         // ),
                         ),
                         floatingActionButton:  
-                        Visibility(child:                             
+                        Visibility(
+                          
+                          child:                             
                         FloatingActionButton(
                           elevation: 10,
+                          focusNode: myNextNode,
+                          
                            onPressed: (){   
                                     final form = _formKey.currentState;
                                     if (form.validate()) {
@@ -488,6 +494,8 @@ class _UserSecond extends State<UserSecond>{
 
 
   _addItem() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusScope.of(context).requestFocus(myNextNode);
     if(_textFieldControllerAge.text!=''){
     setState(() {
       count = count + 1;
@@ -495,7 +503,9 @@ class _UserSecond extends State<UserSecond>{
       ages.add(
         _textFieldControllerAge.text
       );
-      FocusScope.of(context).requestFocus(FocusNode());
+      FocusScope.of(context).requestFocus(myNextNode);
+      
+
     });
       // _textFieldControllerAge.text = '';
       WidgetsBinding.instance.addPostFrameCallback( (_) => _textFieldControllerAge.clear());
@@ -508,10 +518,10 @@ class _UserSecond extends State<UserSecond>{
   _buildRow(int index, ages, theme){
     if(index<5)
     {
-      // _btnEnabled = true;
+      _btnEnabled = true;
       return _tile(" Niño "+ (index+1).toString(), ages[index].toString() + ' años', Icons.delete_sweep, theme);
     }else{
-      // _btnEnabled = false;
+      _btnEnabled = false;
       _textFieldControllerAge.text = '';
     }
   }
@@ -547,16 +557,16 @@ class _UserSecond extends State<UserSecond>{
     RegExp regex = new RegExp(pattern);
     // print(value);
     var numValue = int.tryParse(value);
-    // _btnEnabled = false;
+    _btnEnabled = false;
     // print(numValue);
     if(numValue!=null)
     if (!regex.hasMatch(value) && value!='' || numValue>23 )
     { 
-      // _btnEnabled = false;
+      _btnEnabled = false;
       return 'Coloca una edad válida, entre 0 y 23, luego presiona +';
     }
     else{
-      // _btnEnabled = true;
+      _btnEnabled = true;
       return null;
     }
     return null;

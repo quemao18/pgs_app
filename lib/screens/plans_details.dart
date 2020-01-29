@@ -232,7 +232,7 @@ class _PlansPageState extends State<PlansPage> {
       SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-            _buildTitle(context, theme),
+            _buildTitle(context, theme, screenSize),
             Container(
             padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 90.0),
             child: Column(
@@ -275,9 +275,9 @@ class _PlansPageState extends State<PlansPage> {
   }
 
 
-  Widget _buildTitle(BuildContext context, theme) {
+  Widget _buildTitle(BuildContext context, theme, screenSize) {
     return Container(
-            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
+            padding:new EdgeInsets.symmetric(horizontal: 0, vertical: screenSize.height/55),
             child: Column(
               children: <Widget>[
               ListTile(

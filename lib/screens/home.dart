@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import '../screens/user_login.dart';
-
+import "dart:ui" as ui;
 
 class HomePage extends StatefulWidget {
 
@@ -17,6 +18,17 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     changeStatusBar();
+    Size s = ui.window.physicalSize/ui.window.devicePixelRatio;
+    bool landscape = s.width>s.height;
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    if (landscape) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+    }
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitDown,
+    //   DeviceOrientation.portraitUp,
+    // ]);
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return new Scaffold(
       body: LoginPage(message: null,)
     );
