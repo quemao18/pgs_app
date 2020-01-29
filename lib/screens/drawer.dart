@@ -205,7 +205,7 @@ class _DrawerOnly extends State<DrawerOnly> {
                         //         ),
         
                         //       ),
-                          SizedBox(height: screenSize.height>700 ? screenSize.height/5 : screenSize.height/12,),
+                          SizedBox(height: screenSize.height>700 ? screenSize.height/6 : screenSize.height/12,),
                           Container(
                           // margin: EdgeInsets.only(right: 10,),
                           // padding:new EdgeInsets.only(top: screenSize.height/9),

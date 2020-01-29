@@ -979,7 +979,12 @@ class _LoginPageState extends State<LoginPage> {
                                   // SizedBox(
                                   //   height: 10,
                                   // ),
-                                  FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
+                                  AppleSignInButton(
+                                    cornerRadius: 40,
+                                    style: ButtonStyle.white,
+                                    onPressed: logIn,
+                                  ),
+                                  // FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
                                   // if (errorMessage2 != null) Text(errorMessage2, style: TextStyle(color: Colors.white)),
                                   // SizedBox(
                                   //   height: 500,
