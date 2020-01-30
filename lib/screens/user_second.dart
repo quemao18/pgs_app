@@ -136,7 +136,7 @@ class _UserSecond extends State<UserSecond>{
                                     child: SwitchListTile(
                                         value: _value2,
                                         onChanged: _onChanged2,
-                                        title: new Text('¿Cónyugue?', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        title: new Text('Cónyuge', style: TextStyle(fontWeight: FontWeight.bold),),
                                         activeColor: theme.primaryColor,
                                     )
                                   ),
