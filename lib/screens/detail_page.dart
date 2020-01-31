@@ -322,7 +322,7 @@ class DetailPage extends StatelessWidget {
                 children: <Widget>[
 
                   Text(
-                    'Desglosada:',
+                    'Prima desglosada:',
                     style: TextStyle(fontWeight: FontWeight.bold,),
                   ),
                  
