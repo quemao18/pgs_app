@@ -20,6 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Build
 
+Remember change version in pubspec.yaml before upload appbludle to play store
 `flutter build appbundle -t lib/main_prod.dart --release`
 `flutter build apk -t lib/main_prod.dart --release`
 
