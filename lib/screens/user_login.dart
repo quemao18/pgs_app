@@ -953,7 +953,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: FlatButton.icon(onPressed: _signInWithGoogle, icon: Icon(MdiIcons.google, color: Colors.white), label: Text('Entrar con Google', style: TextStyle(color: Colors.white),)),
               ),
-               Platform.isIOS || errorMessage == null ? Container(
+               Platform.isIOS ? Container(
                   width: 210,
                   margin: EdgeInsets.only(left: 0, top: 10),
                   padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -1001,8 +1001,8 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(color: Colors.white, fontSize: 12)
                               ));
                     }),
-              )://Container(),
-              Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text(errorMessage, style: TextStyle(color: Colors.white),))
+              ):Container(),
+              // Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text(errorMessage, style: TextStyle(color: Colors.white),))
             
     ],
     
