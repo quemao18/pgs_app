@@ -21,7 +21,7 @@ dependencies:
   url_launcher: ^4.2.0+3
   flutter_facebook_login: ^3.0.0
   firebase_auth: ^0.14.0+5
-  google_sign_in: ^4.0.7
+  google_sign_in: ^4.1.1
   material_design_icons_flutter: 3.2.4595
   # keyboard_visibility: ^[CURRENT VERSION NUMBER]
   cached_network_image: ^2.0.0-rc

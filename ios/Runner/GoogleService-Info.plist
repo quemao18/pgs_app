@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>855167360160-neb5ugrg0okjoru1sql71kmq48201e48.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.855167360160-neb5ugrg0okjoru1sql71kmq48201e48</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>855167360160-rbcbnbrnii3gubne1mj15nlkf61r76po.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAx56fT0wchkY-7SQ-F2x7svNoUymQkS2I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>855167360160</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pgs.pgshealth</string>
+	<key>PROJECT_ID</key>
+	<string>pgs-consulting</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pgs-consulting.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:855167360160:ios:42f8ff2b10b405d49f7dc5</string>
+	<key>DATABASE_URL</key>
+	<string>https://pgs-consulting.firebaseio.com</string>
+</dict>
+</plist>
