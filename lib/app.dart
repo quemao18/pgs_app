@@ -1,11 +1,15 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:pgs_health/screens/home_material.dart';
 import './screens/home.dart';
 import 'screens/user_login.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class App extends StatelessWidget {
+  
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+
   @override
   Widget build(BuildContext context) {
     // Call AppConfig.of(context) anywhere to obtain the 
@@ -63,6 +67,9 @@ class App extends StatelessWidget {
 
         ),
       home: new HomePage(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     );
   }
 }
