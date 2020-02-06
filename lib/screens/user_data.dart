@@ -177,7 +177,7 @@ class UserDataState extends State<UserData> {
 
        Widget _makeListTile(data, theme) {
         String age = data['age'].toString() + ' años. ';
-        String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años. ': '';
+        String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Cónyuge: '+ data['spouse_age'].toString() + ' años. ': '';
         String dependents = data['dependents']!=null && data['dependents']>0 ? ' '+ data['dependents'].toString() + ' dependiente(s).': '';
  
         return  

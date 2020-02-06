@@ -154,7 +154,7 @@ class DetailPage extends StatelessWidget {
     Widget _buildAge(BuildContext context, data, theme) {
     String gender = data['spouse_gender'] == 'female' ? '(Mujer).': data['spouse_gender'] == 'male' ? '(Hombre).' : '';  
     // String age = data['age'].toString() + ' años. ';
-    String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Conyugue: '+ data['spouse_age'].toString() + ' años ': '';
+    String spouse = data['spouse_age']!=null && data['spouse_age']>0 ? ' Cónyuge: '+ data['spouse_age'].toString() + ' años ': '';
     String dependents = data['dependents']!=null && data['dependents']>0 ? ' Dependientes: '+ data['dependents'].toString() + '.': '';
     return spouse!='' || dependents!='' ? Container(
       // padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
@@ -249,7 +249,7 @@ class DetailPage extends StatelessWidget {
   if(plan['option_prices'].length>0)
   priceUser = plan['option_prices'][0]!=null && plan['option_prices'][0] > 0 ? 'Titular \$' + formatter.format(plan['option_prices'][0]).toString():'';
   if(plan['option_prices'].length>1)
-  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Cónyugue \$' + formatter.format(plan['option_prices'][1]).toString():'';
+  priceSpouse = plan['option_prices'][1]!=null && plan['option_prices'][1] >0 ? 'Cónyuge \$' + formatter.format(plan['option_prices'][1]).toString():'';
   if(plan['option_prices'].length>2)
   priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Dependientes '+dependents+' \$' + formatter.format(plan['option_prices'][2]).toString():'';
 
