@@ -1011,7 +1011,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void firebaseCloudMessagingListeners() {
-  if (Platform.isIOS) iOSPermission();
+  // if (Platform.isIOS) iOSPermission();
 
   _firebaseMessaging.getToken().then((token){
     print(token);
