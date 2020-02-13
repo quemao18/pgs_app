@@ -34,7 +34,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = GoogleSignIn();
+final GoogleSignIn _googleSignIn = GoogleSignIn(
+scopes: ['email', 'https://www.googleapis.com/auth/contacts.readonly'],
+// hostedDomain: "",
+// clientId: "",
+);
 final FacebookLogin _facebookLogin = FacebookLogin();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 final databaseReference = Firestore.instance;
@@ -108,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
   @protected
   initState(){
     // if(this.isLoggedIn)
-    _saveDeviceToken();
     this.userData = null;
     this.isLoading = true;
     this.isConexion = false;
@@ -123,14 +126,13 @@ class _LoginPageState extends State<LoginPage> {
 
     });
 
+    _saveDeviceToken();
     firebaseCloudMessagingListeners();
-    super.initState();
-
     // checkLoggedInState();
-
     AppleSignIn.onCredentialRevoked.listen((_) {
       print("Credentials revoked");
     });
+    super.initState();
 
   }
 
@@ -701,8 +703,8 @@ class _LoginPageState extends State<LoginPage> {
 
     // Example code of how to sign in with google.
    void _signInWithGoogle() async {
-     try{
-         setState(() {
+    try{
+    setState(() {
       isLoading = true;
     });
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -740,7 +742,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
     } catch (error) {
-   print(error.toString());
+      print(error.toString());
       return null;
     }
   }
@@ -825,7 +827,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
   _getCurrentUser() async{
-    
+    try{
     final FirebaseUser user = await _auth.currentUser();
     final email = await FlutterSecureStorage().read(key: "email");
     final nameIOS = await FlutterSecureStorage().read(key: "nameIOS");
@@ -844,6 +846,11 @@ class _LoginPageState extends State<LoginPage> {
     });
     // print(this.userGoogle.email);
     this.userLogged = this.userGoogle;
+    } catch (error) {
+      print(error.toString());
+      this.userLogged = null;
+      return null;
+    }
     
   }
 
@@ -1011,7 +1018,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void firebaseCloudMessagingListeners() {
-  // if (Platform.isIOS) iOSPermission();
+  if (Platform.isIOS) iOSPermission();
 
   _firebaseMessaging.getToken().then((token){
     print(token);
@@ -1065,20 +1072,19 @@ void iOSPermission() {
     // Get the token for this device
     try{
     String fcmToken = await _firebaseMessaging.getToken();
+    FirebaseUser currentUser = await _auth.currentUser();
     // print(fcmToken);
     // Save it to Firestore
-    if (fcmToken != null && this.userLogged.email!=null) {
-      var tokens = databaseReference
+    if (fcmToken != null && currentUser!=null) {
+      databaseReference
           .collection('users')
-          .document(this.userLogged.email)
-          .collection('tokens')
-          .document(fcmToken);
-
-      await tokens.updateData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(), // optional
-        'platform': Platform.operatingSystem // optional
-      });
+          .document(currentUser.email)
+          .setData({
+            'fcmToken': fcmToken,
+            'uid':currentUser.uid,
+            'cretedAt': FieldValue.serverTimestamp(), // optional
+            'platform': Platform.operatingSystem // optional
+          });
     }
     }catch(e){
       print(e.toString());

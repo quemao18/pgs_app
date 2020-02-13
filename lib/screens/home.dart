@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
@@ -17,7 +19,7 @@ class HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    changeStatusBar();
+    if (Platform.isAndroid) changeStatusBar();
     Size s = ui.window.physicalSize/ui.window.devicePixelRatio;
     bool landscape = s.width>s.height;
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);

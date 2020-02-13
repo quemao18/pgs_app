@@ -561,7 +561,7 @@ getCompanies(BuildContext context) async {
         );
       if(sum2>0)
         optionsArr.add(
-        ' Opción I \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString()
+        ' Opción II \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString()
         );
       if(sum3>0)
         optionsArr.add(

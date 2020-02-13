@@ -253,7 +253,7 @@ class DetailPage extends StatelessWidget {
   if(plan['option_prices'].length>2)
   priceDependents = plan['option_prices'][2]!=null && plan['option_prices'][2] > 0 ? 'Dependientes '+dependents+' \$' + formatter.format(plan['option_prices'][2]).toString():'';
 
-  deductible = plan ['deductible']!=null ? 'Deducible \$' + formatter.format(plan['deductible']) : ''; 
+  deductible = plan ['deductible']!=null ? '\$' + formatter.format(plan['deductible']) : ''; 
   maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Anexo Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
   transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Anexo Transplante de organos \$' + formatter.format(plan['transplant']) : ''; 
   costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos \$' + formatter.format(plan['cost_admin']) : '';
@@ -308,7 +308,7 @@ class DetailPage extends StatelessWidget {
           title:Text(plan['company_name'],
             style: TextStyle(fontWeight: FontWeight.bold)
             ), 
-            subtitle: Text(plan['plan_name']+ '\nOpción ' +option ,
+            subtitle: Text(plan['plan_name']+ '\nOpción ' +option + ' '+ deductible,
             style: TextStyle(height: 1.3, fontSize: 12)
             ),
             ),
@@ -356,10 +356,10 @@ class DetailPage extends StatelessWidget {
                     style: TextStyle(height: 1.5,)
                   ):Container(),
 
-                  Text(
-                    deductible,
-                    style: TextStyle(height: 1.5,)
-                  ),
+                  // Text(
+                  //   deductible,
+                  //   style: TextStyle(height: 1.5,)
+                  // ),
                   
               ],)
             
