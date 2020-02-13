@@ -35,7 +35,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn(
-scopes: ['email', 'https://www.googleapis.com/auth/contacts.readonly'],
+// scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
 // hostedDomain: "",
 // clientId: "",
 );
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
 
     });
 
-    _saveDeviceToken();
+    // _saveDeviceToken();
     firebaseCloudMessagingListeners();
     // checkLoggedInState();
     AppleSignIn.onCredentialRevoked.listen((_) {
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  void logIn() async {
+  void logInApple() async {
      if(await AppleSignIn.isAvailable()) {
     final AuthorizationResult result = await AppleSignIn.performRequests([
       AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
@@ -160,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           this.isLoading = false;
           if (result.credential != null) { 
+            _saveDeviceToken(result.credential.email);
             isLoggedIn = true;
             // _success = true;
             // _userID = user.uid;
@@ -425,7 +426,9 @@ class _LoginPageState extends State<LoginPage> {
                                       future: this.userData,
                                       // initialData: this.userData,
                                       builder: (context, snapshot) {
+                                      
                                       if (snapshot.hasData && this.isConexion && !isLoading) {
+                                      
                                       if (snapshot.data != null) { 
                                       return
                                       Column(children: <Widget>[
@@ -509,7 +512,7 @@ class _LoginPageState extends State<LoginPage> {
                                               //buttonColor: primaryColor,
                                             ); 
                                     }else{
-                         
+                                      
                                       return 
                                       this.isLoggedIn ? Align(
                                         alignment: Alignment.bottomCenter,
@@ -692,10 +695,8 @@ class _LoginPageState extends State<LoginPage> {
         this.userFb.name =  profile['name'];
         this.userFb.email = profile['email'];
         this.userFb.photo = profile['picture']['data']['url'];
-
         _signInWithFacebook(token);
         onLoginStatusChanged(true, profileData: profile, userLogged: userFb);
-
         break;
 
     }
@@ -730,6 +731,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       if (user != null) {
         isLoggedIn = true;
+        _saveDeviceToken(user.email);
         // _success = true;
         // _userID = user.uid;
         this.userGoogle.name = user.displayName;
@@ -758,10 +760,14 @@ class _LoginPageState extends State<LoginPage> {
     // if(user!=null)
     // print(user);
     // if(user.email== null)
-    if (Platform.isIOS)
+    String email = '';
+    if (Platform.isIOS){
     assert(user.providerData[0].email !=null);
-    else
+    email = user.providerData[0].email;
+    }else{
     assert(user.providerData[1].email !=null);
+    email = user.providerData[1].email;
+    }
     // else
     // assert(user.providerData[0].displayName != null);
     // assert(user.providerData[0].email != null);
@@ -771,9 +777,11 @@ class _LoginPageState extends State<LoginPage> {
 
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
+    assert(user.email == currentUser.email);
     setState(() {
       if (user != null) {
-        _message = 'Successfully signed in with Facebook. ' + user.uid;
+        _saveDeviceToken(email);
+        _message = 'Successfully signed in with Facebook. ' + email;
       } else {
         _message = 'Failed to sign in with Facebook. ';
       }
@@ -989,7 +997,7 @@ class _LoginPageState extends State<LoginPage> {
                                   AppleSignInButton(
                                     cornerRadius: 40,
                                     style: ButtonStyle.white,
-                                    onPressed: logIn,
+                                    onPressed: logInApple,
                                   ),
                                   // FlatButton.icon(onPressed: logIn, icon: Icon(MdiIcons.apple, color: Colors.white), label: Text('Entrar con Apple', style: TextStyle(color: Colors.white),)),
                                   // if (errorMessage2 != null) Text(errorMessage2, style: TextStyle(color: Colors.white)),
@@ -1064,7 +1072,7 @@ void iOSPermission() {
 }
 
   /// Get the token, save it to the database for current user
-  _saveDeviceToken() async {
+  _saveDeviceToken(email) async {
     // Get the current user
     // String uid = 'jeffd23';
     // FirebaseUser user = await _auth.currentUser();
@@ -1078,7 +1086,7 @@ void iOSPermission() {
     if (fcmToken != null && currentUser!=null) {
       databaseReference
           .collection('users')
-          .document(currentUser.email)
+          .document(email)
           .setData({
             'fcmToken': fcmToken,
             'uid':currentUser.uid,
