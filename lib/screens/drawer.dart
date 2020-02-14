@@ -293,7 +293,7 @@ class _DrawerOnly extends State<DrawerOnly> {
         this.userGoogle.email = email!=null ? email : user.providerData[0].email;
         else
         this.userGoogle.email =user.providerData[1].email;
-        this.userGoogle.photo = user!=null ? user.photoUrl: '';
+        this.userGoogle.photo = user.photoUrl!=null ? user.photoUrl:'';
         // print(userGoogle);
         isLoggedIn = true;
       }

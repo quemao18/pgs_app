@@ -157,6 +157,18 @@ class _LoginPageState extends State<LoginPage> {
         await FlutterSecureStorage()
             .write(key: "nameIOS", value: result.credential.fullName.givenName);
         // print(result.credential.identityToken);
+        OAuthProvider oAuthProvider =
+            new OAuthProvider(providerId: "apple.com");
+        final AuthCredential credential = oAuthProvider.getCredential(
+          idToken:
+              String.fromCharCodes(result.credential.identityToken),
+          accessToken:
+              String.fromCharCodes(result.credential.authorizationCode),
+        );
+
+        await FirebaseAuth.instance
+            .signInWithCredential(credential);
+
         setState(() {
           this.isLoading = false;
           if (result.credential != null) { 
