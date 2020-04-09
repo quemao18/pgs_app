@@ -25,13 +25,6 @@ class User {
   bool smoker = false;
   bool transplant = false;
 
-  Map info = {
-    InfoMaternity: false,
-    InfoSmoker: false,
-    InfoTransplant: false
-  };
-  // bool newsletter = false;
-
   save(context, user, user2, userLogged) async {
     print('saving user using a web service');
 
