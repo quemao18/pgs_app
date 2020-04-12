@@ -28,8 +28,9 @@ class PlansPage extends StatefulWidget {
   final List plansIds;
   final String userId;
   final userData;
-
-  PlansPage({Key key, this.plans, this.plansIds, this.userId, this.userData}) : super(key: key);
+  final options;
+  
+  PlansPage({Key key, this.plans, this.plansIds, this.userId, this.userData, this.options}) : super(key: key);
 
   @override
   _PlansPageState createState() => _PlansPageState();
@@ -52,9 +53,11 @@ class _PlansPageState extends State<PlansPage> {
 
     super.initState();
     companies = null;
-    Future.delayed(Duration(milliseconds: 50), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
-        companies = getCompanies(context);
+        // companies = getCompanies(context);
+        companies = widget.options;
+        // print(companies);
         //companies = [];
       });
     });
@@ -75,6 +78,7 @@ class _PlansPageState extends State<PlansPage> {
     final ThemeData theme = Theme.of(context);
     final Size screenSize = MediaQuery.of(context).size;
     // final formatter = NumberFormat("#,###.##");
+    // print(widget.options);
 
     ExpansionTile makeExpansion(data, planName, planDescription, planId, pln, plan) => ExpansionTile(
               title: new ListTile(
@@ -118,8 +122,9 @@ class _PlansPageState extends State<PlansPage> {
       margin: new EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
       child: isLoading || companies==null?  
+      Center(child: 
         Container(
-        margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/5),
+        margin: EdgeInsets.only(top: screenSize.height/5,),
         child: Column(children: <Widget>[
           LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
@@ -130,6 +135,7 @@ class _PlansPageState extends State<PlansPage> {
         isSaving ?  Text('\nEnviando solicitud...') : Text('\nBuscando los mejores precios...')
         ],)
         )
+      )
       :
       FutureBuilder(
         future: companies,
@@ -321,8 +327,9 @@ getCompanies(BuildContext context) async {
         }else{
           throw Exception('Failed to load post');
         }
-    }catch(_){
-      print('error in options details');
+    }catch(e){
+      print(e.toString());
+      // print('error in options details');
     }
       
   }

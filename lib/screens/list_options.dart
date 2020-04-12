@@ -40,6 +40,7 @@ class _ListPageState extends State<ListPage> {
     Future.delayed(Duration(milliseconds: 50), () {
       setState(() {
         companies = getCompanies(context);
+        // print(companies);
       });
     });
 
@@ -133,11 +134,12 @@ class _ListPageState extends State<ListPage> {
       // height: screenSize.height,
       //width: 400,
       // padding: EdgeInsets.only(top:screenSize.height/14),
-      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      // margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
       child:  isLoading || companies==null?  
+      Center(child: 
         Container(
-        margin: EdgeInsets.only(top: screenSize.height/5, left: screenSize.width/4.5),
+        margin: EdgeInsets.only(top: screenSize.height/5, ),
         child: Column(children: <Widget>[
           LoadingBouncingGrid.square(
         borderColor: theme.primaryColor,
@@ -148,6 +150,7 @@ class _ListPageState extends State<ListPage> {
         Text('\nBuscando los mejores planes...')
         ],)
         )
+      )
       :FutureBuilder(
         future: companies,
         builder: (context, snapshot) {
@@ -159,7 +162,7 @@ class _ListPageState extends State<ListPage> {
                else{
 
                  var children = <Widget>[];
-
+                  
                  for(var data in snapshot.data){
                    children.add(
                       Container(
@@ -216,7 +219,7 @@ class _ListPageState extends State<ListPage> {
                   MaterialPageRoute(
                   builder: (context) => 
                   //ExpansionTileSample(dataResult2, companiesIds),
-                  PlansPage(plansIds: planIds, userId: widget.userId, userData: widget.userData)
+                  PlansPage(plansIds: planIds, userId: widget.userId, userData: widget.userData, options: companies)
                   ),
                   );
                 },
@@ -304,8 +307,9 @@ getCompanies(BuildContext context) async {
           throw Exception('Failed to load post');
         }   
     }
-    catch(_){
-    print('error');
+    catch(e){
+      print(e.toString());
+    // print('error');
     // _showDialog2('Error de conexión', 3);
     }
 
