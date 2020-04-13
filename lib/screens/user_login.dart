@@ -1040,7 +1040,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: Alignment.bottomCenter,
                         child:
                             Container(
-                              margin: EdgeInsets.only(top:50),
+                              margin: Platform.isIOS ? EdgeInsets.only(top:5):EdgeInsets.only(top:50),
                               child:
                               ListTile(
                                 title: Text('Términos y condiciones de privacidad', 
