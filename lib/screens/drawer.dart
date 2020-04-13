@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,10 +12,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pgs_health/screens/contact_us.dart';
 import 'package:pgs_health/screens/user_data.dart';
 import 'package:pgs_health/screens/user_login.dart';
+import '../app_config.dart';
 import '../screens/home_material.dart';
 
 import '../screens/user_first.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,6 +30,7 @@ bool isLoading = false;
 var profileData;
 var userLogged ;
 var userData;
+var data2;
 
 class DrawerItem {
   String title;
@@ -49,11 +53,10 @@ class _DrawerOnly extends State<DrawerOnly> {
     @protected
   void initState() {
     super.initState();
-
     Future.delayed(Duration(milliseconds: 100), () {
 
         _getCurrentUser();
-
+        data2 = _getData(context);
     });
   }
 
@@ -78,6 +81,38 @@ class _DrawerOnly extends State<DrawerOnly> {
     throw 'Could not launch $url';
   }
 }
+
+      _getData(BuildContext context) async{
+      try{
+   
+      setState(() {
+      isLoading = true;  
+      });
+
+      var res2;
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      var res = await http.get(Uri.encodeFull(url+'v1/'), headers: {"Accept": "application/json"});
+      var resBody = json.decode(res.body);
+
+        // print(resBody[0]);
+
+        if (res.statusCode == 200) { 
+          res2 = resBody;
+        }else{
+          res2 = null;
+        }
+        return res2;
+      }catch(_){
+        print('error in contact us');
+        
+           setState(() {
+          isLoading = false;  
+          });
+        return null;
+      }
+
+  }
 
 // String uid;
 // final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -210,27 +245,28 @@ class _DrawerOnly extends State<DrawerOnly> {
                           // margin: EdgeInsets.only(right: 10,),
                           // padding:new EdgeInsets.only(top: screenSize.height/9),
         
-                          child: new Align(
-        
-                              alignment: Alignment.bottomCenter,
-        
-                              child:
-        
-                                  Container(
-        
-                                    child:
-        
-                                    ListTile(
-        
-                                      title: Text('Términos y condiciones de privacidad', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45),),
-                                      onTap: () => _launchURL('https://pgs-consulting.firebaseapp.com/#/policity'),
-                     
-        
-                                    ), 
-        
+                          child: FutureBuilder(
+                                    future: data2,
+                                    builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child:
+                                          Container(
+                                            child:
+                                            ListTile(
+                                              title: Text('Términos y condiciones de privacidad', 
+                                              textAlign: TextAlign.center, style: TextStyle(color: Colors.black38, fontSize: 13),),
+                                              onTap: () => _launchURL(snapshot.data['policity']),
+                                            ), 
+                                          ),
+                                        );
+                                    }else if (snapshot.hasError) {
+                                      return Text("${snapshot.error}");
+                                    }
+                                    return Container();
+                                    }
                                   ),
-        
-                                ),
         
                               ),
                           

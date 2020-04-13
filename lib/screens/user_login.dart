@@ -11,6 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pgs_health/components/Buttons/roundedButton.dart';
 import 'package:pgs_health/screens/user_first.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:pgs_health/screens/user_first.dart';
 import '../app_config.dart';
 import './progress_hud.dart';
@@ -107,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
   String errorMessage;
 
   String errorMessage2;
-
+  var data2;
 
   @protected
   initState(){
@@ -123,6 +124,8 @@ class _LoginPageState extends State<LoginPage> {
         }
         _getImages(context);
         _getTexts(context);
+        data2 = _getData(context);
+
 
     });
 
@@ -955,7 +958,6 @@ class _LoginPageState extends State<LoginPage> {
   _displayLoginButton() {
     // final Size screenSize = MediaQuery.of(context).size;
         return Column(children: <Widget>[
-      
               Container(
                   width: 210,
                   margin: EdgeInsets.only(left: 0, top: 0),
@@ -1030,11 +1032,42 @@ class _LoginPageState extends State<LoginPage> {
                     }),
               ):Container(),
               // Container(height: 50, padding: EdgeInsets.only(left: 10, right: 10), child: Text(errorMessage, style: TextStyle(color: Colors.white),))
-            
+              FutureBuilder(
+                    future: data2,
+                    builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                        return Align(
+                        alignment: Alignment.bottomCenter,
+                        child:
+                            Container(
+                              margin: EdgeInsets.only(top:50),
+                              child:
+                              ListTile(
+                                title: Text('Términos y condiciones de privacidad', 
+                                textAlign: TextAlign.center, style: TextStyle(color: Colors.white70, fontSize: 12),),
+                                onTap: () => _launchURL(snapshot.data['policity']),
+                              ), 
+                            ),
+                          );
+                      }else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      return Container();
+                    }
+              ),
     ],
     
     );
 
+  }
+
+    _launchURL(url) async {
+  //const url = 'https://pgs-consulting.com/somos-pgs/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void firebaseCloudMessagingListeners() {
@@ -1148,6 +1181,37 @@ void iOSPermission() {
 
   }
 
+      _getData(BuildContext context) async{
+      try{
+   
+      setState(() {
+      isLoading = true;  
+      });
+
+      var res2;
+      var config = AppConfig.of(context);
+      var url = config.apiBaseUrl;
+      var res = await http.get(Uri.encodeFull(url+'v1/'), headers: {"Accept": "application/json"});
+      var resBody = json.decode(res.body);
+
+        // print(resBody[0]);
+
+        if (res.statusCode == 200) { 
+          res2 = resBody;
+        }else{
+          res2 = null;
+        }
+        return res2;
+      }catch(_){
+        print('error in contact us');
+        
+           setState(() {
+          isLoading = false;  
+          });
+        return null;
+      }
+
+  }
 
     _getTexts(BuildContext context) async{
       try{
