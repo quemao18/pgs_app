@@ -434,7 +434,10 @@ class _LoginPageState extends State<LoginPage> {
 
                                       Container(
                                       padding: widget.message == null ?  
-                                      EdgeInsets.only(top: screenSize.height/7): EdgeInsets.only(top: screenSize.height/60),
+                                      Platform.isIOS ?
+                                      EdgeInsets.only(top: screenSize.height/12)
+                                      : EdgeInsets.only(top: screenSize.height/7)
+                                      : EdgeInsets.only(top: screenSize.height/60),
                                       child: 
                                       
                                    FutureBuilder(
