@@ -517,50 +517,53 @@ getCompanies(BuildContext context) async {
       price8[1] = price8Arr[1];
     }
 
-    var costAdmin = [], maternityArr = [], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
+    var costAdmin = [], maternityArr = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], transplantArr = [] , sumCostAdmin = 0.0, sumMaternity = 0.0, sumTransplant = 0.0;
 
     for(var pln in data['plans']){
         if(plan['plan_id']==pln['plan_id']){
           costAdmin.add(pln['cost_admin']);
-          if(userData.maternity) maternityArr.add(pln['maternity']);
+          if(userData.maternity) {
+            if(pln['maternity_deductible']!=null && pln['maternity_deductible'].length>0){
+              // maternityArr.add(pln['maternity']);
+              for (var dedu in pln['maternity_deductible'])
+                maternityArr[dedu['item_id']-1] = pln['maternity'];
+
+            }else{
+              for (var i=0; i<8; i++)
+                maternityArr[i] = pln['maternity'];
+            }
+            // print(maternityArr);
+          }
           if(userData.transplant) transplantArr.add(pln['transplant']);
         }
     }
 
     if(costAdmin.length>0)
       sumCostAdmin = costAdmin.reduce((a, b) => a + b );
-    if(maternityArr.length>0)
-      sumMaternity = maternityArr.reduce((a, b) => a + b );
+    // if(maternityArr.length>0)
+    //   sumMaternity = maternityArr.reduce((a, b) => a + b );
     if(transplantArr.length>0)
       sumTransplant = transplantArr.reduce((a, b) => a + b );
    
     // print(sumMaternity );
      
      if(price1[0]!=null && price1.length>0 && price1.reduce((a, b) => a + b )>0)
-     sum1 = price1.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum1 = price1.reduce((a, b) => a + b ) + sumTransplant + maternityArr[0] + sumCostAdmin;
      if(price2[0]!=null && price2.length>0 && price2.reduce((a, b) => a + b )>0)
-     sum2 = price2.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum2 = price2.reduce((a, b) => a + b ) + sumTransplant + maternityArr[1] + sumCostAdmin;
      if(price3[0]!=null && price3.length>0 && price3.reduce((a, b) => a + b )>0)
-     sum3 = price3.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum3 = price3.reduce((a, b) => a + b ) + sumTransplant + maternityArr[2] + sumCostAdmin;
      if(price4[0]!=null && price4.length>0 && price4.reduce((a, b) => a + b )>0)
-     sum4 = price4.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum4 = price4.reduce((a, b) => a + b ) + sumTransplant + maternityArr[3] + sumCostAdmin;
      if(price5[0]!=null && price5.length>0 && price5.reduce((a, b) => a + b )>0)
-     sum5 = price5.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum5 = price5.reduce((a, b) => a + b ) + sumTransplant + maternityArr[4] + sumCostAdmin;
      if(price6[0]!=null && price6.length>0 && price6.reduce((a, b) => a + b )>0)
-     sum6 = price6.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum6 = price6.reduce((a, b) => a + b ) + sumTransplant + maternityArr[5] + sumCostAdmin;
      if(price7[0]!=null && price7.length>0 && price7.reduce((a, b) => a + b )>0)
-     sum7 = price7.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum7 = price7.reduce((a, b) => a + b ) + sumTransplant + maternityArr[6] + sumCostAdmin;
      if(price8[0]!=null && price8.length>0 && price8.reduce((a, b) => a + b )>0)
-     sum8 = price8.reduce((a, b) => a + b ) + sumTransplant + sumMaternity + sumCostAdmin;
+     sum8 = price8.reduce((a, b) => a + b ) + sumTransplant + maternityArr[7] + sumCostAdmin;
 
-          // ' Opción I \$'+(formatter.format(dedu1)).toString() +'\n'+' \$'+(formatter.format(sum1)).toString(),
-          // ' Opción II \$'+(formatter.format(dedu2)).toString() +'\n'+' \$'+(formatter.format(sum2)).toString(),
-          // ' Opción III \$'+(formatter.format(dedu3)).toString() +'\n'+' \$'+(formatter.format(sum3)).toString(),
-          // ' Opción IV \$'+(formatter.format(dedu4)).toString() +'\n'+' \$'+(formatter.format(sum4)).toString(),
-          // ' Opción V \$'+(formatter.format(dedu5)).toString() +'\n'+' \$'+(formatter.format(sum5)).toString(),
-          // ' Opción VI \$'+(formatter.format(dedu6)).toString() +'\n'+' \$'+(formatter.format(sum6)).toString(),
-          // ' Opción VII \$'+(formatter.format(dedu7)).toString() +'\n'+' \$'+(formatter.format(sum7)).toString(),
-          // ' Opción VIII \$'+(formatter.format(dedu8)).toString() +'\n'+' \$'+(formatter.format(sum8)).toString(),
       optionsArr.length = 0;
       if(sum1>0)
         optionsArr.add(
@@ -618,14 +621,14 @@ getCompanies(BuildContext context) async {
           onChange: (String label, int index){ 
             // print("label: $label index: $plan");
             // var values = label.split(' ');
-            if(index==0) {price = price1; dedu = dedu1;}
-            if(index==1) {price = price2; dedu = dedu2;}
-            if(index==2) {price = price3; dedu = dedu3;}
-            if(index==3) {price = price4; dedu = dedu4;}
-            if(index==4) {price = price5; dedu = dedu5;}
-            if(index==5) {price = price6; dedu = dedu6;}
-            if(index==6) {price = price7; dedu = dedu7;}
-            if(index==7) {price = price8; dedu = dedu8;}
+            if(index==0) {price = price1; dedu = dedu1; sumMaternity = maternityArr[0];}
+            if(index==1) {price = price2; dedu = dedu2; sumMaternity = maternityArr[1];}
+            if(index==2) {price = price3; dedu = dedu3; sumMaternity = maternityArr[2];}
+            if(index==3) {price = price4; dedu = dedu4; sumMaternity = maternityArr[3];}
+            if(index==4) {price = price5; dedu = dedu5; sumMaternity = maternityArr[4];}
+            if(index==5) {price = price6; dedu = dedu6; sumMaternity = maternityArr[5];}
+            if(index==6) {price = price7; dedu = dedu7; sumMaternity = maternityArr[6];}
+            if(index==7) {price = price8; dedu = dedu8; sumMaternity = maternityArr[7];}
 
             setState(() {
              
