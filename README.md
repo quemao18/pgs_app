@@ -25,3 +25,8 @@ Remember change version in pubspec.yaml before upload appbludle to play store
 `flutter build appbundle -t lib/main_prod.dart --release`
 `flutter build apk -t lib/main_prod.dart --release`
 `flutter build ios -t lib/main_prod.dart --release` in iOS
+
+## iOS upload store
+1. Change version build in XCODE
+2. Build in vscode with flutter command `flutter build ios -t lib/main_prod.dart --release`
+3. Change to Generic iOS Device and build Archive in XCODE
