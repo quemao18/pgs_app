@@ -138,7 +138,7 @@ class _UserThird extends State<UserThird>{
                                 margin: EdgeInsets.only(top: 0),
                                 padding: EdgeInsets.all(10),
                                 child: CheckboxListTile(
-                                    title: const Text('Transplante de órganos'),
+                                    title: const Text('Trasplante de órganos'),
                                     value: _user.transplant,
                                     activeColor: theme.primaryColor,
                                     onChanged: (val) {

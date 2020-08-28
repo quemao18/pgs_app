@@ -414,7 +414,7 @@ class _UserSecond extends State<UserSecond>{
                              height: 40,
                           //padding:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: CheckboxListTile(
-                              title: const Text('Transplante de organos'),
+                              title: const Text('Trasplante de organos'),
                               value: _user.transplant,
                               activeColor: Color(0xFF9e946b),
                               onChanged: (val) {

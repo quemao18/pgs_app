@@ -255,7 +255,7 @@ class DetailPage extends StatelessWidget {
 
   deductible = plan ['deductible']!=null ? '\$' + formatter.format(plan['deductible']) : ''; 
   maternity = plan ['maternity']!=null && plan['maternity'] >0 ? 'Anexo Complicaciones por maternidad \$' + formatter.format(plan['maternity']) : '';
-  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Anexo Transplante de organos \$' + formatter.format(plan['transplant']) : ''; 
+  transplant = plan ['transplant']!=null && plan ['transplant'] >0 ? 'Anexo Trasplante de organos \$' + formatter.format(plan['transplant']) : ''; 
   costAdmin = plan ['cost_admin']!=null && plan ['cost_admin'] >0 ? 'Costos administrativos \$' + formatter.format(plan['cost_admin']) : '';
 
 
